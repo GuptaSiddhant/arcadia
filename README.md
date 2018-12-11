@@ -31,6 +31,6 @@ TODO:
 ##### Timetable 
 TODO: Maybe rough estimates of time needed for each implementation
 ## Credits
-Henri Ahti  
-Siddhant Gupta  
-Santeri Volkov 528142  
+Henri Ahti      
+Siddhant Gupta  721936
+Santeri Volkov  528142  
