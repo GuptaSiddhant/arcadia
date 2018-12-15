@@ -1,6 +1,12 @@
 #######First draft
 # Arcadia: Online Game Store
 TODO: Write a project description (What and Why)
+
+## Team
+Henri Ahti      
+Siddhant Gupta  721936  
+Santeri Volkov  528142 
+
 ## Features
 TODO: What features we will be implementing  
 Are there some extra features not listed in the project description?  
@@ -8,6 +14,7 @@ For each feature, how are we going to implement it?
 ## Models and Views
 TODO: Initial ideas for what kind of Models and Views we will be needing, 
 and how they relate to each other
+(some schematics?)
 ## Collaboration (planned working practices)
 TODO: How are we going to work? Will we meet face-to-face regularly, 
 use some project management tools, etc.
@@ -22,15 +29,8 @@ use some project management tools, etc.
 
 Or do we want to just push to master?
 
-## Implementation
-##### Order
-TODO:
+## Process and Time Schedule
+TODO: Maybe rough estimates of time needed for each implementation
 1. Feature#1
 2. Feature#2
 3. ...
-##### Timetable 
-TODO: Maybe rough estimates of time needed for each implementation
-## Credits
-Henri Ahti      
-Siddhant Gupta  721936
-Santeri Volkov  528142  
