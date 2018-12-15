@@ -10,15 +10,20 @@
 
 ## Game
 * url
+* genre
 * price
 * name
 * image (future)
 * description
 * global-high-score with user
 
-## transactions
-* statistics - high_score
-* save_game (own-object)
+## Transactions
+* sales (gameid, playerid, amount, timestamp)
+
+## GameState
+* settings
+* score
+* game_state
 
 ## WebViews
 * Login/Register
