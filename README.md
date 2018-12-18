@@ -13,7 +13,7 @@ to implement at least the following extra features:
 - Mobile friendly
 - Save/load and resolution 
  
-For each feature, a brief description how do you plan to implement it?
+TODO: For each feature, a brief description how do you plan to implement it?
 (what is there to say about this? We follow the requirements?) 
 
 ## Models and Views
@@ -35,7 +35,7 @@ and how they relate to each other.
 * Game-Page (login)
 * Submit-Game (login-dev)
 
-![alt text][logo]
+![alt text][Model relations]
 
 ## Collaboration (planned working practices)
 - We use Telegram for communication and collaboration
@@ -104,4 +104,4 @@ Final date 19th of Feb
 
 
 
-[logo]: https://version.aalto.fi/gitlab/guptas4/arcadia/blob/master/media/Arcadia.png "Arcadia"
+[Model relations]: media/Arcadia.png "Model relations"
