@@ -1,4 +1,3 @@
-#######First draft
 # Arcadia: Online Game Store
 TODO: Write a project description (What and Why)
 
@@ -8,21 +7,40 @@ Siddhant Gupta  721936
 Santeri Volkov  528142 
 
 ## Features
-We will implement the features defined is project description.  In addition to mandatory requirements we are going 
-to implement minimum the following extra features:
-- social media sharing
-- mobile friendly
-  
-For each feature, how are we going to implement it?
+We will implement the features defined in the project description.  In addition to mandatory requirements we are going 
+to implement at least the following extra features:
+- Social media sharing
+- Mobile friendly
+- Save/load and resolution 
+ 
+For each feature, a brief description how do you plan to implement it?
+(what is there to say about this? We follow the requirements?) 
+
 ## Models and Views
-TODO: Initial ideas for what kind of Models and Views we will be needing, 
-and how they relate to each other
-(some schematics?)
+Initial plan of Models and Views we will be implementing, 
+and how they relate to each other.
+
+###### Models
+* User(Django) -> (Developer, Player)
+* Transactions(sales)
+* Game
+* GameState
+
+###### WebViews
+* Login/Register
+* Browse (no-login)
+* Dev-Profile (login-dev)
+* Player-Profile (login) 
+* Details-Purchase-page (no-login) (Highscores)
+* Game-Page (login)
+* Submit-Game (login-dev)
+
+![alt text][logo]
 
 ## Collaboration (planned working practices)
-- we use Telegram for communication and collaboration
-- we use Gitlab as code repository
-- we meet minimum once per week during the project sprints
+- We use Telegram for communication and collaboration
+- We use Gitlab as code repository
+- We meet at minimum once per week during the project sprints
 
 Git
 
@@ -33,7 +51,6 @@ Git
 5. Submit a pull request :D  
 
 ## Process and Time Schedule
-TODO: Maybe rough estimates of time needed for each implementation
 
 WEEK 51-52
 1. Heroku setup (Santeri)
@@ -43,7 +60,7 @@ WEEK 51-52
     - production configuration with Postgres
     - required middleware for Authentication etc.
     - check / configure default template system used
-3. Implement the first models (User(Django), DeveloperProfile, GamerProfile, Transactions, Game, GameState (settings, 
+3. Implement the first models (User(Django), DeveloperProfile, PlayerProfile, Transactions, Game, GameState (settings, 
 game_state) (Henri)
 4. Initial website deign (Siddhant)
 
@@ -55,7 +72,7 @@ WEEK 1 Sprint
 
 WEEK 2 Sprint
 - DevelopersView
-- GamersView
+- PlayersView
 - message_SCORE
 - message_SAVE
 - message_LOAD
@@ -85,3 +102,6 @@ WEEK 7 Sprint
 Final date 19th of Feb
 
 
+
+
+[logo]: https://version.aalto.fi/gitlab/guptas4/arcadia/blob/master/media/Arcadia.png "Arcadia"
