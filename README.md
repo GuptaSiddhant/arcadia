@@ -1,6 +1,8 @@
 # Arcadia: Online Game Store
-TODO: Write a project description (What and Why)
-
+ Arcadia is an online game store for JavaScript games. The service has two types of users: players and developers. Developers can add their games to the service and set a price for it. Players can buy games on the platform and then play purchased games online.
+ 
+ This is a course project for Web Software Development CS-C3170 2018-2019 at Aalto University
+ 
 ## Team
 Henri Ahti 57237L      
 Siddhant Gupta  721936  
