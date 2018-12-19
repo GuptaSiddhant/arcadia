@@ -13,10 +13,7 @@ We will implement the features defined in the project description.  In addition 
 to implement at least the following extra features:
 - Social media sharing
 - Mobile friendly
-- Save/load and resolution 
- 
-TODO: For each feature, a brief description how do you plan to implement it?
-(what is there to say about this? We follow the requirements?) 
+- Save/load and resolution  
 
 ## Models and Views
 Initial plan of Models and Views we will be implementing, 
