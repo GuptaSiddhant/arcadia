@@ -24,7 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Setting default development secret key, and django_heroku will handle the
 # production secret key config
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = 'e-pzjz^rl!f@1*bDvmp=ci!wpgmq6&c(o+mwet*tr^(ap=jy7x'
+
+# os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if 'DEBUG' in os.environ:
