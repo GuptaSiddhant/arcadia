@@ -1,0 +1,44 @@
+.game-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: inherit;
+
+}
+
+.game-list-item {
+    width: 250px;
+    height: 250px;
+    margin: 0 20px 20px 0;
+    border-radius: 10px;
+    background-color: #6E42C0;
+    position: relative;
+}
+
+.game-list-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.information {
+    width: 100%;
+    height: 50%;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-image: linear-gradient(-180deg, rgba(0,0,0,0.00) 0%, #000000 100%);
+    padding: 10px 20px;
+    color: #ffffff;
+
+}
+
+.list-action {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

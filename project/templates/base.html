@@ -1,13 +1,58 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>{% block title %}Arcadia{% endblock %}</title>
+    <meta charset="utf-8">
+    <title> Arcadia - {% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
+
 </head>
 <body>
-  <main>
-    {% block content %}
-    {% endblock %}
-  </main>
+<section id="page">
+    <header>
+        <div class="logo">
+            <!--Replace Logo URL-->
+            <a href="{% url 'profile' %}">
+                <img class="logo" src="{% static 'media/logo-light.png' %}">
+            </a>
+        </div>
+        <div class="navigation">
+            {% block nav-desktop %}
+            {% endblock %}
+        </div>
+        <div class="navigation-mobile">
+            {% block nav-mobile %}
+            {% endblock %}
+        </div>
+    </header>
+
+    <aside>
+        {% block sidebar %}
+        {% endblock %}
+    </aside>
+
+    <main>
+        {% block main %}
+        {% endblock %}
+    </main>
+
+
+    <footer>© Arcadia 2019.</footer>
+</section>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
 </body>
 </html>

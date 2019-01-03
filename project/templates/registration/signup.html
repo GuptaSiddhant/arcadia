@@ -1,12 +1,56 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign Up{% endblock %}
+{% block title %}
+Register
+{% endblock %}
 
-{% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-  </form>
+{% block nav-desktop %}
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">Login</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="#">Register</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block nav-mobile %}
+<div class="dropdown">
+    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Menu
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+        <a class="dropdown-item active" href="#">Register</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="heading">
+    <h2>About Arcadia</h2>
+    <hr>
+</div>
+<div class="scrollable">
+    Arcadia is online Game-Shop.
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="heading">
+    <h1>Create an Account</h1>
+    <hr>
+</div>
+<div class="scrollable">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div >
+            <button type="submit" class="btn btn-primary btn-lg ">Register</button>
+            <button type="reset" class="btn btn-secondary btn-lg">Reset</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
