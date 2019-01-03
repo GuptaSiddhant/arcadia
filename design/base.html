@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--{% block title %}-->
+    <title>Arcadia</title>
+    <!--{% endblock %}-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <!-- Add additional CSS in static file -->
+    <!--{% load static %}-->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<section id="page">
+    <header>
+        <div class="logo"><img class="logo" src="logo-light.png"></div>
+        <div class="navigation">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Library</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profile</a>
+                </li>
+            </ul>
+        </div>
+        <div class="navigation-mobile">
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Menu
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item active" href="#">Explore</a>
+                    <a class="dropdown-item" href="#">Library</a>
+                    <a class="dropdown-item" href="#">Profile</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <aside>
+        <div class="heading">
+            <h2>Filter Games</h2>
+            <hr>
+        </div>
+        <div class="scrollable">
+            <h5>Select Genre: </h5>
+            <ul class="list-unstyled">
+                <li>All Games</li>
+                <li>Free to Play</li>
+                <li>Action</li>
+                <li>Adventure</li>
+                <li>Casual</li>
+                <li>Indie</li>
+                <li>Multiplayer</li>
+                <li>Racing</li>
+                <li>RPG</li>
+                <li>Simulation</li>
+                <li>Sports</li>
+                <li>Simulation</li>
+            </ul>
+        </div>
+    </aside>
+    <main>
+        <div class="heading">
+            <h1>Explore Games</h1>
+            <hr>
+        </div>
+        <div class="scrollable">
+            <div class="game-list grid--auto-fit">
+                <div class="game-list-item">
+                    <img src="BG.png">
+                    <button class="list-action btn btn-primary">
+                        Buy €10,00
+                    </button>
+                    <div class="information">
+                        Game Genre
+                        <h4>Game Name</h4>
+                    </div>
+                </div>
+                <div class="game-list-item">
+                    <img src="no-image.png">
+                    <button class="list-action btn btn-primary">
+                        Buy €10,00
+                    </button>
+                    <div class="information">
+                        <span>Racing</span>
+                        <h4>Space Warriors: To the End</h4>
+                    </div>
+                </div>
+                <div class="game-list-item">
+                    <img src="no-image.png">
+                    <button class="list-action btn btn-success">
+                        Play
+                    </button>
+                    <div class="information">
+                        Game Genre
+                        <h4>Game Name</h4>
+                    </div>
+                </div>
+                <div class="game-list-item">
+                    <img src="no-image.png">
+                    <button class="list-action btn btn-primary">
+                        Buy €10,00
+                    </button>
+                    <div class="information">
+                        Game Genre
+                        <h4>Game Name</h4>
+                    </div>
+                </div>
+                <div class="game-list-item">
+                    <img src="no-image.png">
+                    <button class="list-action btn btn-primary">
+                        Buy €10,00
+                    </button>
+                    <div class="information">
+                        Game Genre
+                        <h4>Game Name</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>© Arcadia 2019.</footer>
+</section>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
