@@ -28,38 +28,32 @@ Login
 </div>
 {% endblock %}
 
-{% block sidebar %}
-<div class="heading">
-    <h2>Welcome Back!</h2>
-    <hr>
-</div>
-<div class="scrollable">
-    <form method="post">
-        {% csrf_token %}
-        <h5>Use this form:</h5>
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
-    </form>
-</div>
-{% endblock %}
 
-{% block main %}
-<div class="heading">
-    <h1>Welcome Back!</h1>
-    <hr>
-</div>
-<div class="scrollable">
-    <form method="post">
-        <div class="form-group">
-            <label for="username">Email ID</label>
-            <input type="email" class="form-control" id="username" placeholder="name@example.com">
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
-            <small class="form-text text-muted"><a href="#">Forgot Password?</a></small>
-        </div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
-    </form>
+{% block content %}
+<div class="floater">
+    <div class="heading">
+        <h2>Ready. Set. Go.</h2>
+        <hr>
+    </div>
+    <div class="scrollable">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                {{ field.errors }}
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                <p class="help-text">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {{ form.non_field_errors }}
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+        </form>
+        <br>
+        <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
+        <div>Not a member? <a href="{% url 'signup' %}">Register.</a></div>
+    </div>
 </div>
 {% endblock %}

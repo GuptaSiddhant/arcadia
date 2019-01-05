@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/form.css' %}">
     <link rel="stylesheet" href="{% static 'css/game.css' %}">
 
 </head>
@@ -33,6 +32,7 @@
         </div>
     </header>
 
+    {% block content %}
     <aside>
         {% block sidebar %}
         {% endblock %}
@@ -42,9 +42,9 @@
         {% block main %}
         {% endblock %}
     </main>
+    {% endblock %}
 
-
-    <footer>© Arcadia 2019.</footer>
+    <!--<footer>© Arcadia 2019.</footer>-->
 </section>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

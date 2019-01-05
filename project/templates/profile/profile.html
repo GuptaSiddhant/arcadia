@@ -1,13 +1,93 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
 
+{% block title %}
+Profile
+{% endblock %}
+
+{% block nav-desktop %}
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link" href="#">Explore</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Library</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="#">Profile</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block nav-mobile %}
+<div class="dropdown">
+    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Menu
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Explore</a>
+        <a class="dropdown-item" href="#">Library</a>
+        <a class="dropdown-item active" href="#">Profile</a>
+    </div>
+</div>
+{% endblock %}
+
+<!--Sidebar-->
+{% block sidebar %}
+{% if user.is_authenticated %}
+<div class="heading">
+    <h2>Settings</h2>
+    <hr>
+</div>
+<div class="scrollable">
+    <div class="form-group">
+        <h5>Username:</h5>
+        {{ user.username }}
+    </div>
+    <div class="form-group">
+        <h5>Password:</h5>
+        <a href="{% url 'password_change' %}">Change Password.</a>
+    </div>
+    <div class="form-group">
+        <h5>Account Type:</h5>
+        {{ user.group }}
+    </div>
+    <div class="form-group">
+        <h5>Profile Photo:</h5>
+        <img src="{{ user.image }}" style="width: 100px">
+    </div>
+</div>
+<button type="button" class="btn btn-danger btn-lg" onclick="location.href='{% url 'logout' %}'">
+    Logout
+</button>
+{% else %}
+<script type="text/javascript">
+    window.location = "{% url 'login' %}"
+</script>
+{% endif %}
+{% endblock %}
+
+<!--Main Block-->
 {% block main %}
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  <p><a href="{% url 'logout' %}">logout</a></p>
+<div class="heading">
+    <h1>Welcome, {{ user.username }}!</h1>
+    <hr>
+</div>
+<div class="scrollable">
+    You are awesome!
+</div>
 {% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">login</a>
+<div class="heading">
+    <h1>Hey! Sneaky Person.</h1>
+    <hr>
+</div>
+<div class="scrollable">
+    <p>You are not logged in</p>
+    <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{% url 'login' %}'">
+        Login
+    </button>
+</div>
 {% endif %}
 {% endblock %}

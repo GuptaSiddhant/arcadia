@@ -5,15 +5,6 @@ body {
     height: 100vh !important;
 }
 
-#page {
-    display: grid;
-    width: 100%;
-    height: 100vh;
-    grid-template-areas: "head head" "side main" "foot  foot";
-    grid-template-rows: 60px 1fr 30px;
-    grid-template-columns: 300px 1fr;
-}
-
 #page > header {
     grid-area: head;
     background-color: #6E42C0;
@@ -33,9 +24,8 @@ body {
     /*flex: 80px 1fr;*/
 }
 
-
 .floater {
-    justify-self: ;
+    justify-self: center;
     align-self: center;
     background-color: #ffffff;
     margin: 20px;
@@ -57,14 +47,26 @@ body {
 #page > footer {
     grid-area: foot;
     text-align: center;
+    align-self: center;
     padding-top: 0;
     background-color: inherit;
 }
 
+/* Desktop Layout */
 @media (min-width: 801px) {
     body {
         overflow: hidden;
     }
+
+    #page {
+        display: grid;
+        width: 100%;
+        height: 100vh;
+        grid-template-areas: "head head" "side main" "foot  foot";
+        grid-template-rows: 60px 1fr;
+        grid-template-columns: 300px 1fr;
+    }
+
     .navigation {
         display: block;
     }
@@ -87,10 +89,13 @@ body {
     }
 
     .scrollable {
+        width: 100%;
         overflow-y: scroll;
+        overflow-x: hidden;
     }
 }
 
+/* Mobile Layout */
 @media (max-width: 800px) {
     #page {
         display: grid;
@@ -172,8 +177,13 @@ h5 {
     color: #343A3E;
 }
 
+.registration {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+}
+
 .help-text {
-    font-style: italic;
     color: gray;
 }
 
@@ -181,4 +191,12 @@ label {
     font-size: 1rem;
     font-weight: 500;
     color: #343A3E;
+}
+
+input {
+    border: 1px solid rgba(0,0,0,0.25);
+    border-radius: 5px;
+    height: 35px;
+    width: 100%;
+    padding: 10px;
 }
