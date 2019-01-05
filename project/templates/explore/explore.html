@@ -1,20 +1,19 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block title %}
-Profile
+Explore
 {% endblock %}
 
 {% block nav-desktop %}
 <ul class="nav">
     <li class="nav-item">
-        <a class="nav-link" href="#">Explore</a>
+        <a class="nav-link active" href="#">Explore</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">Library</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="#">Profile</a>
+        <a class="nav-link " href="#">Profile</a>
     </li>
 </ul>
 {% endblock %}
@@ -26,9 +25,9 @@ Profile
         Menu
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Explore</a>
+        <a class="dropdown-item active" href="#">Explore</a>
         <a class="dropdown-item" href="#">Library</a>
-        <a class="dropdown-item active" href="#">Profile</a>
+        <a class="dropdown-item" href="#">Profile</a>
     </div>
 </div>
 {% endblock %}
@@ -37,30 +36,26 @@ Profile
 {% block sidebar %}
 {% if user.is_authenticated %}
 <div class="heading">
-    <h2>Settings</h2>
+    <h2>Filter Games</h2>
     <hr>
 </div>
 <div class="scrollable">
-    <div class="form-group">
-        <h5>Username:</h5>
-        {{ user.username }}
-    </div>
-    <div class="form-group">
-        <h5>Password:</h5>
-        <a href="{% url 'password_change' %}">Change Password.</a>
-    </div>
-    <div class="form-group">
-        <h5>Account Type:</h5>
-        {{ user.group }}
-    </div>
-    <div class="form-group">
-        <h5>Profile Photo:</h5>
-        <img src="{{ user.image }}" style="width: 100px">
-    </div>
+    <h5>Select Genre: </h5>
+    <ul class="list-unstyled">
+        <li>All Games</li>
+        <li>Free to Play</li>
+        <li>Action</li>
+        <li>Adventure</li>
+        <li>Casual</li>
+        <li>Indie</li>
+        <li>Multiplayer</li>
+        <li>Racing</li>
+        <li>RPG</li>
+        <li>Simulation</li>
+        <li>Sports</li>
+        <li>Simulation</li>
+    </ul>
 </div>
-<button type="button" class="btn btn-danger btn-lg" onclick="location.href='{% url 'logout' %}'">
-    Logout
-</button>
 {% else %}
 <script type="text/javascript">
     window.location = "{% url 'login' %}"
@@ -72,13 +67,13 @@ Profile
 {% block main %}
 {% if user.is_authenticated %}
 <div class="heading">
-    <h1>Welcome, {{ user.username }}!</h1>
+    <h1>Explore Games</h1>
     <hr>
 </div>
 <div class="scrollable">
     <div class="game-list grid--auto-fit">
         <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
+            <img src="BG.png">
             <button class="list-action btn btn-primary">
                 Buy €10,00
             </button>
@@ -88,7 +83,7 @@ Profile
             </div>
         </div>
         <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
+            <img src="no-image.png">
             <button class="list-action btn btn-primary">
                 Buy €10,00
             </button>
@@ -98,7 +93,7 @@ Profile
             </div>
         </div>
         <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
+            <img src="no-image.png">
             <button class="list-action btn btn-success">
                 Play
             </button>
@@ -108,7 +103,7 @@ Profile
             </div>
         </div>
         <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
+            <img src="no-image.png">
             <button class="list-action btn btn-primary">
                 Buy €10,00
             </button>
@@ -118,7 +113,7 @@ Profile
             </div>
         </div>
         <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
+            <img src="no-image.png">
             <button class="list-action btn btn-primary">
                 Buy €10,00
             </button>

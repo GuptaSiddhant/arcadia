@@ -40,7 +40,7 @@ class Game(models.Model):
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE, null=False)
     price = models.FloatField(default=0)
     name = models.CharField(max_length=100, unique=True)
-    image = models.URLField(default="http://www.mysite.com/myimage.png")
+    image = models.URLField(default="/static/media/no-image.png")
     description = models.TextField()
     highscore = models.PositiveIntegerField(default=0)
 
