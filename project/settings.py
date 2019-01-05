@@ -138,3 +138,6 @@ LOGOUT_REDIRECT_URL = 'profile'
 
 # Configure Django App for Heroku.
 django_heroku.settings(locals(), test_runner=False)
+
+# Console email backend settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
