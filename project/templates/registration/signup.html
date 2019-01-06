@@ -1,32 +1,5 @@
 {% extends 'base.html' %}
-
-{% block title %}
-Register
-{% endblock %}
-
-{% block nav-desktop %}
-<ul class="nav">
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'login' %}">Login</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="#">Register</a>
-    </li>
-</ul>
-{% endblock %}
-
-{% block nav-mobile %}
-<div class="dropdown">
-    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Menu
-    </button>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="{% url 'login' %}">Login</a>
-        <a class="dropdown-item active" href="#">Register</a>
-    </div>
-</div>
-{% endblock %}
+{% block title %} Register {% endblock %}
 
 {% block sidebar %}
 <div class="heading">

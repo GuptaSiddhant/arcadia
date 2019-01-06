@@ -1,37 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}
-Profile
-{% endblock %}
-
-{% block nav-desktop %}
-<ul class="nav">
-    <li class="nav-item">
-        <a class="nav-link" href="#">Explore</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Library</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="#">Profile</a>
-    </li>
-</ul>
-{% endblock %}
-
-{% block nav-mobile %}
-<div class="dropdown">
-    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Menu
-    </button>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Explore</a>
-        <a class="dropdown-item" href="#">Library</a>
-        <a class="dropdown-item active" href="#">Profile</a>
-    </div>
-</div>
-{% endblock %}
+{% block title %} Profile {% endblock %}
 
 <!--Sidebar-->
 {% block sidebar %}
@@ -55,7 +24,7 @@ Profile
     </div>
     <div class="form-group">
         <h5>Profile Photo:</h5>
-        <img src="{{ user.image }}" style="width: 100px">
+        <img src="{{ user.image }}" style="width: 150px">
     </div>
 </div>
 <button type="button" class="btn btn-danger btn-lg" onclick="location.href='{% url 'logout' %}'">
@@ -79,22 +48,12 @@ Profile
     <div class="game-list grid--auto-fit">
         <div class="game-list-item">
             <img src="{% static 'media/no-image.png' %}">
-            <button class="list-action btn btn-primary">
-                Buy €10,00
+            <button class="list-action btn btn-dark">
+                €10,00
             </button>
             <div class="information">
                 Game Genre
                 <h4>Game Name</h4>
-            </div>
-        </div>
-        <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
-            <button class="list-action btn btn-primary">
-                Buy €10,00
-            </button>
-            <div class="information">
-                <span>Racing</span>
-                <h4>Space Warriors: To the End</h4>
             </div>
         </div>
         <div class="game-list-item">
@@ -103,28 +62,8 @@ Profile
                 Play
             </button>
             <div class="information">
-                Game Genre
-                <h4>Game Name</h4>
-            </div>
-        </div>
-        <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
-            <button class="list-action btn btn-primary">
-                Buy €10,00
-            </button>
-            <div class="information">
-                Game Genre
-                <h4>Game Name</h4>
-            </div>
-        </div>
-        <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
-            <button class="list-action btn btn-primary">
-                Buy €10,00
-            </button>
-            <div class="information">
-                Game Genre
-                <h4>Game Name</h4>
+                <span>Racing</span>
+                <h4>Space Warriors: To the End</h4>
             </div>
         </div>
     </div>

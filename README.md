@@ -67,22 +67,25 @@ WEEK 1 Sprint
 - Registration page
 - Login page
 - Email validation / SMTP sending from Django
-- test planning for the project
 
 WEEK 2 Sprint
-- DevelopersView
-- PlayersView
-- message_SCORE
-- message_SAVE
-- message_LOAD
-- message_SETTING
+- test data population (Santeri)
+- model diagram update (Santeri)
+- revised model implementation & migration (Henri)
+- Django Groups into use (Henri)
+- GamePlayView (Siddhant)
+- ProfileView (Siddhant))
+- message_SCORE (Siddhant)
 
 WEEK 3 Sprint
-- GamePlayView
+- test framework setup models / main functions
 - SubmitGameView
 - message_LOAD_REQUEST
 - message_ERROR
 - payment service integration
+- message_SAVE
+- message_LOAD
+- message_SETTING
 
 WEEK 4 Sprint
 - ModifyGameView
