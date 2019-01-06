@@ -1,0 +1,65 @@
+<script>
+    window.onload = setNavigation;
+
+    function setNavigation() {
+        var path = window.location.pathname;
+        path = decodeURIComponent(path);
+        console.log(path);
+        $(".nav a").each(function () {
+            var href = $(this).attr('href');
+            if (path.substring(0, href.length) === href) {
+                $(this).addClass('active');
+                console.log($(this).attr('href').value);
+            }
+        });
+        $(".dropdown-menu a").each(function () {
+            var href = $(this).attr('href');
+            if (path.substring(0, href.length) === href) {
+                $(this).addClass('active');
+            }
+        });
+    }
+</script>
+
+
+<div class="navigation">
+    <ul class="nav">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="#">Explore</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Library</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'signup' %}">Register</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="navigation-mobile">
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Menu
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            {% if user.is_authenticated %}
+            <a class="dropdown-item" href="#">Explore</a>
+            <a class="dropdown-item" href="#">Library</a>
+            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+            {% else %}
+            <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+            <a class="dropdown-item" href="{% url 'signup' %}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+</div>

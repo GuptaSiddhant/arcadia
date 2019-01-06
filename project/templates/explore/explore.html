@@ -1,36 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Explore
-{% endblock %}
-
-{% block nav-desktop %}
-<ul class="nav">
-    <li class="nav-item">
-        <a class="nav-link active" href="#">Explore</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Library</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link " href="#">Profile</a>
-    </li>
-</ul>
-{% endblock %}
-
-{% block nav-mobile %}
-<div class="dropdown">
-    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Menu
-    </button>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item active" href="#">Explore</a>
-        <a class="dropdown-item" href="#">Library</a>
-        <a class="dropdown-item" href="#">Profile</a>
-    </div>
-</div>
-{% endblock %}
+{% block title %} Explore {% endblock %}
 
 <!--Sidebar-->
 {% block sidebar %}
