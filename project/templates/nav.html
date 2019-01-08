@@ -21,6 +21,9 @@
     }
 </script>
 
+{% set nav_auth = [ ('#', 'Explore'), ('#', 'Library'), ('{% url 'profile' %}', 'Profile')] %}
+{% set nav_notAuth = [ ('#', 'Explore'), ('{% url 'login' %}', 'Login'), ('{% url 'signup' %}', 'Register')] %}
+
 <div class="navigation">
     <ul class="nav">
         {% if user.is_authenticated %}
@@ -39,7 +42,6 @@
             <a class="nav-link" href="{{ href }}">{{ caption }}</a>
         </li>
         {% endfor %}
-
         <li class="nav-item">
             <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
