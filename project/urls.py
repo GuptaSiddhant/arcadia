@@ -28,5 +28,10 @@ urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile/', TemplateView.as_view(template_name='profile/profile.html'), name='profile'),
     path('accounts/signup/', views.SignUp.as_view(), name='signup'),
+]
+
+urlpatterns += [
+    path('', views.Index),
     path('game/<int:game_id>/', views.GamePlay, name='game'),
+
 ]
