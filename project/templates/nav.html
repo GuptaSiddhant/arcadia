@@ -20,28 +20,22 @@
         });
     }
 </script>
-
-{% set nav_auth = [ ('#', 'Explore'), ('#', 'Library'), ('{% url 'profile' %}', 'Profile')] %}
-{% set nav_notAuth = [ ('#', 'Explore'), ('{% url 'login' %}', 'Login'), ('{% url 'signup' %}', 'Register')] %}
-
 <div class="navigation">
     <ul class="nav">
         {% if user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link" href="#">Explore</a>
+            <a class="nav-link" href="{% url 'game' 1 %}">Explore</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Library</a>
+            <a class="nav-link" href="{% url 'game' 2 %}">Library</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'profile' %}">Profile</a>
         </li>
         {% else %}
-        {% for href, caption in nav_notAuth %}
         <li class="nav-item">
-            <a class="nav-link" href="{{ href }}">{{ caption }}</a>
+            <a class="nav-link" href="{% url 'game' 1 %}">Explore</a>
         </li>
-        {% endfor %}
         <li class="nav-item">
             <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
@@ -60,8 +54,8 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
             {% if user.is_authenticated %}
-            <a class="dropdown-item" href="#">Explore</a>
-            <a class="dropdown-item" href="#">Library</a>
+            <a class="dropdown-item" href="{% url 'game' 1 %}">Explore</a>
+            <a class="dropdown-item" href="{% url 'game' 2 %}">Library</a>
             <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
             {% else %}
             <a class="dropdown-item" href="{% url 'login' %}">Login</a>

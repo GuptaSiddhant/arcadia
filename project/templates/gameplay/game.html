@@ -39,15 +39,23 @@
     <h1>{{ game.name }}</h1>
     <hr>
 </div>
-
 <div class="scrollable">
     {% if user.is_authenticated %}
     {% if game.price != 0 %}
     <button type="button" class="btn btn-primary btn-block" onclick="location.href='#'">
-    Purchase Game €{{ game.price }}
-    </button><br>
+        Purchase Game €{{ game.price }}
+    </button>
+    <br>
     {% endif %}
-    <iframe src="{{ game.url }}"></iframe>
+    <div>
+        <iframe id="game_frame"
+                style="border: 1px solid #000000; border-radius: 5px"
+                src="{{ game.url }}"></iframe>
+    </div><br>
+    <div class="form-group">
+        <h5>Status Updates:</h5>
+        <span id="status"></span>
+    </div>
     {% else %}
     <h5>Looks like you're missing out on a lot of fun. </h5>
     <p>Login to your account to access this game or create a new account if you don't already have one.</p>
@@ -55,4 +63,35 @@
     <a class="btn btn-secondary" href="{% url 'signup' %}" role="button">Create an Account</a>
     {% endif %}
 </div>
+
+<script>
+    /* global $ */
+    $(document).ready(function () {
+        'use strict';
+        $(window).on('message', function (evt) {
+            // Get data out of message
+            var data = evt.originalEvent.data;
+            // Filter Message
+            switch (data.messageType) {
+                case 'SETTING':
+                    console.log(data.options);
+                    $('#game_frame').width(data.options.width).height(data.options.height);
+                    $('#status').text("Size = width:" + data.options.width + ", height:" + data.options.height);
+                    break;
+                case 'SCORE':
+                    console.log(data.score);
+                    $('#status').text("Score = " + data.score);
+                    break;
+                case 'SAVE':
+                    console.log(data.gameState);
+                    $('#status').text("Saved Player Items = " + data.gameState.playerItems);
+                    break;
+                case 'LOAD_REQUEST':
+                    console.log("Load Req");
+                    $('#status').text("Load Requested");
+                    break;
+            }
+        });
+    });
+</script>
 {% endblock %}
