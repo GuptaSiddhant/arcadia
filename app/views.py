@@ -17,12 +17,6 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
-
-def Index(request):
-    game = Game.objects.get(pk=1)
-    return render(request, 'gameplay/game.html', {'game': game})
-
-
 def GamePlay(request, game_id):
     try:
         game = Game.objects.get(pk=game_id)
