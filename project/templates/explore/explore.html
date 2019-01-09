@@ -1,109 +1,100 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %} Explore {% endblock %}
+
+{% block logic %}
+<script>
+    $(document).ready(function () {
+        let params = (new URL(document.location)).searchParams;
+        let genre = params.get("genre");
+        let search = params.get("search");
+        if (search != null && search !== '') {
+            $('#explore-heading').text('Search Results for \"' + search + '\"');
+        }
+        else {
+            $(".genres a").each(function () {
+                if (genre === null) {
+                    genre = 'all'
+                }
+                const href = $(this).attr('href');
+                if (href.includes(genre)) {
+                    $(this).css("font-weight", "700");
+                    $('#genre-heading').text(genre);
+                }
+            });
+        }
+
+        $("#search").on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                $(this).addClass("buttonSearch");
+            }
+        });
+
+        $('#search-button').click(function (e) {
+            $('#search-form').submit();
+        });
+
+    });
+</script>
+{% endblock %}
+
 
 <!--Sidebar-->
 {% block sidebar %}
-{% if user.is_authenticated %}
 <div class="heading">
     <h2>Filter Games</h2>
     <hr>
 </div>
 <div class="scrollable">
+    <form id="search-form" method="get" action="/explore/">
+        <div id="search-game" style="position: relative">
+            <div style="position: absolute; top:0px; left: 0px; padding: 7px; color: #343A3E;">
+                <i class="fas fa-search"></i></div>
+            <input type="search" id="search" name="search" placeholder="Search Games" autofocus>
+            <div id="search-button"
+                 style="position: absolute; top:0px; right: 0px; padding: 7px; color: #6E42C0; cursor: pointer">
+                <i class="fas fa-arrow-circle-right"></i></div>
+        </div>
+    </form>
+    <br>
     <h5>Select Genre: </h5>
-    <ul class="list-unstyled">
-        <li>All Games</li>
-        <li>Free to Play</li>
-        <li>Action</li>
-        <li>Adventure</li>
-        <li>Casual</li>
-        <li>Indie</li>
-        <li>Multiplayer</li>
-        <li>Racing</li>
-        <li>RPG</li>
-        <li>Simulation</li>
-        <li>Sports</li>
-        <li>Simulation</li>
+    <ul class="list-unstyled genres">
+        <li><a href="?genre=all">All Games</a></li>
+        <li><a href="?genre=free">Free to Play</a> <i style="color: #ffc107" class="fas fa-circle"></i></li>
+        {% for genre in genres %}
+        <li><a href="?genre={{ genre }}">{{ genre }}</a></li>
+        {% endfor %}
     </ul>
 </div>
-{% else %}
-<script type="text/javascript">
-    window.location = "{% url 'login' %}"
-</script>
-{% endif %}
 {% endblock %}
 
 <!--Main Block-->
 {% block main %}
-{% if user.is_authenticated %}
 <div class="heading">
-    <h1>Explore Games</h1>
+    <h1 id="explore-heading" style="text-transform: capitalize;">
+        Explore <span id="genre-heading"></span> Games
+    </h1>
     <hr>
 </div>
 <div class="scrollable">
     <div class="game-list grid--auto-fit">
-        <div class="game-list-item">
-            <img src="BG.png">
-            <button class="list-action btn btn-primary">
-                Buy €10,00
-            </button>
-            <div class="information">
-                Game Genre
-                <h4>Game Name</h4>
+        {% for game in games %}
+        <a href="{% url 'game' game.id %}">
+            <div class="game-list-item">
+                <img draggable="false" src="{{ game.image }}">
+                {% if game.price == 0 %}
+                <button class="list-action btn btn-warning">Free to Play</button>
+                {% else %}
+                <button class="list-action btn btn-light">€ {{ game.price }}</button>
+                {% endif %}
+                <div class="information">
+                    {{ game.genre }}
+                    <h4>{{ game.name }}</h4>
+                </div>
             </div>
-        </div>
-        <div class="game-list-item">
-            <img src="no-image.png">
-            <button class="list-action btn btn-primary">
-                Buy €10,00
-            </button>
-            <div class="information">
-                <span>Racing</span>
-                <h4>Space Warriors: To the End</h4>
-            </div>
-        </div>
-        <div class="game-list-item">
-            <img src="no-image.png">
-            <button class="list-action btn btn-success">
-                Play
-            </button>
-            <div class="information">
-                Game Genre
-                <h4>Game Name</h4>
-            </div>
-        </div>
-        <div class="game-list-item">
-            <img src="no-image.png">
-            <button class="list-action btn btn-primary">
-                Buy €10,00
-            </button>
-            <div class="information">
-                Game Genre
-                <h4>Game Name</h4>
-            </div>
-        </div>
-        <div class="game-list-item">
-            <img src="no-image.png">
-            <button class="list-action btn btn-primary">
-                Buy €10,00
-            </button>
-            <div class="information">
-                Game Genre
-                <h4>Game Name</h4>
-            </div>
-        </div>
+
+        </a>
+        {% endfor %}
     </div>
 </div>
-{% else %}
-<div class="heading">
-    <h1>Hey! Sneaky Person.</h1>
-    <hr>
-</div>
-<div class="scrollable">
-    <p>You are not logged in</p>
-    <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{% url 'login' %}'">
-        Login
-    </button>
-</div>
-{% endif %}
 {% endblock %}
