@@ -27,13 +27,13 @@ urlpatterns = [
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile/', TemplateView.as_view(template_name='profile/profile.html'), name='profile'),
-    path('accounts/signup/', views.SignUp.as_view(), name='signup'),
+    path('accounts/signup/', views.SignUpView.as_view(), name='signup'),
 ]
 
 urlpatterns += [
-    path('', views.Explore),
-    path('library/', views.Library, name='library'),
-    path('explore/', views.Explore, name='explore'),
-    path('game/<int:game_id>/', views.GamePlay, name='game'),
-
+    path('', views.ExploreView),
+    path('library/', views.LibraryView, name='library'),
+    path('explore/', views.ExploreView, name='explore'),
+    path('game/form/', views.GameFormView, name='gameForm'),
+    path('game/<int:game_id>/', views.GamePlayView, name='game'),
 ]
