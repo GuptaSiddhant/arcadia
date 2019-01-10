@@ -169,8 +169,8 @@
     <div>
         <h5>Looks like you're missing out on a lot of fun. </h5>
         <p>Login to your account to access this game or create a new account if you don't already have one.</p>
-        <a class="btn btn-primary" href="{% url 'login' %}" role="button">Login</a>
-        <a class="btn btn-secondary" href="{% url 'signup' %}" role="button">Create an Account</a>
+        <a class="btn btn-primary" href="{% url 'login' %}?next={% firstof request.path '/' %}" role="button">Login</a>
+        <a class="btn btn-secondary" href="{% url 'signup' %}?next={% firstof request.path '/' %}" role="button">Create an Account</a>
     </div>
     {% endif %}
 </div>

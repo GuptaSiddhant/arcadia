@@ -32,6 +32,7 @@ urlpatterns += [
 
 urlpatterns += [
     path('', views.Explore),
+    path('library/', views.Library, name='library'),
     path('explore/', views.Explore, name='explore'),
     path('game/<int:game_id>/', views.GamePlay, name='game'),
 
