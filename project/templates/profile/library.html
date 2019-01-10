@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Explore {% endblock %}
+{% block title %} Library {% endblock %}
 
 {% block logic %}
 <script>
@@ -9,7 +9,7 @@
         let genre = params.get("genre");
         let search = params.get("search");
         if (search != null && search !== '') {
-            $('#explore-heading').text('Search Results for \"' + search + '\"');
+            $('#explore-heading').text('Search Results for \"' + search + '\" in Library');
         }
         else {
             $(".genres a").each(function () {
@@ -46,7 +46,7 @@
     <hr>
 </div>
 <div class="scrollable">
-    <form id="search-form" method="get" action="/explore/">
+    <form id="search-form" method="get" action="/library/">
         <div id="search-game" style="position: relative">
             <div style="position: absolute; top:0px; left: 0px; padding: 4px 7px; color: #343A3E;">
                 <img src="{% static 'media/search.svg' %}" width="16px"></div>
@@ -72,7 +72,7 @@
 {% block main %}
 <div class="heading">
     <h1 id="explore-heading" style="text-transform: capitalize;">
-        Explore <span id="genre-heading"></span> Games
+        Your Library - <span id="genre-heading"></span> Games
     </h1>
     <hr>
 </div>
@@ -85,7 +85,7 @@
                 {% if game.price == 0 %}
                 <button class="list-action btn btn-warning">Free to Play</button>
                 {% else %}
-                <button class="list-action btn btn-light">€ {{ game.price }}</button>
+                <button class="list-action btn btn-success">Play</button>
                 {% endif %}
                 <div class="information">
                     {{ game.genre }}
