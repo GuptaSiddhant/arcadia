@@ -7,6 +7,7 @@ class User(AbstractUser):
     inventory = models.ManyToManyField('Game', default=None, blank=True)
     points_level = models.PositiveIntegerField(default=0)
     image = models.URLField(default="/static/media/no-image.png")
+    is_dev = models.BooleanField(default=False)
 
 
 class Game(models.Model):
