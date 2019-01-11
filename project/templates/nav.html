@@ -4,17 +4,15 @@
     function setNavigation() {
         var path = window.location.pathname;
         path = decodeURIComponent(path);
-        console.log(path);
         $(".nav a").each(function () {
             var href = $(this).attr('href');
-            if (path.substring(0, href.length) === href) {
+            if (path.includes(href)) {
                 $(this).addClass('active');
-                console.log($(this).attr('href').value);
             }
         });
         $(".dropdown-menu a").each(function () {
             var href = $(this).attr('href');
-            if (path.substring(0, href.length) === href) {
+            if (path.includes(href)) {
                 $(this).addClass('active');
             }
         });
@@ -24,17 +22,17 @@
     <ul class="nav">
         {% if user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'game' 1 %}">Explore</a>
+            <a class="nav-link" href="{% url 'explore' %}">Explore</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'game' 2 %}">Library</a>
+            <a class="nav-link" href="{% url 'library' %}">Library</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'profile' %}">Profile</a>
         </li>
         {% else %}
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'game' 1 %}">Explore</a>
+            <a class="nav-link" href="{% url 'explore' %}">Explore</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'login' %}">Login</a>
@@ -54,10 +52,11 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
             {% if user.is_authenticated %}
-            <a class="dropdown-item" href="{% url 'game' 1 %}">Explore</a>
-            <a class="dropdown-item" href="{% url 'game' 2 %}">Library</a>
+            <a class="dropdown-item" href="{% url 'explore' %}">Explore</a>
+            <a class="dropdown-item" href="{% url 'library' %}">Library</a>
             <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
             {% else %}
+            <a class="dropdown-item" href="{% url 'explore' %}">Explore</a>
             <a class="dropdown-item" href="{% url 'login' %}">Login</a>
             <a class="dropdown-item" href="{% url 'signup' %}">Register</a>
             {% endif %}

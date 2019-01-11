@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Game Details {% endblock %}
+
+{% block sidebar %}
+<div class="heading">
+    <h2>About Arcadia</h2>
+    <hr>
+</div>
+<div class="scrollable">
+    Arcadia is online Game-Shop.
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="heading">
+    <h1>Create an Account</h1>
+    <hr>
+</div>
+<div class="scrollable registration">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            {{ field.errors }}
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+            <p class="help-text">{{ field.help_text|safe }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="registration">
+            <button type="submit" class="btn btn-primary btn-lg ">Register</button>
+            <button type="reset" class="btn btn-secondary btn-lg">Reset</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

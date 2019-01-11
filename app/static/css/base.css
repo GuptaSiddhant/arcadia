@@ -173,9 +173,9 @@ h4 {
 }
 
 h5 {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #343A3E;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    color: #343A3E !important;
 }
 
 .registration {
@@ -200,4 +200,85 @@ input {
     height: 35px;
     width: 100%;
     padding: 10px;
+}
+
+input:focus {
+    outline: #6E42C0 auto 2px;
+}
+
+#search-game > input {
+    border: 1px solid rgba(0,0,0,0.25);
+    color: #343A3E;
+    border-radius: 5px;
+    height: 35px;
+    width: 100%;
+    padding: 10px 30px;
+}
+
+#search-game > div {
+    color: #6E42C0;
+}
+
+.genres > li {
+    line-height: 1.5 !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.game-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: inherit;
+
+}
+
+.game-list-item {
+    width: 250px;
+    height: 250px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: #6E42C0;
+    position: relative;
+    transition: all .2s ease-in-out;
+    transform: scale(0.975);
+}
+
+.game-list-item:hover{
+    transform: scale(1);
+    box-shadow: rgba(0,0,0,0.25) 0 0 20px 2px;
+}
+
+.game-list-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.information {
+    width: 100%;
+    height: 50%;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-image: linear-gradient(-180deg, rgba(0,0,0,0.00) 0%, #000000 100%);
+    padding: 10px 20px;
+    color: #ffffff;
+
+}
+
+.list-action {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.button {
+    z-index: 10;
 }

@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ game.name }} {% endblock %}
+
+{% block logic %}
+{# Define states of User & Game #}
+{# Need Set tag #}
+<script>
+    /* global $ */
+    $(document).ready(function () {
+        'use strict';
+
+        var gameWidth = 0;
+
+        $('#game-image img').each(function () {
+            const src = $(this).attr('src');
+            if (src.includes('no-image')) {
+                $('#game-image').css('display', 'none');
+            }
+        });
+
+        $(window).resize(function () {
+            if ($(window).width() <= 800) {
+                $('#game_frame').width('100%');
+            }
+            else {
+                $('#game_frame').width(gameWidth);
+            }
+        });
+
+        $(window).on('message', function (evt) {
+            // Get data out of message
+            var data = evt.originalEvent.data;
+            // Filter Message
+            switch (data.messageType) {
+                case 'SETTING':
+                    console.log(data.options);
+                    let gWidth = data.options.width;
+                    gameWidth = gWidth;
+                    let gHeight = data.options.height;
+                    if ($(window).width() > 800) {
+                        $('#game_frame').width(gWidth).height(gHeight);
+                    }
+                    else {
+                        $('#game_frame').width('100%').height(gHeight);
+                    }
+                    $('#status').text("Size = width:" + gWidth + ", height:" + gHeight);
+                    break;
+                case 'SCORE':
+                    console.log(data.score);
+                    $('#status').text("Score = " + data.score);
+                    break;
+                case 'SAVE':
+                    console.log(data.gameState);
+                    $('#status').text("Saved Player Items = " + data.gameState.playerItems);
+                    break;
+                case 'LOAD_REQUEST':
+                    console.log("Load Req");
+                    $('#status').text("Load Requested");
+                    var message = {
+                        messageType: "LOAD",
+                        gameState: {
+                            playerItems: [
+                                "Sword",
+                                "Wizard Hat"
+                            ],
+                            score: 506.0 // Float
+                        }
+                    };
+                    var messageE =  {
+                        messageType: "ERROR",
+                        info: "Gamestate could not be loaded"
+                    };
+                    var game_frame = document.getElementById('game_frame').contentWindow;
+                    game_frame.postMessage(message, "*");
+                    break;
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+<!--Sidebar-->
+{% block sidebar %}
+<div class="heading">
+    <h2>Game Info</h2>
+    <hr>
+</div>
+<div class="scrollable">
+    <div class="form-group">
+        <h5>Developer:</h5>
+        <a href="{% url 'profile' %}">Name Here{{ game.developer.name }}</a>
+    </div>
+    <div class="form-group">
+        <label>Genre:</label>
+        <a href="{% url 'profile' %}">{{ game.genre }}</a>
+    </div>
+    <div class="form-group">
+        <label>Price:</label> € {{ game.price }}
+        {% if user.is_authenticated %} <br>
+        {% if game.price == 0 %}
+        The game is a gift for you.
+        {% else %}
+        <!--{# if user.inventory.game.id == game.id #}-->
+        <span class="help-text">Purchased:</span> {{ game.date }}Not yet
+        {% endif %}
+        {% endif %}
+    </div>
+
+
+    {% if user.is_authenticated %}
+    <!--{# if user.inventory.game.id == game.id #}-->
+    {% if game.price == 0 %}
+    <br>
+    <div class="form-group">
+        <h5>Status Updates:</h5>
+        <span id="status"></span>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+<!--Main Block-->
+{% block main %}
+<div class="heading">
+    <h1>{{ game.name }}
+        {% if game.price == 0 %}
+        <sup>(Free)</sup>
+        {% endif %}
+    </h1>
+    <hr>
+</div>
+<div class="scrollable">
+    <!--Game Frame-->
+    {% if user.is_authenticated %}
+    <!--{# if user.inventory.game.id == game.id #}-->
+    {% if game.price == 0 %}
+    <div style="text-align: center;">
+        <iframe id="game_frame"
+                style="border: 1px solid #000000; border-radius: 5px"
+                src="{{ game.url }}"></iframe>
+    </div>
+    <br>
+    {% endif %}
+    {% endif %}
+
+    <!--Game Description-->
+    <div class="form-group">
+        <h5>Description:</h5>
+        <div style="display: flex; flex-wrap: nowrap; flex-direction: row">
+            <div id="game-image"
+                 style="margin-right: 20px; width: 100%; max-width: 200px; min-width: 100px">
+                <img draggable="false" src="{{ game.image }}" width="100%">
+            </div>
+            <div>{{ game.description }}<br></div>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+    <!--Purchase Button-->
+    {% if game.price != 0 %}
+    <button type="button" class="btn btn-primary btn-block btn-lg" onclick="location.href='#'">
+        Purchase Game €{{ game.price }}
+    </button>
+    <br>
+    {% endif %}
+    {% else %}
+    <div>
+        <h5>Looks like you're missing out on a lot of fun. </h5>
+        <p>Login to your account to access this game or create a new account if you don't already have one.</p>
+        <a class="btn btn-primary" href="{% url 'login' %}?next={% firstof request.path '/' %}" role="button">Login</a>
+        <a class="btn btn-secondary" href="{% url 'signup' %}?next={% firstof request.path '/' %}" role="button">Create an Account</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -16,7 +16,7 @@ class Game(models.Model):
     url = models.URLField(unique=True)
     price = models.FloatField(default=0)
     name = models.CharField(max_length=100, unique=True)
-    image = models.URLField(default="/static/media/no-image.png")
+    image = models.URLField(default="/static/media/no-image.png", blank=True)
     description = models.TextField()
     highscore = models.PositiveIntegerField(default=0)
 

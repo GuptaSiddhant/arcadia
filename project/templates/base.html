@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/game.css' %}">
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/popper.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -20,13 +19,15 @@
     <header>
         <div class="logo">
             <!--Replace Logo URL-->
-            <a href="{% url 'game' 1 %}">
+            <a href="{% url 'explore' %}">
                 <img class="logo" src="{% static 'media/logo-light.png' %}">
             </a>
         </div>
 
         {% include 'nav.html' %}
     </header>
+
+    {% block logic %}{% endblock %}
 
     {% block content %}
     <aside>

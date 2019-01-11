@@ -11,20 +11,20 @@
 </div>
 <div class="scrollable">
     <div class="form-group">
-        <h5>Username:</h5>
-        {{ user.username }}
+        <label>Name:</label>
+        {{ user.first_name }} {{ user.last_name }}
     </div>
     <div class="form-group">
-        <h5>Password:</h5>
-        <a href="{% url 'password_change' %}">Change Password.</a>
+        <label>Username: {{ user.username }} </label>
+        ({{ user.email }})
     </div>
     <div class="form-group">
-        <h5>Account Type:</h5>
-        {{ user.group }}
+        <label>Password:</label>
+        <a href="{% url 'password_change' %}">Change</a>
     </div>
     <div class="form-group">
-        <h5>Profile Photo:</h5>
-        <img src="{{ user.image }}" style="width: 150px">
+        <label>Account Type:</label>
+        {{ user.groups.name }}
     </div>
 </div>
 <button type="button" class="btn btn-danger btn-lg" onclick="location.href='{% url 'logout' %}'">
@@ -32,7 +32,7 @@
 </button>
 {% else %}
 <script type="text/javascript">
-    window.location = "{% url 'login' %}"
+    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
 </script>
 {% endif %}
 {% endblock %}
@@ -41,32 +41,12 @@
 {% block main %}
 {% if user.is_authenticated %}
 <div class="heading">
-    <h1>Welcome, {{ user.username }}!</h1>
+    <h1>Welcome, {{ user.first_name }}!</h1>
     <hr>
 </div>
 <div class="scrollable">
-    <div class="game-list grid--auto-fit">
-        <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
-            <button class="list-action btn btn-dark">
-                €10,00
-            </button>
-            <div class="information">
-                Game Genre
-                <h4>Game Name</h4>
-            </div>
-        </div>
-        <div class="game-list-item">
-            <img src="{% static 'media/no-image.png' %}">
-            <button class="list-action btn btn-success">
-                Play
-            </button>
-            <div class="information">
-                <span>Racing</span>
-                <h4>Space Warriors: To the End</h4>
-            </div>
-        </div>
-    </div>
+    <!--Main-->
+    <h5>You are a star!</h5> See your stats here.
 </div>
 {% else %}
 <div class="heading">
