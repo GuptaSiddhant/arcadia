@@ -88,8 +88,14 @@
 </div>
 <div class="scrollable">
     <div class="form-group">
-        <h5>Developer:</h5>
-        <a href="{% url 'profile' %}">Name Here{{ game.developer.name }}</a>
+        <label>Developer:</label>
+        <a href="/profile/{{ game.developer.username }}">
+            {% if game.developer.first_name != '' %}
+            <br>{{ game.developer.first_name }} {{ game.developer.last_name }} ({{ game.developer.username }})
+            {% else %}
+            {{ game.developer.username }}
+            {% endif %}
+        </a>
     </div>
     <div class="form-group">
         <label>Genre:</label>
@@ -134,8 +140,7 @@
 <div class="scrollable">
     <!--Game Frame-->
     {% if user.is_authenticated %}
-    <!--{# if user.inventory.game.id == game.id #}-->
-    {% if game.price == 0 %}
+    {% if game in user.inventory or game.price == 0 %}
     <div style="text-align: center;">
         <iframe id="game_frame"
                 style="border: 1px solid #000000; border-radius: 5px"
@@ -144,7 +149,6 @@
     <br>
     {% endif %}
     {% endif %}
-
     <!--Game Description-->
     <div class="form-group">
         <h5>Description:</h5>
