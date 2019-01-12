@@ -62,6 +62,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
+
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'project/templates')],
@@ -145,3 +146,5 @@ django_heroku.settings(locals(), test_runner=False)
 
 # Console email backend settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+AUTH_USER_MODEL = 'app.User'

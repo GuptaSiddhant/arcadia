@@ -1,22 +1,27 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from app.models import Developer
-from app.models import Player
+from app.models import User
 from app.models import Game
 from app.models import Genre
 from app.forms import GameForm
 import logging
 
+from app.forms import SignUpForm
+
 logger = logging.getLogger(__name__)
 
 
+# TODO: automatically log user in maybe after signup?
+# from django.contrib.auth import login, authenticate
+
+
 class SignUpView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = SignUpForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
+    model = User
 
 
 def ExploreView(request):
