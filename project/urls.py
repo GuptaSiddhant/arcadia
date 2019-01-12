@@ -31,9 +31,10 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('', views.ExploreView),
+    path('', views.IndexView, name='index'),
     path('library/', views.LibraryView, name='library'),
     path('explore/', views.ExploreView, name='explore'),
-    path('game/form/', views.GameFormView, name='gameForm'),
+    path('game/add/', views.GameAddView, name='gameAdd'),
     path('game/<int:game_id>/', views.GamePlayView, name='game'),
+    path('game/<int:game_id>/edit', views.GameEditView, name='gameEdit'),
 ]

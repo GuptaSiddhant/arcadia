@@ -8,6 +8,8 @@
         let params = (new URL(document.location)).searchParams;
         let genre = params.get("genre");
         let search = params.get("search");
+        let redirect = params.get("redirect");
+
         if (search != null && search !== '') {
             $('#explore-heading').text('Search Results for \"' + search + '\"');
         }
@@ -34,6 +36,11 @@
             $('#search-form').submit();
         });
 
+        if (redirect.includes('logout')) {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
     });
 </script>
 {% endblock %}
@@ -48,18 +55,19 @@
 <div class="scrollable">
     <form id="search-form" method="get" action="/explore/">
         <div id="search-game" style="position: relative">
-            <div style="position: absolute; top:0px; left: 0px; padding: 4px 7px; color: #343A3E;">
-                <img src="{% static 'media/search.svg' %}" width="16px"></div>
+            <div style="left: 0; ">
+                <img src="{% static 'media/search.svg' %}">
+            </div>
             <input type="search" id="search" name="search" placeholder="Search Games" autofocus>
-            <div id="search-button"
-                 style="position: absolute; top:0px; right: 0px; padding: 4px 7px; color: #6E42C0; cursor: pointer">
-                <img src="{% static 'media/arrow-circle-right.svg' %}" width="16px"></div>
+            <div id="search-button" style="right: 0; cursor: pointer">
+                <img src="{% static 'media/arrow-circle-right.svg' %}">
+            </div>
         </div>
     </form>
     <br>
     <h5>Select Genre: </h5>
     <ul class="list-unstyled genres">
-        <li><a href="?genre=all" style="color: #343A3E" >All Games</a></li>
+        <li><a href="?genre=all" style="color: #343A3E">All Games</a></li>
         <li><a href="?genre=free" style="color: #ffc107">Free to Play</a></li>
         {% for genre in genres %}
         <li><a href="?genre={{ genre }}">{{ genre }}</a></li>
@@ -97,4 +105,10 @@
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block extra %}
+{% if user.is_authenticated == False %}
+    <div id="snackbar">Logout Successful!</div>
+{% endif %}
 {% endblock %}
