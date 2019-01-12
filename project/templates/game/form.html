@@ -2,23 +2,84 @@
 {% load static %}
 {% block title %} Game Details {% endblock %}
 
+{% block logic %}
+<script>
+    $(document).ready(function () {
+
+        // Thumbnail Initialize
+        $('#thumbnail_image').attr('src', $('#id_image').val());
+        $('#thumbnail_name').text($('#id_name').val());
+        $('#thumbnail_genre').text($('#id_genre :selected').text());
+        var price = $('#id_price').val()
+        if (price == 0) {
+            $('#thumbnail_price').text('Free to Play');
+        }
+        else {
+            $('#thumbnail_price').text('€' + price);
+        }
+
+        // Thumbnail Update
+        $('#game-form').on("change paste keyup", function () {
+            $('#thumbnail_image').attr('src', $('#id_image').val());
+            $('#thumbnail_name').text($('#id_name').val());
+            $('#thumbnail_genre').text($('#id_genre :selected').text());
+            var price = $('#id_price').val()
+            if (price == 0) {
+                $('#thumbnail_price').text('Free to Play');
+            }
+            else {
+                $('#thumbnail_price').text('€' + price);
+            }
+        });
+    });
+</script>
+{% endblock %}
+
 {% block sidebar %}
+{% if user.is_authenticated %}
+{% if user.is_dev %}
 <div class="heading">
-    <h2>About Arcadia</h2>
+    <h2>Preview</h2>
     <hr>
 </div>
 <div class="scrollable">
-    Arcadia is online Game-Shop.
+    Enter URL on the right, to preview the content.
+    <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
+        <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}">
+        <button id="thumbnail_price" class="list-action btn btn-light">Free to Play</button>
+        <div class="information">
+            <span id="thumbnail_genre">Genre</span>
+            <h4 id="thumbnail_name">Game Name</h4>
+        </div>
+    </div>
 </div>
+<div>
+    {% if game %}
+    <button type="button" class="btn btn-outline-danger btn-lg" onclick="location.href='#'">
+        Delete Game
+    </button>
+    {% endif %}
+</div>
+{% else %}
+{% endif %}
+{% else %}
+<script type="text/javascript">
+    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
+</script>
+{% endif %}
 {% endblock %}
 
 {% block main %}
 <div class="heading">
-    <h1>Create an Account</h1>
+    <h1 id="form_heading">
+        {% if game %} Edit Game
+        {% else %} Add New Game {% endif %}
+    </h1>
     <hr>
 </div>
-<div class="scrollable registration">
-    <form method="post">
+<div class="scrollable ">
+    {% if user.is_dev %}
+    <form method="post" class="registration" id="game-form">
         {% csrf_token %}
         {% for field in form %}
         <div class="form-group">
@@ -30,10 +91,15 @@
             {% endif %}
         </div>
         {% endfor %}
-        <div class="registration">
-            <button type="submit" class="btn btn-primary btn-lg ">Register</button>
-            <button type="reset" class="btn btn-secondary btn-lg">Reset</button>
+        <button type="submit" class="btn btn-primary btn-lg ">Save</button>
+        <div>
+            <button type="reset" class="btn btn-outline-secondary btn-lg">Reset</button>
+            <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
         </div>
     </form>
+    {% else %}
+    <h5>You do not have access to this page.</h5>
+    <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
+    {% endif %}
 </div>
 {% endblock %}

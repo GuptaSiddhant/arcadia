@@ -40,13 +40,12 @@ image
         {% endif %}
     </div>
 </div>
-<button type="button" class="btn btn-danger btn-lg" onclick="location.href='{% url 'logout' %}'">
+<button type="button" class="btn btn-outline-danger btn-lg" onclick="location.href='{% url 'logout' %}'">
     Logout
 </button>
 {% else %}
 <script type="text/javascript">
     window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
-
 </script>
 {% endif %}
 {% endblock %}

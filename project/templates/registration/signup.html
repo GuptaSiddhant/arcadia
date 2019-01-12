@@ -9,6 +9,9 @@
 <div class="scrollable">
     Arcadia is online Game-Shop.
 </div>
+<button type="button" class="btn btn-outline-info btn-lg" onclick="location.href='mailto:siddhant.gupta@aalto.fi?subject=Arcadia Support: '">
+    Contact Arcadia
+</button>
 {% endblock %}
 
 {% block main %}
@@ -16,8 +19,8 @@
     <h1>Create an Account</h1>
     <hr>
 </div>
-<div class="scrollable registration">
-    <form method="post">
+<div class="scrollable">
+    <form method="post" class="registration">
         {% csrf_token %}
         {% for field in form %}
         <div class="form-group">
@@ -29,10 +32,9 @@
             {% endif %}
         </div>
         {% endfor %}
-        <div class="registration">
-            <button type="submit" class="btn btn-primary btn-lg ">Register</button>
-            <button type="reset" class="btn btn-secondary btn-lg">Reset</button>
-        </div>
+        <button type="submit" class="btn btn-primary btn-lg ">Register</button>
+        <button type="reset" class="btn btn-outline-secondary btn-lg">Reset</button>
+
     </form>
 </div>
 {% endblock %}
