@@ -17,3 +17,5 @@ admin.site.register(Genre)
 admin.site.register(Transaction)
 admin.site.register(GameState)
 admin.site.register(GameScore)
+
+# heroku acting up
