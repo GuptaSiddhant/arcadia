@@ -138,8 +138,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Login / logout redirect urls
-LOGIN_REDIRECT_URL = 'profile'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = '/library/?redirect=login'
+LOGOUT_REDIRECT_URL = '/?redirect=logout'
 
 # Configure Django App for Heroku.
 django_heroku.settings(locals(), test_runner=False)

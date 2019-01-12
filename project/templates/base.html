@@ -20,7 +20,7 @@
     <header>
         <div class="logo">
             <!--Replace Logo URL-->
-            <a href="{% url 'explore' %}">
+            <a href="{% url 'index' %}">
                 <img class="logo" src="{% static 'media/logo-light.png' %}">
             </a>
         </div>
@@ -44,6 +44,7 @@
 
     <!--<footer>© Arcadia 2019.</footer>-->
 </section>
+{% block extra %}{% endblock %}
 </div>
 </body>
 </html>

@@ -103,7 +103,7 @@ body {
         display: grid;
         width: 100%;
         grid-template-areas: "head" "main" "side" "foot";
-        grid-template-rows: 60px 1fr 1fr 30px;
+        grid-template-rows: 60px auto auto;
         grid-template-columns: 1fr;
     }
 
@@ -190,7 +190,7 @@ h5 {
 .registration {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 20px;
+    grid-column-gap: 20px;
 }
 
 .help-text {
@@ -203,7 +203,7 @@ label {
     color: #343A3E;
 }
 
-input {
+input, textarea, select {
     border: 0px solid rgba(0,0,0,0.25);
     background-color: #E8E4EE;
     border-radius: 5px;
@@ -213,15 +213,21 @@ input {
 }
 
 input:focus {
-    outline: #6E42C0 auto 2px;
+    outline: #6E42C0 auto 1px;
 }
 
 #search-game > input {
     padding: 10px 30px;
+    height: 40px !important;
 }
 
 #search-game > div {
-    color: #6E42C0;
+    position: absolute;
+    top: 0;
+    padding: 7px;
+}
+#search-game > div > img {
+    width: 16px
 }
 
 .genres > li {
@@ -290,4 +296,48 @@ input:focus {
 
 .shown {
     display: block !important;
+}
+
+/* Snackbar */
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #fff;
+    color: #343A3E;
+    text-align: center;
+    border-radius: 10px;
+    padding: 16px;
+    position: fixed;
+    z-index: 20;
+    left: 50%;
+    top: 30px;
+    font-size: 1rem;
+    box-shadow: #6E42C0 0 0 20px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {top: 30px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {top: 30px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }

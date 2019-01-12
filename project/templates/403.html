@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Error 403 {% endblock %}
+
+{% block content %}
+<div class="floater">
+    <div class="heading">
+        <h1>You Shall Not Pass!</h1>
+        <hr>
+    </div>
+    <div class="scrollable">
+        <h5>This area is forbidden by powers bigger than you.</h5>
+        <p>You can go back or use navigation to find something new.</p>
+        <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
+    </div>
+</div>
+{% endblock %}

@@ -8,6 +8,8 @@
         let params = (new URL(document.location)).searchParams;
         let genre = params.get("genre");
         let search = params.get("search");
+        let redirect = params.get("redirect");
+        
         if (search != null && search !== '') {
             $('#explore-heading').text('Search Results for \"' + search + '\" in Library');
         }
@@ -34,6 +36,11 @@
             $('#search-form').submit();
         });
 
+        if (redirect.includes('login')) {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
     });
 </script>
 {% endblock %}
@@ -46,6 +53,7 @@
     <hr>
 </div>
 <div class="scrollable">
+    {% if user.is_authenticated %}
     <form id="search-form" method="get" action="/library/">
         <div id="search-game" style="position: relative">
             <div style="position: absolute; top:0px; left: 0px; padding: 4px 7px; color: #343A3E;">
@@ -65,7 +73,17 @@
         <li><a href="?genre={{ genre }}">{{ genre }}</a></li>
         {% endfor %}
     </ul>
+    {% else %}
+    <script type="text/javascript">
+        window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
+    </script>
+    {% endif %}
 </div>
+{% if user.is_dev %}
+<button type="button" class="btn btn-outline-primary btn-lg" onclick="location.href='{% url 'gameAdd' %}'">
+    Add New Game
+</button>
+{% endif %}
 {% endblock %}
 
 <!--Main Block-->
@@ -97,4 +115,11 @@
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+
+{% block extra %}
+{% if user.is_authenticated %}
+<div id="snackbar">Login Successful!</div>
+{% endif %}
 {% endblock %}
