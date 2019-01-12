@@ -87,6 +87,7 @@ body {
 
     .heading {
         overflow-y: hidden;
+        position: relative;
     }
 
     .scrollable {
@@ -154,6 +155,14 @@ body {
     color: #ffffff;
 }
 
+.dropdown-item {
+    color: #6E42C0 !important;
+}
+
+.dropdown-item.active {
+    color: #ffffff !important;
+}
+
 h1 {
     font-size: 1.5rem;
     font-weight: 700;
@@ -195,7 +204,8 @@ label {
 }
 
 input {
-    border: 1px solid rgba(0,0,0,0.25);
+    border: 0px solid rgba(0,0,0,0.25);
+    background-color: #E8E4EE;
     border-radius: 5px;
     height: 35px;
     width: 100%;
@@ -207,11 +217,6 @@ input:focus {
 }
 
 #search-game > input {
-    border: 1px solid rgba(0,0,0,0.25);
-    color: #343A3E;
-    border-radius: 5px;
-    height: 35px;
-    width: 100%;
     padding: 10px 30px;
 }
 
@@ -281,4 +286,8 @@ input:focus {
 
 .button {
     z-index: 10;
+}
+
+.shown {
+    display: block !important;
 }

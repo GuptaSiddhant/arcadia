@@ -16,7 +16,9 @@
                 $(this).addClass('active');
             }
         });
+
     }
+
 </script>
 <div class="navigation">
     <ul class="nav">
@@ -27,8 +29,22 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'library' %}">Library</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+        <li id="nav-profile" class="nav-item">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               id="dropdownProfile" href="{% url 'profile' %}">
+                {% if user.first_name == '' %}
+                {{ user.username }}
+                {% else %}
+                {{ user.first_name }}
+                {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownProfile">
+                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </li>
+        <li id='nav-logout' class="nav-item hidden">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
         {% else %}
         <li class="nav-item">
