@@ -13,7 +13,7 @@ from app.forms import SignUpForm
 logger = logging.getLogger(__name__)
 
 
-# TODO: automatically log user in maybe after signup?
+# TODO: Maybe we could automatically log the user in after signup?
 # from django.contrib.auth import login, authenticate
 
 
