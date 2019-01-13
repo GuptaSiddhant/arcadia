@@ -32,6 +32,7 @@ class SignUpForm(UserCreationForm):
 
 class UpdateProfile(UserChangeForm):
     password = None
+    email = forms.EmailField(required=True)
 
     class Meta:
         model = User
