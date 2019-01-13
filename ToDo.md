@@ -50,3 +50,7 @@ source ~/djangoenv/bin/activate
 python manage.py makemigrations;
 python manage.py migrate
 python manage.py runserver
+
+heroku login
+heroku git:remote -a wsd-arcadia
+git push heroku master
