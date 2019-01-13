@@ -84,10 +84,19 @@
     <br>
     <h5>Select Genre: </h5>
     <ul class="list-unstyled genres">
-        <li><a href="?{% param_replace genre='all' %}" style="color: #343A3E">All Games</a></li>
-        <li><a href="?{% param_replace genre='free' %}" style="color: #ffc107">Free to Play</a></li>
+        <li>
+            <a href="?{% param_replace genre='all' %}" style="color: #343A3E">All Games</a>
+            ({{ count.total }})
+        </li>
+        <li>
+            <a href="?{% param_replace genre='free' %}" style="color: #ffc107">Free to Play</a>
+            ({{ count.free }})
+        </li>
         {% for genre in genres %}
-        <li><a href="?{% param_replace genre=genre %}">{{ genre }}</a></li>
+        <li>
+            <a href="?{% param_replace genre=genre %}">{{ genre }}</a>
+            ({{ genre.game_set.count }})
+        </li>
         {% endfor %}
     </ul>
 </div>

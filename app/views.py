@@ -47,10 +47,15 @@ def explore_view(request):
     if search_tag is not None:
         games = games.filter(name__icontains=search_tag)
 
+    count_g = {'total': games.count,
+               'free': games.filter(price=0).count}
+
     # Pagination
     pages = Paginator(games, per_page=2, orphans=0)
     game_list = pages.get_page(page)
-    return render(request, 'game/explore.html', {'games': game_list, 'genres': genres, 'redirect': red_tag})
+
+    args = {'games': game_list, 'genres': genres, 'count': count_g, 'redirect': red_tag}
+    return render(request, 'game/explore.html', args)
 
 
 def library_view(request):
