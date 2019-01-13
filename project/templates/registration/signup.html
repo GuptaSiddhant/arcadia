@@ -9,7 +9,8 @@
 <div class="scrollable">
     Arcadia is online Game-Shop.
 </div>
-<button type="button" class="btn btn-outline-info btn-lg" onclick="location.href='mailto:siddhant.gupta@aalto.fi?subject=Arcadia Support: '">
+<button type="button" class="btn btn-outline-info btn-lg"
+        onclick="location.href='mailto:siddhant.gupta@aalto.fi?subject=Arcadia Support: '">
     Contact Arcadia
 </button>
 {% endblock %}
@@ -20,7 +21,7 @@
     <hr>
 </div>
 <div class="scrollable">
-    <form method="post" class="registration">
+    <form method="post" class="registration" id="signup_form">
         {% csrf_token %}
         {% for field in form %}
         <div class="form-group">
@@ -32,9 +33,17 @@
             {% endif %}
         </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary btn-lg ">Register</button>
-        <button type="reset" class="btn btn-outline-secondary btn-lg">Reset</button>
-
     </form>
+    <div class="flex_space_between">
+        <button type="submit" class="btn btn-primary btn-lg "
+                onclick="$('#signup_form').submit()">Register Account
+        </button>
+        <div>
+            <button type="reset" class="btn btn-outline-secondary btn-lg"
+                    onclick="$('#signup_form')[0].reset()">Reset
+            </button>
+            <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

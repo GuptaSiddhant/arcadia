@@ -46,7 +46,7 @@
     <hr>
 </div>
 <div class="scrollable">
-    Enter URL on the right, to preview the content.
+    Enter data in the form to preview the content.
     <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
         <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}">
         <button id="thumbnail_price" class="list-action btn btn-light">Free to Play</button>
@@ -94,12 +94,18 @@
             {% endif %}
         </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary btn-lg ">Save</button>
+    </form>
+    <div class="flex_space_between">
+        <button type="submit" class="btn btn-primary btn-lg "
+                onclick="$('#game-form').submit()">Save Game
+        </button>
         <div>
-            <button type="reset" class="btn btn-outline-secondary btn-lg">Reset</button>
+            <button type="reset" class="btn btn-outline-secondary btn-lg"
+                    onclick="$('#game-form')[0].reset()">Reset
+            </button>
             <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
         </div>
-    </form>
+    </div>
     {% else %}
     <h5>You do not have access to this page.</h5>
     <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>

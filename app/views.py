@@ -123,9 +123,6 @@ def profile_edit_view(request):
     red_tag = request.GET.get('redirect', None)
     if request.method == 'POST':
         form = UpdateProfile(request.POST, instance=request.user)
-        # user = request.user
-        # form.fields['first_name'].initial = user.first_name
-        # form.fields['last_name'].initial = user.last_name
         if form.is_valid():
             form.save()
             return redirect('/profile/')
