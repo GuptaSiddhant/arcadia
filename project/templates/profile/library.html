@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load arcadia_tags %}
 {% block title %} Library {% endblock %}
 
 {% block logic %}
@@ -9,22 +10,25 @@
         let genre = params.get("genre");
         let search = params.get("search");
         let redirect = params.get("redirect");
-        
+        let page = params.get("page");
+
         if (search != null && search !== '') {
             $('#explore-heading').text('Search Results for \"' + search + '\" in Library');
+            $('#search').attr('value', search);
+            $('#search-icon').attr('src', '/static/media/times-circle.svg')
         }
-        else {
-            $(".genres a").each(function () {
-                if (genre === null) {
-                    genre = 'all'
-                }
-                const href = $(this).attr('href');
-                if (href.includes(genre)) {
-                    $(this).css("font-weight", "700");
-                    $('#genre-heading').text(genre);
-                }
-            });
-        }
+
+        $(".genres a").each(function () {
+            if (genre === null) {
+                genre = 'all'
+            }
+            const href = $(this).attr('href');
+            if (href.includes(genre)) {
+                $(this).css("font-weight", "700");
+                $('#genre-heading').text(genre);
+            }
+        });
+
 
         $("#search").on('keypress', function (e) {
             if (e.keyCode === 13) {
@@ -36,10 +40,23 @@
             $('#search-form').submit();
         });
 
+        $('#search-icon').click(function (e) {
+            $('#search').attr('value', '');
+            $('#search-form').submit();
+        });
+
+        if (page === null) {
+            page = 1
+        }
+        var page_id = document.getElementById('page_' + page);
+        page_id.className = 'page-item active';
+
         if (redirect.includes('login')) {
             var x = document.getElementById("snackbar");
             x.className = "show";
-            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+            setTimeout(function () {
+                x.className = x.className.replace("show", "");
+            }, 3000);
         }
     });
 </script>
@@ -56,21 +73,21 @@
     {% if user.is_authenticated %}
     <form id="search-form" method="get" action="/library/">
         <div id="search-game" style="position: relative">
-            <div style="position: absolute; top:0px; left: 0px; padding: 4px 7px; color: #343A3E;">
-                <img src="{% static 'media/search.svg' %}" width="16px"></div>
+            <div style="left: 0px;">
+                <img id="search-icon" src="{% static 'media/search.svg' %}"></div>
             <input type="search" id="search" name="search" placeholder="Search Games" autofocus>
             <div id="search-button"
-                 style="position: absolute; top:0px; right: 0px; padding: 4px 7px; color: #6E42C0; cursor: pointer">
-                <img src="{% static 'media/arrow-circle-right.svg' %}" width="16px"></div>
+                 style="right: 0px; cursor: pointer">
+                <img src="{% static 'media/arrow-circle-right.svg' %}"></div>
         </div>
     </form>
     <br>
     <h5>Select Genre: </h5>
     <ul class="list-unstyled genres">
-        <li><a href="?genre=all" style="color: #343A3E" >All Games</a></li>
-        <li><a href="?genre=free" style="color: #ffc107">Free to Play</a></li>
+        <li><a href="?{% param_replace genre='all' %}" style="color: #343A3E">All Games</a></li>
+        <li><a href="?{% param_replace genre='free' %}" style="color: #ffc107">Free to Play</a></li>
         {% for genre in genres %}
-        <li><a href="?genre={{ genre }}">{{ genre }}</a></li>
+        <li><a href="?{% param_replace genre=genre %}">{{ genre }}</a></li>
         {% endfor %}
     </ul>
     {% else %}
@@ -79,11 +96,7 @@
     </script>
     {% endif %}
 </div>
-{% if user.is_dev %}
-<button type="button" class="btn btn-outline-primary btn-lg" onclick="location.href='{% url 'gameAdd' %}'">
-    Add New Game
-</button>
-{% endif %}
+<a class="btn btn-outline-danger btn-block" href="/library/">Reset Filters</a>
 {% endblock %}
 
 <!--Main Block-->
@@ -95,6 +108,7 @@
     <hr>
 </div>
 <div class="scrollable">
+    {% if games %}
     <div class="game-list grid--auto-fit">
         {% for game in games %}
         <a href="{% url 'game' game.id %}">
@@ -110,11 +124,43 @@
                     <h4>{{ game.name }}</h4>
                 </div>
             </div>
-
         </a>
         {% endfor %}
     </div>
+    {% else %}
+    <h5>No games found.</h5>
+    <p>Try different filters or reset the filters.</p>
+    {% endif %}
 </div>
+{% if games.paginator.num_pages > 1 %}
+<div style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-evenly">
+    <nav aria-label="navigation">
+        <ul class="pagination">
+            {% if games.has_previous %}
+            <li class="page-item"><a class="page-link" href="?{% param_replace page=games.previous_page_number %}">
+                Previous</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">
+                Previous</a></li>
+            {% endif %}
+            {% for page in games.paginator.page_range %}
+            <li id="page_{{ page }}" class="page-item">
+                <a class="page-link" href="?{% param_replace page=page %}">
+                    {{ page }}
+                </a>
+            </li>
+            {% endfor %}
+            {% if games.has_next %}
+            <li class="page-item"><a class="page-link" href="?{% param_replace page=games.next_page_number %}">
+                Next</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">
+                Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endif %}
 {% endblock %}
 
 

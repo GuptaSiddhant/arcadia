@@ -67,7 +67,7 @@
                             score: 506.0 // Float
                         }
                     };
-                    var messageE =  {
+                    var messageE = {
                         messageType: "ERROR",
                         info: "Gamestate could not be loaded"
                     };
@@ -126,7 +126,8 @@
     {% endif %}
 </div>
 {% if user == game.developer %}
-<button type="button" class="btn btn-outline-primary btn-lg" onclick="location.href='{% url 'gameEdit' game.id %}'">
+<button type="button" class="btn btn-outline-primary btn-block"
+        onclick="location.href='{% url 'gameEdit' game.id %}'">
     Edit Game
 </button>
 {% endif %}
@@ -137,7 +138,7 @@
 <div class="heading">
     <h1>{{ game.name }}
         {% if game.price == 0 %}
-        <sup>(Free)</sup>
+        <sup>[Free]</sup>
         {% endif %}
     </h1>
     <hr>
@@ -156,13 +157,15 @@
     {% endif %}
     <!--Game Description-->
     <div class="form-group">
-        <h5>Description:</h5>
         <div style="display: flex; flex-wrap: nowrap; flex-direction: row">
             <div id="game-image"
                  style="margin-right: 20px; width: 100%; max-width: 200px; min-width: 100px">
-                <img draggable="false" src="{{ game.image }}" width="100%">
+                <img draggable="false" src="{{ game.image }}" style="width: 100%; border-radius: 10px;">
             </div>
-            <div>{{ game.description }}<br></div>
+            <div>
+                <h5>Description:</h5>
+                {{ game.description }}<br>
+            </div>
         </div>
     </div>
 
@@ -178,8 +181,10 @@
     <div>
         <h5>Looks like you're missing out on a lot of fun. </h5>
         <p>Login to your account to access this game or create a new account if you don't already have one.</p>
-        <a class="btn btn-primary" href="{% url 'login' %}?next={% firstof request.path '/' %}" role="button">Login to your Account</a>
-        <a class="btn btn-outline-secondary" href="{% url 'signup' %}?next={% firstof request.path '/' %}" role="button">Create an Account</a>
+        <a class="btn btn-primary" href="{% url 'login' %}?next={% firstof request.path '/' %}" role="button">Login to
+            your Account</a>
+        <a class="btn btn-outline-secondary" href="{% url 'signup' %}?next={% firstof request.path '/' %}"
+           role="button">Create an Account</a>
     </div>
     {% endif %}
 </div>

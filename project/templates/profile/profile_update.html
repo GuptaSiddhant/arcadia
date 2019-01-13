@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Update Profile {% endblock %}
+
+{% block logic %}
+<script>
+    $(document).ready(function () {
+
+        // Thumbnail Initialize
+        $('#user_image').attr('src', $('#id_image').val());
+        $('#preview_name').text($('#id_first_name').val() + ' ' + $('#id_last_name').val());
+        $('#preview_email').text($('#id_email').val());
+
+        // Thumbnail Update
+        $('#game-form').on("change paste keyup", function () {
+            $('#user_image').attr('src', $('#id_image').val());
+            $('#preview_name').text($('#id_first_name').val() + ' ' + $('#id_last_name').val());
+            $('#preview_email').text($('#id_email').val());
+        });
+    });
+</script>
+{% endblock %}
+
+{% block sidebar %}
+{% if user.is_authenticated %}
+<div class="heading">
+    <h2>Preview</h2>
+    <hr>
+</div>
+<div class="scrollable">
+    <div style="width: 220px; text-align: center; margin-bottom: 1rem">
+        <img id="user_image" draggable="false" src="{{ user.image }}">
+    </div>
+    <div class="form-group">
+        <label>Name:</label>
+        <span id="preview_name">
+        {% if user.first_name == '' %}
+        We don't know your name.
+        {% else %}
+        {{ user.first_name }} {{ user.last_name }}
+        {% endif %}
+        </span>
+    </div>
+    <div class="form-group">
+        <label>Username: {{ user.username }} </label>
+        <span id="preview_email" style="font-size: 0.8rem;">{{ user.email }}</span>
+    </div>
+    <div class="form-group">
+        <label>Password:</label>
+        <a href="{% url 'password_change' %}">Change</a>
+    </div>
+    <div class="form-group">
+        <label>Account Type:</label>
+        {% if user.is_dev == False %}
+        Player
+        {% else %}
+        Developer
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<script type="text/javascript">
+    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
+</script>
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="heading">
+    <h1 id="form_heading">
+        Update Profile
+    </h1>
+    <hr>
+</div>
+<div class="scrollable ">
+    <form method="post" class="registration" id="game-form">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            {{ field.errors }}
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+            <p class="help-text">{{ field.help_text|safe }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary btn-lg ">Save</button>
+        <div>
+            <button type="reset" class="btn btn-outline-secondary btn-lg">Reset</button>
+            <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,3 +1,10 @@
+# Todo
+* inventory
+    * ext-profile
+    * library
+    * gameplay
+    
+
 ## User
 * Groups - Admins, Developers, Gamers
 * Login

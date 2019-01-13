@@ -30,3 +30,25 @@
     </div>
 </div>
 {% endblock %}
+
+
+{% block logic %}
+<script>
+    $(document).ready(function () {
+        let params = (new URL(document.location)).searchParams;
+        let redirect = params.get("redirect");
+
+        if (redirect.includes('access')) {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+    });
+</script>
+{% endblock %}
+
+{% block extra %}
+{% if user.is_authenticated == False %}
+<div id="snackbar">Login to gain access!</div>
+{% endif %}
+{% endblock %}
