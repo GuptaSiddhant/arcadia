@@ -29,10 +29,9 @@ SECRET_KEY = 'e-pzjz^rl!f@1*bDvmp=ci!wpgmq6&c(o+mwet*tr^(ap=jy7x'
 # os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if 'DEBUG' in os.environ:
-    DEBUG = os.environ['DEBUG']
-else:
-    DEBUG = True
+# To have debug True create a .env file in project root and add 'DEBUG = True'
+DEBUG = os.environ.get('DEBUG')
+
 
 ALLOWED_HOSTS = ['*']
 
