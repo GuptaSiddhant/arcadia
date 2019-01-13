@@ -78,14 +78,13 @@ WEEK 2 Sprint
 - message_SCORE (Siddhant)
 
 WEEK 3 Sprint
-- test framework setup models / main functions
-- SubmitGameView
-- message_LOAD_REQUEST
-- message_ERROR
-- payment service integration
-- message_SAVE
-- message_LOAD
-- message_SETTING
+- Email validation (Henri)
+- payment service integration (Henri)
+- Get inventory working (Santeri)
+- test data population and some unit tests (Santeri)
+- save for Gameform (Santeri)
+- save game messages (Santeri)
+- Post message (Siddhant)
 
 WEEK 4 Sprint
 - ModifyGameView
