@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Profile {% endblock %}
+
+{% block profile-image %}
+image
+
+{% endblock %}
+
+<!--Sidebar-->
+{% block sidebar %}
+{% if user.is_authenticated %}
+<div class="heading">
+    <h2>Game Inventory</h2>
+    <hr>
+</div>
+<div class="scrollable">
+    {{ user2.inventory }}
+    {{ user2.inventory.all }}
+</div>
+{% else %}
+<script type="text/javascript">
+    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
+</script>
+{% endif %}
+{% endblock %}
+
+<!--Main Block-->
+{% block main %}
+{% if user.is_authenticated %}
+<div class="heading">
+    <h1>Profile of
+        {% if user2.first_name == '' %} {{ user2.username }}
+        {% else %} {{ user2.first_name }} {{ user2.last_name }}
+        {% endif %}
+        <sup>{% if user2.is_dev %} [Dev] {% endif %}</sup>
+    </h1><hr>
+</div>
+<div class="scrollable">
+    <!--Main-->
+
+    <div class="form-group">
+        <div style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-between">
+            <div>
+                <div class="form-group">
+                    <label>Username: </label>
+                    <span>{{ user2.username }}</span>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <span>{{ user2.email }}</span>
+                </div>
+                <div class="form-group">
+                    <label>Account Type:</label>
+                    {% if user2.is_dev == False %}
+                    Player
+                    {% else %}
+                    Developer
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label>Points:</label>
+                    <span>{{ user2.points_level }}</span>
+                </div>
+            </div>
+            <div id="game-image"
+                 style="margin-right: 20px; width: 100%; max-width: 150px; min-width: 100px">
+                <img draggable="false" src="{{ user2.image }}" width="100%"
+                     style="border-radius: 50%">
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+{% else %}
+<div class="heading">
+    <h1>Hey! Sneaky Person.</h1>
+    <hr>
+</div>
+<div class="scrollable">
+    <p>You are not logged in</p>
+    <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{% url 'login' %}'">
+        Login
+    </button>
+</div>
+{% endif %}
+{% endblock %}

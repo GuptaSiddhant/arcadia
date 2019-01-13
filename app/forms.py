@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from app.models import Game
 from app.models import Genre
@@ -28,6 +28,15 @@ class SignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class UpdateProfile(UserChangeForm):
+    password = None
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'image')
+        exclude = ('password1',)
 
 
 class GameForm(forms.ModelForm):

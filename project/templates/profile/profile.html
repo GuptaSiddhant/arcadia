@@ -11,10 +11,14 @@ image
 {% block sidebar %}
 {% if user.is_authenticated %}
 <div class="heading">
-    <h2>Settings</h2>
+    <h2>Your Profile</h2>
     <hr>
 </div>
 <div class="scrollable">
+    <div id="game-image"
+         style="width: 220px; text-align: center; margin-bottom: 1rem">
+        <img id="user_image" draggable="false" src="{{ user.image }}">
+    </div>
     <div class="form-group">
         <label>Name:</label>
         {% if user.first_name == '' %}
@@ -40,12 +44,15 @@ image
         {% endif %}
     </div>
 </div>
-<button type="button" class="btn btn-outline-danger btn-lg" onclick="location.href='{% url 'logout' %}'">
+<button type="button" class="btn btn-outline-primary btn-block" onclick="location.href='{% url 'profileEdit' %}'">
+    Update Profile
+</button>
+<button type="button" class="btn btn-outline-danger btn-block" onclick="location.href='{% url 'logout' %}'">
     Logout
 </button>
 {% else %}
 <script type="text/javascript">
-    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
+    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
 </script>
 {% endif %}
 {% endblock %}
@@ -66,6 +73,12 @@ image
     <!--Main-->
     <h5>You are a star!</h5> See your stats here.
 </div>
+
+{% if user.is_dev %}
+<button type="button" class="btn btn-outline-primary btn-lg" onclick="location.href='{% url 'gameAdd' %}'">
+    Add New Game
+</button>
+{% endif %}
 {% else %}
 <div class="heading">
     <h1>Hey! Sneaky Person.</h1>

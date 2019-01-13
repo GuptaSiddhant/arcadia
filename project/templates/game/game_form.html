@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Game Details {% endblock %}
+{% block title %}
+{% if game %} Edit Game
+{% else %} Add New Game {% endif %}
+{% endblock %}
 
 {% block logic %}
 <script>
@@ -55,7 +58,7 @@
 </div>
 <div>
     {% if game %}
-    <button type="button" class="btn btn-outline-danger btn-lg" onclick="location.href='#'">
+    <button type="button" class="btn btn-outline-danger btn-block" onclick="location.href='#'">
         Delete Game
     </button>
     {% endif %}
@@ -64,7 +67,7 @@
 {% endif %}
 {% else %}
 <script type="text/javascript">
-    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
+    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
 </script>
 {% endif %}
 {% endblock %}

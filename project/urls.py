@@ -26,15 +26,18 @@ urlpatterns = [
 # Add Django site authentication urls (for login, logout, password management)
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
+    path('profile/', TemplateView.as_view(template_name='profile/profile.html')),
     path('accounts/profile/', TemplateView.as_view(template_name='profile/profile.html'), name='profile'),
+    path('accounts/profile/edit/', views.profile_edit_view, name='profileEdit'),
     path('accounts/signup/', views.SignUpView.as_view(), name='signup'),
 ]
 
 urlpatterns += [
-    path('', views.IndexView, name='index'),
-    path('library/', views.LibraryView, name='library'),
-    path('explore/', views.ExploreView, name='explore'),
-    path('game/add/', views.GameAddView, name='gameAdd'),
-    path('game/<int:game_id>/', views.GamePlayView, name='game'),
-    path('game/<int:game_id>/edit', views.GameEditView, name='gameEdit'),
+    path('', views.index_view, name='index'),
+    path('library/', views.library_view, name='library'),
+    path('explore/', views.explore_view, name='explore'),
+    path('game/add/', views.game_add_view, name='gameAdd'),
+    path('game/<int:game_id>/', views.game_play_view, name='game'),
+    path('game/<int:game_id>/edit/', views.game_edit_view, name='gameEdit'),
+    path('profile/<slug:username>/', views.external_profile_view, name='user_profile'),
 ]
