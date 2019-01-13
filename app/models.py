@@ -6,7 +6,7 @@ from django.conf import settings
 class User(AbstractUser):
     inventory = models.ManyToManyField('Game', default=None, blank=True)
     points_level = models.PositiveIntegerField(default=0)
-    image = models.URLField(required=False, default=None, blank=True)
+    image = models.URLField(default=None, blank=True)
     is_dev = models.BooleanField(default=False)
 
 
@@ -16,7 +16,7 @@ class Game(models.Model):
     url = models.URLField(unique=True)
     price = models.FloatField(default=0)
     name = models.CharField(max_length=100, unique=True)
-    image = models.URLField(required=False, default=None, blank=True)
+    image = models.URLField(default=None, blank=True)
     description = models.TextField()
     highscore = models.PositiveIntegerField(default=0)
 
