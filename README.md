@@ -4,7 +4,7 @@
  This is a course project for Web Software Development CS-C3170 2018-2019 at Aalto University
  
 ## Team
-Henri Ahti 57237L      
+Henri Ahti      57237L      
 Siddhant Gupta  721936  
 Santeri Volkov  528142 
 
@@ -51,6 +51,9 @@ Git
 
 ## Process and Time Schedule
 
+Project online on Heroku:  
+http://arcadiagames.ga
+
 WEEK 51-52
 1. Heroku setup (Santeri)
 2. Django basic setup (Henri)
@@ -75,14 +78,14 @@ WEEK 2 Sprint
 - Django Groups into use (Henri)
 - GamePlayView (Siddhant)
 - ProfileView (Siddhant))
-- message_SCORE (Siddhant)
+- message_SCORE(and all other game-service messages) (Siddhant)
 
 WEEK 3 Sprint
 - Email validation (Henri)
 - payment service integration (Henri)
 - Get inventory working (Santeri)
 - test data population and some unit tests (Santeri)
-- save for Gameform (Santeri)
+- save for GameForm (Santeri)
 - save game messages (Santeri)
 - Post message (Siddhant)
 
@@ -101,8 +104,6 @@ WEEK 7 Sprint
 - Testing
 
 Final date 19th of Feb
-
-
 
 
 [Model relations]: img/Arcadia.png "Model relations"
