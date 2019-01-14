@@ -2,8 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
-from app.models import Game
-from app.models import Genre
+from app.models import Game, Genre, Transaction
 
 User = get_user_model()
 
@@ -37,7 +36,6 @@ class UpdateProfile(UserChangeForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'image')
-        exclude = ('password1',)
 
 
 class GameForm(forms.ModelForm):

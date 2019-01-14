@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Checkout {% endblock %}
+
+{% block logic %}
+{% endblock %}
+
+{% block sidebar %}
+    {% if user.is_authenticated %}
+        <div class="heading">
+            <h2>Game</h2>
+            <hr>
+        </div>
+        <div class="scrollable">
+            <a href="{% url 'game' game.id %}">
+                <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
+                    <img draggable="false" id="thumbnail_image" src="{{ game.image }}">
+                    <button id="thumbnail_price" class="list-action btn btn-light">€ {{ game.price }}</button>
+                    <div class="information">
+                        <span id="thumbnail_genre">{{ game.genre }}</span>
+                        <h4 id="thumbnail_name">{{ game.name }}</h4>
+                    </div>
+                </div>
+            </a>
+            {{ game.description }}
+        </div>
+    {% else %}
+        <script type="text/javascript">
+            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    <div class="heading">
+        <h1 id="form_heading">Checkout</h1>
+        <hr>
+    </div>
+    <div class="scrollable ">
+        {% if game in user.inventory.all or user == game.developer %}
+            <h5>Why do you want to purchase your game?</h5>
+            We do like money but this is too much to handle. Kindly go back. <br>
+            <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
+        {% else %}
+            <h5>Great Choice!</h5>
+            <p>Check form for the details and click purchase to complete the transaction.</p>
+            <div class="registration">
+                <div class="form-group">
+                    <label for="id_player">User</label>
+                    <input type="text" id="id_player" name="user" value="{{ user.username }}" disabled/>
+                </div>
+                <div class="form-group">
+                    <label for="id_game">Game</label>
+                    <input type="text" id="id_game" name="game" value="{{ game.name }}" disabled/>
+                </div>
+                <div class="form-group">
+                    <label for="id_method">Payment Method</label>
+                    <input type="text" id="id_method" name="method" value="Arcadia Balance" disabled/>
+                </div>
+                <div class="form-group">
+                    <label for="id_amount">Amount (€)</label>
+                    <input type="text" id="id_amount" name="amount" value="{{ game.price }}" disabled/>
+                </div>
+            </div>
+            <form action="http://payments.webcourse.niksula.hut.fi/pay/" method="post"
+                  class="registration" id="checkout-form">
+                {% csrf_token %}
+                {# Add pid and checksum #}
+                <input type="hidden" name="pid" value={{ pid }}/>
+                <input type="hidden" name="sid" value={{ sid }}/>
+                <input type="hidden" name="success_url"
+                       value="{% url 'payment' %}"/>
+                <input type="hidden" name="cancel_url"
+                       value="{% url 'payment' %}"/>
+                <input type="hidden" name="error_url"
+                       value="{% url 'payment' %}"/>
+                <input type="hidden" name="checksum"
+                       value={{ checksum }}/>
+                <input type="hidden" id="id_amount" name="amount"
+                       value="{{ game.price }}" disabled/>
+            </form>
+            <div class="flex_space_between">
+                <button type="submit" class="btn btn-primary btn-lg "
+                        onclick="$('#checkout-form').submit()">Purchase
+                </button>
+
+                <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
+
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
