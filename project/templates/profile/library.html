@@ -154,14 +154,18 @@
                     <tr class='clickable-row' data-href="{% url 'game' game.id %}"
                         style="cursor: pointer">
                         <td style="display: grid; grid-template-columns:170px auto;">
-                            <img class="table-image" draggable="false" src="{{ game.image }}">
+                            {% if game.image %}
+                                <img draggable="false" class="table-image" src="{{ game.image }}">
+                            {% else %}
+                                <img draggable="false" class="table-image" src="{% static 'media/no-image.png' %}">
+                            {% endif %}
                             <div>
                                 <span style="font-weight: 700">{{ game.name }}</span>
                                 <br>{{ game.genre }}
-                                <br><a class="btn btn-outline-success btn-sm"
+                                <br><a class="btn btn-outline-success btn-sm" style="margin-top: 0"
                                        href="{% url 'game' game.id %}">Play</a>
                                 {% if user == game.developer %}
-                                    <a class="btn btn-outline-primary btn-sm"
+                                    <a class="btn btn-outline-primary btn-sm" style="margin-top: 0"
                                        href="{% url 'gameEdit' game.id %}">Edit Game</a>
                                 {% endif %}
                             </div>
@@ -176,7 +180,12 @@
             </table>
         {% else %}
             <h5>No games found.</h5>
-            <p>Try different filters or reset the filters.</p>
+            {% if user.inventory.all %}
+                <p>Also try different filters or reset the filters.</p>
+            {% else %}
+                <p>You don't own any games. Explore some.</p>
+                <a class="btn btn-outline-primary" href="/explore/">Explore Games</a>
+            {% endif %}
         {% endif %}
     </div>
     {% if games.paginator.num_pages > 1 %}
