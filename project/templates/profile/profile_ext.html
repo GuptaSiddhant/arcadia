@@ -32,7 +32,7 @@ image
         {% if user2.first_name == '' %} {{ user2.username }}
         {% else %} {{ user2.first_name }} {{ user2.last_name }}
         {% endif %}
-        <sup>{% if user2.is_dev %} [Dev] {% endif %}</sup>
+        <span class="heading-addon">{% if user2.is_dev %} [Dev] {% endif %}</span>
     </h1><hr>
 </div>
 <div class="scrollable">

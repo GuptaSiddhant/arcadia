@@ -20,6 +20,9 @@ class Game(models.Model):
     description = models.TextField()
     highscore = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        ordering = ['name', 'genre']
+
     def __str__(self):
         return str(self.name)
 
