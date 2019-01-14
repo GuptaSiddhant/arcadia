@@ -9,15 +9,10 @@
         /* global $ */
         $(document).ready(function () {
             'use strict';
+            let params = (new URL(document.location)).searchParams;
+            let redirect = params.get("redirect");
 
             var gameWidth = 0;
-
-            $('#game-image img').each(function () {
-                const src = $(this).attr('src');
-                if (src.includes('no-image')) {
-                    $('#game-image').css('display', 'none');
-                }
-            });
 
             $(window).resize(function () {
                 if ($(window).width() <= 800) {
@@ -74,6 +69,14 @@
                         break;
                 }
             });
+
+            if (redirect.includes('free')) {
+                var x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function () {
+                    x.className = x.className.replace("show", "");
+                }, 3000);
+            }
         });
     </script>
 {% endblock %}
@@ -156,8 +159,10 @@
         {% endif %}
         <!--Game Description-->
         <div class="media">
-            <img src="{{ game.image }}" class="align-self-start mr-3" alt="{{ game.name }}"
-                 style="width: 100%; max-width: 200px; min-width: 150px; border-radius: 10px;">
+            {% if game.image %}
+                <img src="{{ game.image }}" class="align-self-start mr-3" alt="{{ game.name }}"
+                     style="width: 100%; max-width: 200px; min-width: 150px; border-radius: 10px;">
+            {% endif %}
             <div class="media-body">
                 <h5 class="mt-0">Description:</h5>
                 <p>{{ game.description }}</p>
@@ -186,4 +191,10 @@
         {% endif %}
     </div>
 
+{% endblock %}
+
+{% block extra %}
+    {% if user.is_authenticated %}
+        <div id="snackbar">It's a Free game. Enjoy!</div>
+    {% endif %}
 {% endblock %}

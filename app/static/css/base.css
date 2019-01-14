@@ -275,6 +275,7 @@ input:focus {
     margin: 10px;
     border-radius: 10px;
     background-color: #6E42C0;
+    background-image: url("static/media/no-image.png");
     position: relative;
     transition: all .2s ease-in-out;
     transform: scale(0.975);

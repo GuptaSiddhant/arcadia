@@ -117,7 +117,11 @@
                 {% for game in games %}
                     <a href="{% url 'game' game.id %}">
                         <div class="game-list-item">
-                            <img draggable="false" src="{{ game.image }}">
+                            {% if game.image %}
+                                <img draggable="false" src="{{ game.image }}">
+                            {% else %}
+                                <img draggable="false" src="{% static 'media/no-image.png' %}">
+                            {% endif %}
                             {% if game.price == 0 %}
                                 <button class="list-action btn btn-warning">Free to Play</button>
                             {% else %}
