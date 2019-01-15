@@ -14,7 +14,7 @@ urlpatterns += [
     path('profile/', TemplateView.as_view(template_name='profile/profile.html')),
     path('accounts/profile/', TemplateView.as_view(template_name='profile/profile.html'), name='profile'),
     path('accounts/profile/edit/', views.profile_edit_view, name='profileEdit'),
-    path('accounts/signup/', views.SignUpView.as_view(), name='signup'),
+    path('accounts/signup/', views.signup_view, name='signup'),
     path('profile/<slug:username>/', views.external_profile_view, name='user_profile'),
 ]
 
@@ -30,4 +30,9 @@ urlpatterns += [
 
 urlpatterns += [
     path('payment/', views.payment_result_view, name='payment'),
+]
+
+urlpatterns += [
+    path('account_activation_sent/', views.account_activation_sent, name='account_activation_sent'),
+    path('activate/<uidb64>/<token>/', views.activate, name='activate'),
 ]
