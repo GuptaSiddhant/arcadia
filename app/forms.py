@@ -2,8 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
-from app.models import Game
-from app.models import Genre
+from app.models import Game, Genre, Transaction
 
 User = get_user_model()
 
@@ -25,6 +24,8 @@ class SignUpForm(UserCreationForm):
         user.set_password(self.cleaned_data["password1"])
         user.email = self.cleaned_data['email']
         user.is_dev = self.cleaned_data['dev_registration']
+        if self.cleaned_data['image'] == '':
+            user.image = 'https://pngimage.net/wp-content/uploads/2018/05/default-user-profile-image-png-2.png'
         if commit:
             user.save()
         return user
@@ -37,7 +38,6 @@ class UpdateProfile(UserChangeForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'image')
-        exclude = ('password1',)
 
 
 class GameForm(forms.ModelForm):

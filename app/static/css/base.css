@@ -187,10 +187,17 @@ h5 {
     color: #343A3E !important;
 }
 
+.heading-addon {
+    font-size: 1rem !important;
+    font-weight: 700;
+    color: #6E42C0;
+}
+
 .registration {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-column-gap: 20px;
+    grid-row-gap: 10px;
 }
 
 .flex_space_between {
@@ -202,6 +209,14 @@ h5 {
 
 .help-text {
     color: gray;
+}
+
+.btn {
+    margin-top: 10px;
+}
+
+.sort_icon {
+    cursor: pointer;
 }
 
 label {
@@ -234,7 +249,7 @@ input:focus {
     padding: 7px;
 }
 
-#search-game > div > img {
+.icon16 {
     width: 16px
 }
 
@@ -251,7 +266,7 @@ input:focus {
     flex-direction: row;
     flex-wrap: wrap;
     background-color: inherit;
-
+    justify-content: center;
 }
 
 .game-list-item {
@@ -275,6 +290,13 @@ input:focus {
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
+}
+
+.table-image {
+    width: 150px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
 .information {

@@ -92,6 +92,8 @@ WEEK 3 Sprint
 WEEK 4 Sprint
 - ModifyGameView
 - GameDetailView
+- Security (https enforcing and other django settings):  
+https://observatory.mozilla.org/analyze/wsd-arcadia.herokuapp.com
 
 WEEK 5 Sprint
 - GameBrowserView

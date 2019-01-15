@@ -15,4 +15,4 @@ DATABASES = {
 
 # django-heroku handles the allowed hosts, secret key and staticfiles
 # setups
-django_heroku.settings(locals(), databases=False, test_runner=False)
+django_heroku.settings(locals(), test_runner=False, databases=False)
