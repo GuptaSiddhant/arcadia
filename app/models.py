@@ -6,7 +6,7 @@ from django.conf import settings
 class User(AbstractUser):
     inventory = models.ManyToManyField('Game', default=None, blank=True)
     points_level = models.PositiveIntegerField(default=0)
-    image = models.URLField(default=None, blank=True)
+    image = models.URLField(default=None, blank=True, null=True)
     is_dev = models.BooleanField(default=False)
 
 

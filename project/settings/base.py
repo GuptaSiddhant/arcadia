@@ -18,25 +18,10 @@ import django_heroku
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
-# Setting default development secret key, and django_heroku will handle the
-# production secret key config
-SECRET_KEY = 'e-pzjz^rl!f@1*bDvmp=ci!wpgmq6&c(o+mwet*tr^(ap=jy7x'
-
-# os.environ.get('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -83,20 +68,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'project.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# Default local database. django-heroku handles the heroku database
-# setup from DATABASE_URL
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -135,26 +106,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 # Login / logout redirect urls
 LOGIN_REDIRECT_URL = '/library/?redirect=login'
 LOGOUT_REDIRECT_URL = '/?redirect=logout'
 
-# Configure Django App for Heroku.
-django_heroku.settings(locals(), test_runner=False)
 
 # Console email backend settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Configure our extended AbstractUser as default User model
 AUTH_USER_MODEL = 'app.User'
-
-# Security
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'Strict'
-SESSION_COOKIE_SECURE = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_SSL_REDIRECT = True
-X_FRAME_OPTIONS = 'DENY'
-# SECURE_HSTS_SECONDS = 300  # set low, but when site is ready for deployment, set to at least 15768000 (6 months)
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
