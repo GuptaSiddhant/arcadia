@@ -9,6 +9,7 @@ class User(AbstractUser):
     image = models.URLField(blank=True, null=True, default='https://pngimage.net/wp-content/uploads/'
                                                            '2018/05/default-user-profile-image-png-2.png')
     is_dev = models.BooleanField(default=False)
+    email_confirmed = models.BooleanField(default=False)
 
 
 class Game(models.Model):
