@@ -148,7 +148,7 @@
     <div class="scrollable">
         <!--Game Frame-->
         {% if user.is_authenticated %}
-            {% if game in user.inventory.all or game.price == 0 %}
+            {% if game in user.inventory.all or game.price == 0  or game.developer == user%}
                 <div style="text-align: center;">
                     <iframe id="game_frame"
                             style="border: 1px solid #000000; border-radius: 5px;  width: 100%; height: 300px"
@@ -171,7 +171,7 @@
 
         {% if user.is_authenticated %}
             <!--Purchase Button-->
-            {% if game in user.inventory.all or game.price == 0 %}
+            {% if game in user.inventory.all or game.price == 0 or game.developer == user %}
             {% else %}
                 <a class="btn btn-primary btn-block btn-lg" href="{% url 'checkout' game.id %}">
                     Purchase Game €{{ game.price }}

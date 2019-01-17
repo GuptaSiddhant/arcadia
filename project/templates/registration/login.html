@@ -2,53 +2,77 @@
 {% load static %}
 {% block title %} Login {% endblock %}
 
-{% block content %}
-<div class="floater">
+{% block sidebar %}
     <div class="heading">
-        <h1>Ready. Set. Go.</h1>
+        <h2>Arcadia's Latest</h2>
         <hr>
     </div>
-    <div class="scrollable">
-        <form method="post">
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="form-group">
-                {{ field.errors }}
-                {{ field.label_tag }}
-                {{ field }}
-                {% if field.help_text %}
-                <p class="help-text">{{ field.help_text|safe }}</p>
-                {% endif %}
-            </div>
-            {% endfor %}
-            {{ form.non_field_errors }}
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
-        </form>
-        <br>
-        <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
-        <div>Not a member? <a href="{% url 'signup' %}">Register.</a></div>
+    <div class="scrollable" id="new_game">
     </div>
-</div>
 {% endblock %}
 
+{% block main %}
+    <div class="heading">
+        <h1>Ready. Set. Login.</h1>
+        <hr>
+    </div>
+    <div class="scrollable" id="new_game">
+        <form method="post" class="registration">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                    {% if field.help_text %}
+                        <p class="help-text">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </form>
+        <button type="submit" onclick="$('.registration').submit()" class="btn btn-primary btn-lg btn-block">Login</button>
+    </div>
+    <br>
+    <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
+    <div>Not a member? <a href="{% url 'signup' %}">Register.</a></div>
+{% endblock %}
 
 {% block logic %}
-<script>
-    $(document).ready(function () {
-        let params = (new URL(document.location)).searchParams;
-        let redirect = params.get("redirect");
+    <script>
+        $(document).ready(function () {
+            let params = (new URL(document.location)).searchParams;
+            let redirect = params.get("redirect");
 
-        if (redirect.includes('access')) {
-            var x = document.getElementById("snackbar");
-            x.className = "show";
-            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-        }
-    });
-</script>
+            if (redirect && redirect.includes('access')) {
+                let x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function () {
+                    x.className = x.className.replace("show", "");
+                }, 3000);
+            }
+
+            fetch("{% url 'api_game_latest' %}", {method: 'GET'})
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    let game = data.game;
+                    let HTML = "<a href='/game/" + game.id + "/'>" +
+                        "<div class='game-list-item' style='margin-left: 0px !important; width: 100% !important;'>" +
+                        "<img draggable='false' src='" + game.image + "'>" +
+                        "<button class='list-action btn btn-light'>€ " + game.price + "</button>" +
+                        "<div class='information'>" + game.genre + "<h4>" + game.name + "</h4>" +
+                        "</div></div></a>" +
+                        game.desc + ""
+                    $('#new_game').html(HTML);
+                });
+        });
+    </script>
 {% endblock %}
 
 {% block extra %}
-{% if user.is_authenticated == False %}
-<div id="snackbar">Login to gain access!</div>
-{% endif %}
+    {% if user.is_authenticated == False %}
+        <div id="snackbar">Login to gain access!</div>
+    {% endif %}
 {% endblock %}

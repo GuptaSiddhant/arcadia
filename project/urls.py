@@ -1,27 +1,33 @@
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path
 from django.conf.urls import include
 from django.views.generic.base import TemplateView
 from app import views
 
 urlpatterns = [
+    path('', views.index_view, name='index'),
     path('admin/', admin.site.urls),
 ]
 
 # Add Django site authentication urls (for login, logout, password management)
 urlpatterns += [
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('account/', include('django.contrib.auth.urls')),
+    path('account/signup/', views.signup_view, name='signup'),
+    path('account/activation_sent/', views.account_activation_sent, name='account_activation_sent'),
+    path('account/activate/<uidb64>/<token>/', views.activate, name='activate'),
+    path('account/profile/', TemplateView.as_view(template_name='profile/profile.html'), name='profile'),
+    path('account/profile/edit/', views.profile_edit_view, name='profileEdit'),
+]
+
+urlpatterns += [
     path('profile/', TemplateView.as_view(template_name='profile/profile.html')),
-    path('accounts/profile/', TemplateView.as_view(template_name='profile/profile.html'), name='profile'),
-    path('accounts/profile/edit/', views.profile_edit_view, name='profileEdit'),
-    path('accounts/signup/', views.signup_view, name='signup'),
     path('profile/<slug:username>/', views.external_profile_view, name='user_profile'),
 ]
 
 urlpatterns += [
-    path('', views.index_view, name='index'),
-    path('library/', views.library_view, name='library'),
     path('explore/', views.explore_view, name='explore'),
+    path('library/', views.library_view, name='library'),
     path('game/add/', views.game_add_view, name='gameAdd'),
     path('game/<int:game_id>/', views.game_play_view, name='game'),
     path('game/<int:game_id>/edit/', views.game_edit_view, name='gameEdit'),
@@ -33,6 +39,5 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('account_activation_sent/', views.account_activation_sent, name='account_activation_sent'),
-    path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+    path('api/game/latest/', views.game_api_latest, name='api_game_latest')
 ]

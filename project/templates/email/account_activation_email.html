@@ -1,7 +1,12 @@
 {% autoescape off %}
-Hi {{ user.username }},
+    Hi
+    {% if user2.first_name == '' %} {{ user2.username }}
+    {% else %} {{ user2.first_name }} {{ user2.last_name }}
+    {% endif %},
 
-Please click on the link below to confirm your registration:
+    Please click on the link below to confirm your registration (or paste the following link into your browser):<br>
 
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+    http://{{ domain }}{% url 'activate' uidb64=uid token=token %}<br>
+    <br>
+    - Team Arcadia
 {% endautoescape %}
