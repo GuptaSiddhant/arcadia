@@ -1,7 +1,7 @@
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse_lazy
 from django.views import generic
@@ -19,6 +19,7 @@ from hashlib import md5
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 def signup_view(request):
     if request.method == 'POST':
@@ -41,8 +42,10 @@ def signup_view(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+
 def account_activation_sent(request):
     return render(request, 'email/account_activation_sent.html')
+
 
 def activate(request, uidb64, token):
     try:
@@ -59,6 +62,7 @@ def activate(request, uidb64, token):
         return redirect('profile')
     else:
         return render(request, 'email/account_activation_invalid.html')
+
 
 def index_view(request):
     red = request.GET.get('redirect', None)
@@ -88,7 +92,7 @@ def explore_view(request):
         games = games.filter(name__icontains=search_tag)
 
     # Pagination
-    pages = Paginator(games, per_page=2, orphans=0)
+    pages = Paginator(games, per_page=10, orphans=0)
     game_list = pages.get_page(page)
 
     args = {'games': game_list, 'genres': genres, 'count': count_g, 'redirect': red_tag}
@@ -170,6 +174,28 @@ def game_edit_view(request, game_id):
         return render(request, 'game/game_form.html', {'form': form, 'game': game, 'redirect': red_tag})
     else:
         return render(request, '403.html', {'redirect': red_tag})
+
+
+def game_api_latest(request):
+    game = Game.objects.latest('pk')
+    data = {
+        "game": {
+            'id': game.id,
+            'name': game.name,
+            'genre': game.genre.name,
+            'url': game.url,
+            'price': game.price,
+            'image': game.image,
+            'desc': game.description,
+            'developer': {
+                'username': game.developer.username,
+                'first_name': game.developer.first_name,
+                'last_name': game.developer.last_name,
+                'photo': game.developer.image,
+            }
+        }
+    }
+    return JsonResponse(data)
 
 
 def external_profile_view(request, username):

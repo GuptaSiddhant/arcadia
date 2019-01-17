@@ -38,25 +38,24 @@
                 <img class="logo" src="{% static 'media/logo-light.png' %}">
             </a>
         </div>
-
         {% include 'nav.html' %}
     </header>
 
     {% block logic %}{% endblock %}
 
     {% block content %}
-    <aside>
-        {% block sidebar %}
-        {% endblock %}
-    </aside>
+        <aside>
+            {% block sidebar %}
+            {% endblock %}
+        </aside>
 
-    <main>
-        {% block main %}
-        {% endblock %}
-    </main>
+        <main>
+            {% block main %}
+            {% endblock %}
+        </main>
     {% endblock %}
 
-    <!--<footer>© Arcadia 2019.</footer>-->
+    <footer>© Arcadia 2019.</footer>
 </section>
 {% block extra %}{% endblock %}
 </div>

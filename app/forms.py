@@ -13,7 +13,7 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
     image = forms.URLField(required=False, label='Profile Picture URL', help_text="[Optional]")
     dev_registration = forms.BooleanField(required=False, label='Register as Developer',
-                                          help_text='Yes, I want to register as a Developer. Being a developer allows to submit games to Arcadia.')
+                                          help_text='Yes, I want to register as a Developer. Being a developer allows you to submit games to Arcadia.')
 
     class Meta:
         model = User

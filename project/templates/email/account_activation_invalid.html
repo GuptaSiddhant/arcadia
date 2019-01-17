@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
+{% block title %} Invalid Confirmation Link {% endblock %}
 
-{% block content %}
-  <p>The confirmation link was invalid, possibly because it has already been used.</p>
+{% block main %}
+<div class="heading">
+    <h1>Invalid Confirmation Link</h1>
+    <hr>
+</div>
+<div class="scrollable">
+    <p>The confirmation link was invalid, possibly because it has already been used.</p>
+    <p class="help-text">You will be redirected to registration page in 3 seconds. If not, click the button below.</p>
+    <button type="submit" class="btn btn-primary btn-lg" onclick="location.href='{% url 'signup' %}'">
+        Go to Registration
+    </button>
+</div>
+<script type="text/javascript">
+    setTimeout(redirect, 3000);
+    function redirect() {
+        window.location = "{% url 'signup' %}"
+    }
+</script>
 {% endblock %}
