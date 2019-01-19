@@ -6,7 +6,8 @@
 
 {# Section : Header #}
 {% block title %} {{ game.name }} {% endblock %}
-{% block meta %} {# empty MetaTags #} {% endblock %}
+{% block meta_desc %} {{ game.description }} {% endblock %}
+{% block meta_img %} {{ game.image }} {% endblock %}
 
 
 {# Section : Sidebar #}
@@ -140,6 +141,8 @@
                     $('#game_frame').width(gameWidth);
                 }
             });
+
+            $('#fb-share').attr('href','http://www.facebook.com/share.php?u=' + encodeURIComponent(location.href) + '&amp;src=sdkpreparse');
 
             $(window).on('message', function (evt) {
                 // Get data out of message

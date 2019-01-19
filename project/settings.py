@@ -147,3 +147,6 @@ django_heroku.settings(locals(), test_runner=False)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTH_USER_MODEL = 'app.User'
+
+# for HTTPS put TRUE
+SECURE_SSL_REDIRECT = False
