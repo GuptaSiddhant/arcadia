@@ -1,20 +1,17 @@
+{# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Profile {% endblock %}
+{% load arcadia_tags %}
 
-{% block profile-image %}
-image
 
-{% endblock %}
+{# Section : Header #}
+{% block title %} Your Profile {% endblock %}
+{% block meta %} {# empty MetaTags #} {% endblock %}
 
-<!--Sidebar-->
-{% block sidebar %}
-{% if user.is_authenticated %}
-<div class="heading">
-    <h2>Your Profile</h2>
-    <hr>
-</div>
-<div class="scrollable">
+
+{# Section : Sidebar #}
+{% block side_head %} Your Profile {% endblock %}
+{% block side_body %}
     <div id="game-image"
          style="width: 100%; text-align: center; margin-bottom: 1rem">
         <img id="user_image" draggable="false" src="{{ user.image }}">
@@ -22,9 +19,9 @@ image
     <div class="form-group">
         <label>Name:</label>
         {% if user.first_name == '' %}
-        We don't know your name.
+            We don't know your name.
         {% else %}
-        {{ user.first_name }} {{ user.last_name }}
+            {{ user.first_name }} {{ user.last_name }}
         {% endif %}
     </div>
     <div class="form-group">
@@ -38,57 +35,53 @@ image
     <div class="form-group">
         <label>Account Type:</label>
         {% if user.is_dev == False %}
-        Player
+            Player
         {% else %}
-        Developer
+            Developer
         {% endif %}
     </div>
-</div>
-<button type="button" class="btn btn-outline-primary btn-block" onclick="location.href='{% url 'profileEdit' %}'">
-    Update Profile
-</button>
-<button type="button" class="btn btn-outline-danger btn-block" onclick="location.href='{% url 'logout' %}'">
-    Logout
-</button>
-{% else %}
-<script type="text/javascript">
-    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
-</script>
-{% endif %}
 {% endblock %}
-
-<!--Main Block-->
-{% block main %}
-{% if user.is_authenticated %}
-<div class="heading">
-    <h1>Welcome,
-        {% if user.first_name == '' %}
-        {{ user.username }}
-        {% else %}
-        {{ user.first_name }}
-        {% endif %}!</h1>
-    <hr>
-</div>
-<div class="scrollable">
-    <!--Main-->
-    <h5>You are a star!</h5> See your stats here.
-</div>
-
-{% if user.is_dev %}
-<button type="button" class="btn btn-outline-primary btn-lg" onclick="location.href='{% url 'gameAdd' %}'">
-    Add New Game
-</button>
-{% endif %}
-{% else %}
-<div class="heading">
-    <h1>Hey! Sneaky Person.</h1>
-    <hr>
-</div>
-<div class="scrollable">
-    <p>You are not logged in</p>
-    <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{% url 'login' %}'">
-        Login
+{% block side_foot %}
+    <button type="button" class="btn btn-outline-primary btn-block" onclick="location.href='{% url 'profileEdit' %}'">
+        Update Profile
     </button>
-</div>
-{% endif %}
+    <button type="button" class="btn btn-outline-danger btn-block" onclick="location.href='{% url 'logout' %}'">
+        Logout
+    </button>
 {% endblock %}
+
+
+{# Section : Main #}
+{% block main_head %}
+    Welcome,
+    {% if user.first_name == '' %} {{ user.username }}
+    {% else %} {{ user.first_name }} {% endif %} !
+{% endblock %}
+{% block main_body %}
+    <h5>You are a star!</h5> See your stats here.
+{% endblock %}
+{% block main_foot %}
+    <div>
+        {% if user.is_dev %}
+            <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'gameAdd' %}'">
+                Add New Game
+            </button>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+{# Section : Extra Code #}
+{% block extra %}
+    {% if user.is_authenticated %}
+    {% else %}
+        {# Redirct to login #}
+        <script type="text/javascript">
+            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
+        </script>
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Logic #}
+{% block logic %} {# empty logic #} {% endblock %}
