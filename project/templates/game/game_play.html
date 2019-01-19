@@ -96,7 +96,7 @@
         <!--Purchase Button-->
         {% if game in user.inventory.all or game.price == 0 or game.developer == user %}
         {% else %}
-            <a class="btn btn-primary btn-block btn-lg" href="{% url 'checkout' game.id %}">
+            <a class="btn btn-primary btn-block btn-lg" href="{% url 'purchase' game.id %}">
                 Purchase Game €{{ game.price }}
             </a>
             <br>

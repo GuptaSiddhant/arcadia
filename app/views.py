@@ -222,7 +222,7 @@ def profile_edit_view(request):
         return render(request, 'profile/profile_update.html', {'form': form, 'redirect': red_tag})
 
 
-def pay_checkout_view(request, game_id):
+def pay_purchase_view(request, game_id):
     red_tag = request.GET.get('redirect', None)
     try:
         game = Game.objects.get(pk=game_id)
