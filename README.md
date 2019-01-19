@@ -20,14 +20,17 @@ Initial plan of Models and Views we will be implementing,
 and how they relate to each other.
 
 ###### Models
-* User(Django) -> (Developer, Player)
-* Transactions(sales)
+* AbstractUser(Django) -> User(Developer, Player)
+* Transaction(sales)
 * Game
 * GameState
+* GameScore
+* Genre
 
 ###### WebViews
 * Login/Register
-* Browse (no-login)
+* Explore (no-login)
+* Library(login)
 * Dev-Profile (login-dev)
 * Player-Profile (login) 
 * Details-Purchase-page (no-login) (Highscores)
