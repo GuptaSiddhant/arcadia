@@ -1,49 +1,61 @@
+{# Load Essentials #}
 {% extends 'base.html' %}
-{% block title %} Register {% endblock %}
+{% load static %}
+{% load arcadia_tags %}
 
-{% block sidebar %}
-    <div class="heading">
-        <h2>About Arcadia</h2>
-        <hr>
-    </div>
-    <div class="scrollable">
-        Arcadia is online Game-Shop.
-    </div>
+
+{# Section : Header #}
+{% block title %} Register {% endblock %}
+{% block meta %} {# empty MetaTags #} {% endblock %}
+
+
+{# Section : Sidebar #}
+{% block side_head %} About Arcadia {% endblock %}
+{% block side_body %}
+    Arcadia is online Game-Shop.
+{% endblock %}
+{% block side_foot %}
     <button type="button" class="btn btn-outline-info btn-lg"
             onclick="location.href='mailto:siddhant.gupta@aalto.fi?subject=Arcadia Support: '">
         Contact Arcadia
     </button>
 {% endblock %}
 
-{% block main %}
-    <div class="heading">
-        <h1>Create an Account</h1>
-        <hr>
-    </div>
-    <div class="scrollable">
-        <form method="post" class="registration" id="signup_form">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {{ field.errors }}
-                    {% if field.help_text %}
-                        <p class="help-text">{{ field.help_text|safe }}</p>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </form>
-        <div class="flex_space_between">
-            <button type="submit" class="btn btn-primary btn-lg "
-                    onclick="$('#signup_form').submit()">Register Account
-            </button>
-            <div>
-                <button type="reset" class="btn btn-outline-secondary btn-lg"
-                        onclick="$('#signup_form')[0].reset()">Reset
-                </button>
-                <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
+
+{# Section : Main #}
+{% block main_head %} Create an Account {% endblock %}
+{% block main_body %}
+    <form method="post" class="registration" id="signup_form">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+                {% if field.help_text %}
+                    <p class="help-text">{{ field.help_text|safe }}</p>
+                {% endif %}
             </div>
+        {% endfor %}
+    </form>
+    <div class="flex_space_between">
+        <button type="submit" class="btn btn-primary btn-lg "
+                onclick="$('#signup_form').submit()">Register Account
+        </button>
+        <div>
+            <button type="reset" class="btn btn-outline-secondary btn-lg"
+                    onclick="$('#signup_form')[0].reset()">Reset
+            </button>
+            <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
         </div>
     </div>
 {% endblock %}
+{% block main_foot %} {# empty footer #} {% endblock %}
+
+
+{# Section : Extra Code #}
+{% block extra %} {# empty extra #} {% endblock %}
+
+
+{# Section : Logic #}
+{% block logic %} {# empty logic #} {% endblock %}

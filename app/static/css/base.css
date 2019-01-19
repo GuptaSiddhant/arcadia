@@ -23,18 +23,6 @@ body {
     grid-template-rows: 60px 1fr;
 }
 
-.floater {
-    grid-area: side;
-    justify-self: center;
-    align-self: center;
-    background-color: #ffffff;
-    margin: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    display: grid;
-    grid-template-rows: 60px 1fr;
-}
-
 #page > main {
     grid-area: main;
     background-color: #ffffff;
@@ -52,6 +40,20 @@ body {
     background-color: inherit;
     display: none;
 }
+
+
+.floater {
+    grid-area: side;
+    justify-self: center;
+    align-self: center;
+    background-color: #ffffff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: 60px 1fr;
+}
+
 
 /* Desktop Layout */
 @media (min-width: 801px) {
@@ -78,12 +80,11 @@ body {
 
     #page > main {
         margin: 20px 20px 20px 0;
-        overflow-y: hidden;
+        overflow: hidden;
     }
 
     aside {
-        overflow-y: hidden;
-        overflow-x: hidden;
+        overflow: hidden;
     }
 
     .heading {
@@ -209,7 +210,7 @@ h5 {
 
 .registration {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     grid-column-gap: 20px;
     grid-row-gap: 10px;
 }
@@ -325,6 +326,13 @@ input:focus {
 .table-image {
     width: 150px;
     height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.table-image-small {
+    width: 50px;
+    height: 50px;
     object-fit: cover;
     border-radius: 5px;
 }

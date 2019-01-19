@@ -1,43 +1,56 @@
+{# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
+{% load arcadia_tags %}
+
+
+{# Section : Header #}
 {% block title %} Login {% endblock %}
+{% block meta %} {# empty MetaTags #} {% endblock %}
 
-{% block sidebar %}
-    <div class="heading">
-        <h2>Arcadia's Latest</h2>
-        <hr>
-    </div>
-    <div class="scrollable" id="new_game">
-    </div>
+
+{# Section : Sidebar #}
+{% block side_head %} Arcadia's Latest {% endblock %}
+{% block side_body %}
+    <div id="new_game"></div>
 {% endblock %}
+{% block side_foot %} {# empty footer #} {% endblock %}
 
-{% block main %}
-    <div class="heading">
-        <h1>Ready. Set. Login.</h1>
-        <hr>
-    </div>
-    <div class="scrollable" id="new_game">
-        <form method="post" class="registration">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {{ field.errors }}
-                    {% if field.help_text %}
-                        <p class="help-text">{{ field.help_text|safe }}</p>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            {{ form.non_field_errors }}
-        </form>
-        <button type="submit" onclick="$('.registration').submit()" class="btn btn-primary btn-lg btn-block">Login</button>
-    </div>
-    <br>
+
+{# Section : Main #}
+{% block main_head %} Ready. Set. Login. {% endblock %}
+{% block main_body %}
+    <form method="post" class="registration">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+                {% if field.help_text %}
+                    <p class="help-text">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {{ form.non_field_errors }}
+    </form>
+    <button type="submit" onclick="$('.registration').submit()" class="btn btn-primary btn-lg btn-block">Login</button>
+{% endblock %}
+{% block main_foot %}
     <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
     <div>Not a member? <a href="{% url 'signup' %}">Register.</a></div>
 {% endblock %}
 
+
+{# Section : Extra Code #}
+{% block extra %}
+    {% if user.is_authenticated == False %}
+        <div id="snackbar">Login to gain access!</div>
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Logic #}
 {% block logic %}
     <script>
         $(document).ready(function () {
@@ -69,10 +82,4 @@
                 });
         });
     </script>
-{% endblock %}
-
-{% block extra %}
-    {% if user.is_authenticated == False %}
-        <div id="snackbar">Login to gain access!</div>
-    {% endif %}
 {% endblock %}
