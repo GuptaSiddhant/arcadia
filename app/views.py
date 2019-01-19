@@ -219,10 +219,13 @@ def game_api_latest(request):
 def external_profile_view(request, username):
     red_tag = request.GET.get('redirect', None)
     try:
-        user = User.objects.get(username__contains=username)
+        user2 = User.objects.get(username__contains=username)
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
-    return render(request, 'profile/profile_ext.html', {'user2': user, 'redirect': red_tag})
+
+    games = Game.objects.filter(developer=user2)
+
+    return render(request, 'profile/profile_ext.html', {'user2': user2, 'games': games, 'redirect': red_tag})
 
 
 def profile_edit_view(request):
@@ -237,7 +240,7 @@ def profile_edit_view(request):
         return render(request, 'profile/profile_update.html', {'form': form, 'redirect': red_tag})
 
 
-def pay_checkout_view(request, game_id):
+def pay_purchase_view(request, game_id):
     red_tag = request.GET.get('redirect', None)
     try:
         game = Game.objects.get(pk=game_id)

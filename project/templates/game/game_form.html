@@ -1,10 +1,96 @@
+{# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
+{% load arcadia_tags %}
+
+
+{# Section : Header #}
 {% block title %}
     {% if game %} Edit Game
     {% else %} Add New Game {% endif %}
 {% endblock %}
+{% block meta %} {# empty MetaTags #} {% endblock %}
 
+
+{# Section : Sidebar #}
+{% block side_head %} Preview {% endblock %}
+{% block side_body %}
+    {% if user.is_dev %}
+        Enter data in the form to preview the content.
+        <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
+            <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}">
+            <button id="thumbnail_price" class="list-action btn btn-light">Free to Play</button>
+            <div class="information">
+                <span id="thumbnail_genre">Genre</span>
+                <h4 id="thumbnail_name">Game Name</h4>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block side_foot %}
+    {% if user.is_dev %}
+        {% if game %}
+            <button type="button" class="btn btn-outline-danger btn-block sidebar_button"
+                    onclick="location.href='#'">
+                Delete Game
+            </button>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Main #}
+{% block main_head %}
+    {% if game %} Edit Game
+    {% else %} Add New Game {% endif %}
+{% endblock %}
+{% block main_body %}
+    {% if user.is_dev %}
+            <form method="post" class="registration" id="game-form">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="help-text">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+            </form>
+            <div class="flex_space_between">
+                <button type="submit" class="btn btn-primary btn-lg "
+                        onclick="$('#game-form').submit()">Save Game
+                </button>
+                <div>
+                    <button type="reset" class="btn btn-outline-secondary btn-lg"
+                            onclick="$('#game-form')[0].reset()">Reset
+                    </button>
+                    <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
+                </div>
+            </div>
+        {% else %}
+            <h5>You do not have access to this page.</h5>
+            <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
+        {% endif %}
+{% endblock %}
+{% block main_foot %} {# empty footer #} {% endblock %}
+
+
+{# Section : Extra Code #}
+{% block extra %}
+    {% if user.is_authenticated %}
+    {% else %}
+        {# Redirct to login #}
+        <script type="text/javascript">
+            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
+        </script>
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Logic #}
 {% block logic %}
     <script>
         $(document).ready(function () {
@@ -34,80 +120,4 @@
             });
         });
     </script>
-{% endblock %}
-
-{% block sidebar %}
-    {% if user.is_authenticated %}
-        {% if user.is_dev %}
-            <div class="heading">
-                <h2>Preview</h2>
-                <hr>
-            </div>
-            <div class="scrollable">
-                Enter data in the form to preview the content.
-                <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
-                    <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}">
-                    <button id="thumbnail_price" class="list-action btn btn-light">Free to Play</button>
-                    <div class="information">
-                        <span id="thumbnail_genre">Genre</span>
-                        <h4 id="thumbnail_name">Game Name</h4>
-                    </div>
-                </div>
-            </div>
-            <div>
-                {% if game %}
-                    <button type="button" class="btn btn-outline-danger btn-block sidebar_button"
-                            onclick="location.href='#'">
-                        Delete Game
-                    </button>
-                {% endif %}
-            </div>
-        {% else %}
-        {% endif %}
-    {% else %}
-        <script type="text/javascript">
-            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
-        </script>
-    {% endif %}
-{% endblock %}
-
-{% block main %}
-    <div class="heading">
-        <h1 id="form_heading">
-            {% if game %} Edit Game
-            {% else %} Add New Game {% endif %}
-        </h1>
-        <hr>
-    </div>
-    <div class="scrollable ">
-        {% if user.is_dev %}
-            <form method="post" class="registration" id="game-form">
-                {% csrf_token %}
-                {% for field in form %}
-                    <div class="form-group">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.help_text %}
-                            <p class="help-text">{{ field.help_text|safe }}</p>
-                        {% endif %}
-                        {{ field.errors }}
-                    </div>
-                {% endfor %}
-            </form>
-            <div class="flex_space_between">
-                <button type="submit" class="btn btn-primary btn-lg "
-                        onclick="$('#game-form').submit()">Save Game
-                </button>
-                <div>
-                    <button type="reset" class="btn btn-outline-secondary btn-lg"
-                            onclick="$('#game-form')[0].reset()">Reset
-                    </button>
-                    <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
-                </div>
-            </div>
-        {% else %}
-            <h5>You do not have access to this page.</h5>
-            <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
-        {% endif %}
-    </div>
 {% endblock %}
