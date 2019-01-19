@@ -7,7 +7,7 @@
 {# Section : Main #}
 {% block main_head %} Activation Email Sent {% endblock %}
 {% block main_body %}
-    <p>The activation email is sent to your email ID. Follow instructions given in the mail.</p>
+    <p>The activation email has been sent to your email address. Follow instructions given in the mail.</p>
     <p>Check spam/junk folder too in case your mail doesnt show up in the inbox.</p>
     <p class="help-text">You will be redirected to home-page in 5 seconds. If not, click the button below.</p>
     <button type="submit" class="btn btn-primary btn-lg" onclick="location.href='{% url 'index' %}'">
@@ -17,7 +17,7 @@
 
 {% block logic %}
     <script type="text/javascript">
-        setTimeout(redirect, 5000);
+        setTimeout(redirect, 6000);
 
         function redirect() {
             window.location = "{% url 'explore' %}"

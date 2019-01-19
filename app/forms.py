@@ -41,6 +41,7 @@ class UpdateProfile(UserChangeForm):
 
 
 class GameForm(forms.ModelForm):
+
     class Meta:
         model = Game
         fields = ('name', 'genre', 'url', 'description', 'price', 'image')
