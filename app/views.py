@@ -220,7 +220,7 @@ def game_api_latest(request):
 def external_profile_view(request, username):
     red_tag = request.GET.get('redirect', None)
     try:
-        user2 = User.objects.get(username__contains=username)
+        user2 = User.objects.get(username=username)
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
 

@@ -80,7 +80,8 @@ WEEK 2 Sprint
 - revised model implementation & migration (Henri)
 - Django Groups into use (Henri)
 - GamePlayView (Siddhant)
-- ProfileView (Siddhant))
+- ProfileView (Siddhant)
+- GameBrowserView (Siddhant)
 - message_SCORE(and all other game-service messages) (Siddhant)
 
 WEEK 3 Sprint
@@ -90,17 +91,18 @@ WEEK 3 Sprint
 - test data population and some unit tests (Santeri)
 - save for GameForm (Santeri)
 - save game messages (Santeri)
-- Post message (Siddhant)
+- ModifyGameView (Siddhant)
+- GameDetailView (Siddhant)
+- SocialSharing (Siddhant)
 
 WEEK 4 Sprint
-- ModifyGameView
-- GameDetailView
-- Security (https enforcing and other django settings):  
-https://observatory.mozilla.org/analyze/wsd-arcadia.herokuapp.com
+- Post message from Template to View (Siddhant)
+- Dummy transaction for free games (Henri)
+- Update Model-Game - (Santeri)
 
 WEEK 5 Sprint
-- GameBrowserView
-- SocialSharing
+- Security (https enforcing and other django settings):  
+https://observatory.mozilla.org/analyze/wsd-arcadia.herokuapp.com
 
 WEEK 6 Sprint
 - Extra features
