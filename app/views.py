@@ -160,7 +160,6 @@ def game_add_view(request):
             game = form.save(commit=False)
             game.developer = request.user
             game.save()
-            game.developer.inventory.add(game)
             return redirect('library')
     else:
         form = GameForm()
@@ -192,7 +191,6 @@ def game_edit_view(request, game_id):
         form.fields['price'].initial = game.price
         form.fields['image'].initial = game.image
         return render(request, 'game/game_form.html', {'form': form, 'game': game, 'redirect': red_tag})
-
 
 
 def game_api_latest(request):
@@ -250,10 +248,10 @@ def pay_purchase_view(request, game_id):
 
     # Create temporary transaction and store payment_result with "initialized" state
     transaction = Transaction.objects.create(player=request.user,
-                                 game = game,
-                                 timestamp=datetime.datetime.now(),
-                                 payment_reference=0,
-                                 payment_result="initialized")
+                                             game=game,
+                                             timestamp=datetime.datetime.now(),
+                                             payment_reference=0,
+                                             payment_result="initialized")
     pid = transaction.pk
     sid = "ar20ga19"
     SECRET_KEY = "fbd947351c5047a19b47636402760ccc"
@@ -290,20 +288,18 @@ def payment_result_view(request):
     # Check the user is allowed to manipulate the transaction
     if transaction.player != request.user:
         message = "You are not allowed to manipulate this transaction"
-        args = {'game': transaction.game, 'message': message }
+        args = {'game': transaction.game, 'message': message}
         return render(request, 'payment/result.html', args)
 
     # Check that the result_tag is valid
     if result_tag not in ["success", "cancel", "error"]:
         message = "The payment result was invalid"
-        args = {'game': transaction.game, 'message': message }
+        args = {'game': transaction.game, 'message': message}
         return render(request, 'payment/result.html', args)
 
     # If the payment result was ok add the game to inventory and update the transaction
     if result_tag == "success":
-        # any trick how to add game to inventory through user. Requires use of Membership in the model?
-        # request.user.inventory.add(transaction.game)
-        # request.user.inventory.save()
+        request.user.inventory.add(transaction.game)
         transaction.payment_result = "success"
         transaction.amount = transaction.game.price
         transaction.payment_reference = reference_tag
@@ -312,11 +308,11 @@ def payment_result_view(request):
 
         message = "Thank you for purchasing the game"
         args = {'game': transaction.game,
-            'message': message,
-            'redirect': red_tag,
-            'reference': reference_tag,
-            'result': result_tag,
-            'validity': valid_transaction }
+                'message': message,
+                'redirect': red_tag,
+                'reference': reference_tag,
+                'result': result_tag,
+                'validity': valid_transaction }
         return render(request, 'payment/result.html', args)
 
     # If the payment result was 'cancel' update the transaction
@@ -340,7 +336,7 @@ def payment_result_view(request):
         transaction.payment_reference = reference_tag
         transaction.save()
 
-        message = "An error occured while processing the transaction. Please try again"
+        message = "An error occurred while processing the transaction. Please try again"
         args = {'game': transaction.game,
                 'message': message,
                 'redirect': red_tag,
@@ -348,4 +344,3 @@ def payment_result_view(request):
                 'result': result_tag,
                 'validity': valid_transaction}
         return render(request, 'payment/result.html', args)
-

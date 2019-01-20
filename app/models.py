@@ -20,7 +20,8 @@ class Game(models.Model):
     name = models.CharField(max_length=100, unique=True)
     image = models.URLField(default=None, blank=True)
     description = models.TextField(null=False)
-    highscore = models.PositiveIntegerField(default=0)
+    high_score = models.OneToOneField('GameScore', on_delete=models.PROTECT, related_name='high_score_in', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['name', 'genre']
