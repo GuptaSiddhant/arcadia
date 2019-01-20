@@ -1,22 +1,26 @@
 {% extends 'base.html' %}
 {% block title %} Activation Email Sent {% endblock %}
 
-{% block main %}
-<div class="heading">
-    <h1>Activation Email Sent</h1>
-    <hr>
-</div>
-<div class="scrollable">
-    <p>Please confirm your email address via the link sent to complete the registration.</p>
-    <p class="help-text">You will be redirected to registration page in 3 seconds. If not, click the button below.</p>
-    <button type="submit" class="btn btn-primary btn-lg" onclick="location.href='{% url 'signup' %}'">
-        Go to Registration
+{# Section : Sidebar #}
+{% block sidebar %} {# empty sidebar #} {% endblock %}
+
+{# Section : Main #}
+{% block main_head %} Activation Email Sent {% endblock %}
+{% block main_body %}
+    <p>The activation email has been sent to your email address. Follow instructions given in the mail.</p>
+    <p>Check spam/junk folder too in case your mail doesnt show up in the inbox.</p>
+    <p class="help-text">You will be redirected to home-page in 5 seconds. If not, click the button below.</p>
+    <button type="submit" class="btn btn-primary btn-lg" onclick="location.href='{% url 'index' %}'">
+        Go Home
     </button>
-</div>
-<script type="text/javascript">
-    setTimeout(redirect, 3000);
-    function redirect() {
-        window.location = "{% url 'signup' %}"
-    }
-</script>
+{% endblock %}
+
+{% block logic %}
+    <script type="text/javascript">
+        setTimeout(redirect, 6000);
+
+        function redirect() {
+            window.location = "{% url 'explore' %}"
+        }
+    </script>
 {% endblock %}

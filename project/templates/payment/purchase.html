@@ -1,49 +1,42 @@
+{# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
+{% load arcadia_tags %}
+
+
+{# Section : Header #}
 {% block title %} Checkout {% endblock %}
+{% block meta %} {# empty MetaTags #} {% endblock %}
 
-{% block logic %}
+
+{# Section : Sidebar #}
+{% block side_head %} Gae {% endblock %}
+{% block side_body %}
+    <a href="{% url 'game' game.id %}">
+        <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
+            {% if game.image %}
+                <img draggable="false" id="thumbnail_image" src="{{ game.image }}">
+            {% else %}
+                <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}">
+            {% endif %}
+
+            <button id="thumbnail_price" class="list-action btn btn-light">€ {{ game.price }}</button>
+            <div class="information">
+                <span id="thumbnail_genre">{{ game.genre }}</span>
+                <h4 id="thumbnail_name">{{ game.name }}</h4>
+            </div>
+        </div>
+    </a>
+    {{ game.description }}
 {% endblock %}
+{% block side_foot %} {# empty footer #} {% endblock %}
 
-{% block sidebar %}
-    {% if user.is_authenticated %}
-        <div class="heading">
-            <h2>Game</h2>
-            <hr>
-        </div>
-        <div class="scrollable">
-            <a href="{% url 'game' game.id %}">
-                <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
-                    {% if game.image %}
-                        <img draggable="false" id="thumbnail_image" src="{{ game.image }}">
-                    {% else %}
-                        <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}">
-                    {% endif %}
 
-                    <button id="thumbnail_price" class="list-action btn btn-light">€ {{ game.price }}</button>
-                    <div class="information">
-                        <span id="thumbnail_genre">{{ game.genre }}</span>
-                        <h4 id="thumbnail_name">{{ game.name }}</h4>
-                    </div>
-                </div>
-            </a>
-            {{ game.description }}
-        </div>
-    {% else %}
+{# Section : Main #}
+{% block main_head %} Checkout {% endblock %}
+{% block main_body %}
+    {% if game.price == 0 %}
         <script type="text/javascript">
-            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
-        </script>
-    {% endif %}
-{% endblock %}
-
-{% block main %}
-    <div class="heading">
-        <h1 id="form_heading">Checkout</h1>
-        <hr>
-    </div>
-    <div class="scrollable ">
-        {% if game.price == 0 %}
-            <script type="text/javascript">
             window.location = "{% url 'game' game.id %}?redirect=free"
         </script>
         {% endif %}
@@ -94,9 +87,25 @@
                         onclick="$('#checkout-form').submit()">Purchase
                 </button>
 
-                <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
+            <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
 
-            </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}
+{% block main_foot %} {# empty footer #} {% endblock %}
+
+
+{# Section : Extra Code #}
+{% block extra %}
+    {% if not user.is_authenticated %}
+        <script type="text/javascript">
+            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
+        </script>
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Logic #}
+{% block logic %} {# empty logic #} {% endblock %}
+
+

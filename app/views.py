@@ -154,18 +154,37 @@ def game_play_view(request, game_id):
 
 def game_add_view(request):
     red_tag = request.GET.get('redirect', None)
-    form = GameForm()
+    if request.method == 'POST':
+        form = GameForm(request.POST)
+        if form.is_valid():
+            game = form.save(commit=False)
+            game.developer = request.user
+            game.save()
+            game.developer.inventory.add(game)
+            return redirect('library')
+    else:
+        form = GameForm()
     return render(request, 'game/game_form.html', {'form': form, 'redirect': red_tag})
 
 
 def game_edit_view(request, game_id):
     red_tag = request.GET.get('redirect', None)
-    form = GameForm()
-    try:
-        game = Game.objects.get(pk=game_id)
-    except ObjectDoesNotExist:
-        return render(request, '404.html')
-    if request.user == game.developer:
+    if request.method == 'POST':
+        game_to_edit = Game.objects.get(pk=game_id)
+        form = GameForm(request.POST, instance=game_to_edit)
+        form.save()
+        return redirect('library')
+    else:
+        form = GameForm()
+
+        try:
+            game = Game.objects.get(pk=game_id)
+        except ObjectDoesNotExist:
+            return render(request, '404.html')
+
+        if request.user != game.developer:
+            return render(request, '403.html', {'redirect': red_tag})
+
         form.fields['name'].initial = game.name
         form.fields['genre'].initial = game.genre
         form.fields['url'].initial = game.url
@@ -173,8 +192,7 @@ def game_edit_view(request, game_id):
         form.fields['price'].initial = game.price
         form.fields['image'].initial = game.image
         return render(request, 'game/game_form.html', {'form': form, 'game': game, 'redirect': red_tag})
-    else:
-        return render(request, '403.html', {'redirect': red_tag})
+
 
 
 def game_api_latest(request):
@@ -202,10 +220,13 @@ def game_api_latest(request):
 def external_profile_view(request, username):
     red_tag = request.GET.get('redirect', None)
     try:
-        user = User.objects.get(username__contains=username)
+        user2 = User.objects.get(username__contains=username)
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
-    return render(request, 'profile/profile_ext.html', {'user2': user, 'redirect': red_tag})
+
+    games = Game.objects.filter(developer=user2)
+
+    return render(request, 'profile/profile_ext.html', {'user2': user2, 'games': games, 'redirect': red_tag})
 
 
 def profile_edit_view(request):
@@ -220,7 +241,7 @@ def profile_edit_view(request):
         return render(request, 'profile/profile_update.html', {'form': form, 'redirect': red_tag})
 
 
-def pay_checkout_view(request, game_id):
+def pay_purchase_view(request, game_id):
     red_tag = request.GET.get('redirect', None)
     try:
         game = Game.objects.get(pk=game_id)

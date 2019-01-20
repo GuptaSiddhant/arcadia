@@ -31,7 +31,7 @@ urlpatterns += [
     path('game/add/', views.game_add_view, name='gameAdd'),
     path('game/<int:game_id>/', views.game_play_view, name='game'),
     path('game/<int:game_id>/edit/', views.game_edit_view, name='gameEdit'),
-    path('game/<int:game_id>/purchase/', views.pay_checkout_view, name='checkout'),
+    path('game/<int:game_id>/purchase/', views.pay_purchase_view, name='purchase'),
 ]
 
 urlpatterns += [
