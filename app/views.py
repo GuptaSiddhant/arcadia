@@ -3,7 +3,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode
@@ -11,12 +11,13 @@ from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth import login
 from app.tokens import account_activation_token
-from app.models import User, Game, Genre
+from app.models import User, Game, Genre, Transaction
 from app.forms import GameForm, SignUpForm, UpdateProfile
 from project.settings import SECRET_KEY, sid
 from hashlib import md5
 
 import logging
+import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -247,12 +248,20 @@ def pay_purchase_view(request, game_id):
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
 
-    # Do not know PID yet
-    pid = 123
+    # Create temporary transaction and store payment_result with "initialized" state
+    transaction = Transaction.objects.create(player=request.user,
+                                 game = game,
+                                 timestamp=datetime.datetime.now(),
+                                 payment_reference=0,
+                                 payment_result="initialized")
+    pid = transaction.pk
+    sid = "ar20ga19"
+    SECRET_KEY = "fbd947351c5047a19b47636402760ccc"
     checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, game.price, SECRET_KEY)
     checksum = md5(checksumstr.encode("ascii")).hexdigest()
-
-    args = {'game': game, 'redirect': red_tag, 'checksum': checksum, 'sid': sid, 'pid': pid}
+    absolute_payment_url = request.build_absolute_uri(reverse("payment"))
+    args = {'game': game, 'redirect': red_tag, 'checksum': checksum, 'sid': sid, 'pid': pid, 'amount': game.price,
+            'success_url': absolute_payment_url, 'error_url': absolute_payment_url, 'cancel_url': absolute_payment_url}
     return render(request, 'payment/purchase.html', args)
 
 
@@ -263,21 +272,80 @@ def payment_result_view(request):
     result_tag = request.GET.get('result', None)
     checksum_tag = request.GET.get('checksum', None)
 
+    # Check if the transaction is valid
     valid_transaction = False
+    SECRET_KEY = "fbd947351c5047a19b47636402760ccc"
     checksumstr = "pid={}&ref={}&result={}&token={}".format(pid_tag, reference_tag, result_tag, SECRET_KEY)
     checksum = md5(checksumstr.encode("ascii")).hexdigest()
     if checksum_tag == checksum:
         valid_transaction = True
 
-    # Get Game object from payment id
+    # Verify the transaction exists
+    transaction = None
     try:
-        game = Game.objects.get(id=1)
+        transaction = Transaction.objects.get(id=pid_tag)
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
 
-    args = {'game': game,
+    # Check the user is allowed to manipulate the transaction
+    if transaction.player != request.user:
+        message = "You are not allowed to manipulate this transaction"
+        args = {'game': transaction.game, 'message': message }
+        return render(request, 'payment/result.html', args)
+
+    # Check that the result_tag is valid
+    if result_tag not in ["success", "cancel", "error"]:
+        message = "The payment result was invalid"
+        args = {'game': transaction.game, 'message': message }
+        return render(request, 'payment/result.html', args)
+
+    # If the payment result was ok add the game to inventory and update the transaction
+    if result_tag == "success":
+        # any trick how to add game to inventory through user. Requires use of Membership in the model?
+        # request.user.inventory.add(transaction.game)
+        # request.user.inventory.save()
+        transaction.payment_result = "success"
+        transaction.amount = transaction.game.price
+        transaction.payment_reference = reference_tag
+        transaction.timestamp = datetime.datetime.now()
+        transaction.save()
+
+        message = "Thank you for purchasing the game"
+        args = {'game': transaction.game,
+            'message': message,
             'redirect': red_tag,
             'reference': reference_tag,
             'result': result_tag,
-            'validity': valid_transaction}
-    return render(request, 'payment/result.html', args)
+            'validity': valid_transaction }
+        return render(request, 'payment/result.html', args)
+
+    # If the payment result was 'cancel' update the transaction
+    elif result_tag == "cancel":
+        transaction.payment_result = "cancel"
+        transaction.payment_reference = reference_tag
+        transaction.save()
+
+        message = "The transaction was canceled"
+        args = {'game': transaction.game,
+                'message': message,
+                'redirect': red_tag,
+                'reference': reference_tag,
+                'result': result_tag,
+                'validity': valid_transaction}
+        return render(request, 'payment/result.html', args)
+
+    # If the payment result was 'error' update the transaction
+    elif result_tag == "error":
+        transaction.payment_result = "error"
+        transaction.payment_reference = reference_tag
+        transaction.save()
+
+        message = "An error occured while processing the transaction. Please try again"
+        args = {'game': transaction.game,
+                'message': message,
+                'redirect': red_tag,
+                'reference': reference_tag,
+                'result': result_tag,
+                'validity': valid_transaction}
+        return render(request, 'payment/result.html', args)
+
