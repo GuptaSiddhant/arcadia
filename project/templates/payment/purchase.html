@@ -75,19 +75,19 @@
             <form action="http://payments.webcourse.niksula.hut.fi/pay/" method="post"
                   class="registration" id="checkout-form">
                 {% csrf_token %}
-                {# Add pid and checksum #}
-                <input type="hidden" name="pid" value={{ pid }}/>
-                <input type="hidden" name="sid" value={{ sid }}/>
+                {#<input type="hidden" name="dev" value="1"/>#}
+                <input type="hidden" name="pid" value="{{ pid }}"/>
+                <input type="hidden" name="sid" value="{{ sid }}"/>
                 <input type="hidden" name="success_url"
-                       value="{% url 'payment' %}"/>
+                       value="{{ success_url }}"/>
                 <input type="hidden" name="cancel_url"
-                       value="{% url 'payment' %}"/>
+                       value="{{ cancel_url }}"/>
                 <input type="hidden" name="error_url"
-                       value="{% url 'payment' %}"/>
+                       value="{{ error_url }}"/>
                 <input type="hidden" name="checksum"
-                       value={{ checksum }}/>
-                <input type="hidden" id="id_amount" name="amount"
-                       value="{{ game.price }}" disabled/>
+                       value="{{ checksum }}"/>
+                <input type="hidden" name="amount"
+                       value="{{ amount }}"/>
             </form>
             <div class="flex_space_between">
                 <button type="submit" class="btn btn-primary btn-lg "
