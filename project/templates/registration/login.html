@@ -1,54 +1,85 @@
+{# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Login {% endblock %}
+{% load arcadia_tags %}
 
-{% block content %}
-<div class="floater">
-    <div class="heading">
-        <h1>Ready. Set. Go.</h1>
-        <hr>
-    </div>
-    <div class="scrollable">
-        <form method="post">
-            {% csrf_token %}
-            {% for field in form %}
+
+{# Section : Header #}
+{% block title %} Login {% endblock %}
+{% block meta %} {# empty MetaTags #} {% endblock %}
+
+
+{# Section : Sidebar #}
+{% block side_head %} Arcadia's Latest {% endblock %}
+{% block side_body %}
+    <div id="new_game"></div>
+{% endblock %}
+{% block side_foot %} {# empty footer #} {% endblock %}
+
+
+{# Section : Main #}
+{% block main_head %} Ready. Set. Login. {% endblock %}
+{% block main_body %}
+    <form method="post" class="registration">
+        {% csrf_token %}
+        {% for field in form %}
             <div class="form-group">
-                {{ field.errors }}
                 {{ field.label_tag }}
                 {{ field }}
+                {{ field.errors }}
                 {% if field.help_text %}
-                <p class="help-text">{{ field.help_text|safe }}</p>
+                    <p class="help-text">{{ field.help_text|safe }}</p>
                 {% endif %}
             </div>
-            {% endfor %}
-            {{ form.non_field_errors }}
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
-        </form>
-        <br>
-        <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
-        <div>Not a member? <a href="{% url 'signup' %}">Register.</a></div>
-    </div>
-</div>
+        {% endfor %}
+        {{ form.non_field_errors }}
+    </form>
+    <button type="submit" onclick="$('.registration').submit()" class="btn btn-primary btn-lg btn-block">Login</button>
+{% endblock %}
+{% block main_foot %}
+    <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
+    <div>Not a member? <a href="{% url 'signup' %}">Register.</a></div>
 {% endblock %}
 
 
-{% block logic %}
-<script>
-    $(document).ready(function () {
-        let params = (new URL(document.location)).searchParams;
-        let redirect = params.get("redirect");
-
-        if (redirect.includes('access')) {
-            var x = document.getElementById("snackbar");
-            x.className = "show";
-            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-        }
-    });
-</script>
-{% endblock %}
-
+{# Section : Extra Code #}
 {% block extra %}
-{% if user.is_authenticated == False %}
-<div id="snackbar">Login to gain access!</div>
-{% endif %}
+    {% if user.is_authenticated == False %}
+        <div id="snackbar">Login to gain access!</div>
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Logic #}
+{% block logic %}
+    <script>
+        $(document).ready(function () {
+            let params = (new URL(document.location)).searchParams;
+            let redirect = params.get("redirect");
+
+            if (redirect && redirect.includes('access')) {
+                let x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function () {
+                    x.className = x.className.replace("show", "");
+                }, 3000);
+            }
+
+            fetch("{% url 'api_game_latest' %}", {method: 'GET'})
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    let game = data.game;
+                    let HTML = "<a href='/game/" + game.id + "/'>" +
+                        "<div class='game-list-item' style='margin-left: 0px !important; width: 100% !important;'>" +
+                        "<img draggable='false' src='" + game.image + "'>" +
+                        "<button class='list-action btn btn-light'>€ " + game.price + "</button>" +
+                        "<div class='information'>" + game.genre + "<h4>" + game.name + "</h4>" +
+                        "</div></div></a>" +
+                        game.desc + ""
+                    $('#new_game').html(HTML);
+                });
+        });
+    </script>
 {% endblock %}

@@ -1,8 +1,162 @@
+{# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
 {% load arcadia_tags %}
-{% block title %} Library {% endblock %}
 
+
+{# Section : Header #}
+{% block title %} Library {% endblock %}
+{% block meta %} {# empty MetaTags #} {% endblock %}
+
+
+{# Section : Sidebar #}
+{% block side_head %} Filter Games {% endblock %}
+{% block side_body %}
+    {% if user.is_authenticated %}
+        <form id="search-form" method="get" action="/library/">
+            <div id="search-game" style="position: relative">
+                <div style="left: 0px;">
+                    <img id="search-icon" class="icon16" src="{% static 'media/search.svg' %}"></div>
+                <input type="search" id="search" name="search" placeholder="Search Games" autofocus>
+                <div id="search-button"
+                     style="right: 0px; cursor: pointer">
+                    <img class="icon16" src="{% static 'media/arrow-circle-right.svg' %}"></div>
+            </div>
+        </form>
+        <br>
+        <h5>Select Genre: </h5>
+        <ul class="list-unstyled genres">
+            <li>
+                <a href="?{% param_replace genre='all' %}" style="color: #343A3E">All Games</a>
+                ({{ count.total }})
+            </li>
+            <li>
+                <a href="?{% param_replace genre='free' %}" style="color: #ffc107">Free to Play</a>
+                ({{ count.free }})
+            </li>
+            {% for name, count in genres.items %}
+                <li>
+                    <a href="?{% param_replace genre=name %}">{{ name }}</a>
+                    ({{ count }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <script type="text/javascript">
+            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
+        </script>
+    {% endif %}
+{% endblock %}
+{% block side_foot %}
+    <a class="btn btn-outline-danger btn-block sidebar_button" href="/library/">Reset Filters</a>
+{% endblock %}
+
+
+{# Section : Main #}
+{% block main_head %} Your Library - <span id="genre-heading"></span> Games {% endblock %}
+{% block main_body %}
+    {% if games %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">
+                    Game
+                    <span class="sort_icon_toggle">
+                            <a href="?{% param_replace sort='desc' %}">
+                                <img class="sort_icon icon16" src="{% static 'media/sort-alpha-down.svg' %}">
+                            </a>
+                            <a href="?{% param_replace sort='asc' %}">
+                                <img class="sort_icon icon16" src="{% static 'media/sort-alpha-up.svg' %}"
+                                     style="display:none">
+                            </a>
+                        </span>
+                </th>
+                <th scope="col">Last Played</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for game in games %}
+                <tr class='clickable-row' data-href="{% url 'game' game.id %}"
+                    style="cursor: pointer">
+                    <td style="display: grid; grid-template-columns:170px auto;">
+                        {% if game.image %}
+                            <img draggable="false" class="table-image" src="{{ game.image }}">
+                        {% else %}
+                            <img draggable="false" class="table-image" src="{% static 'media/no-image.png' %}">
+                        {% endif %}
+                        <div>
+                            <span style="font-weight: 700">{{ game.name }}</span>
+                            <br>{{ game.genre }}
+                            <br><a class="btn btn-outline-success btn-sm" style="margin-top: 0"
+                                   href="{% url 'game' game.id %}">Play</a>
+                            {% if user == game.developer %}
+                                <a class="btn btn-outline-primary btn-sm" style="margin-top: 0"
+                                   href="{% url 'gameEdit' game.id %}">Edit Game</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        DD/MM/YYYY <br>
+                        Score: {{ game.highscore }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h5>No games found.</h5>
+        {% if user.inventory.all %}
+            <p>Also try different filters or reset the filters.</p>
+        {% else %}
+            <p>You don't own any games. Explore some.</p>
+            <a class="btn btn-outline-primary" href="/explore/">Explore Games</a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+{% block main_foot %}
+    {% if games.paginator.num_pages > 1 %}
+        <div style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-evenly">
+            <nav aria-label="navigation">
+                <ul class="pagination">
+                    {% if games.has_previous %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="?{% param_replace page=games.previous_page_number %}">
+                            Previous</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#">
+                            Previous</a></li>
+                    {% endif %}
+                    {% for page in games.paginator.page_range %}
+                        <li id="page_{{ page }}" class="page-item">
+                            <a class="page-link" href="?{% param_replace page=page %}">
+                                {{ page }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    {% if games.has_next %}
+                        <li class="page-item"><a class="page-link"
+                                                 href="?{% param_replace page=games.next_page_number %}">
+                            Next</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#">
+                            Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Extra Code #}
+{% block extra %}
+    {% if user.is_authenticated %}
+        <div id="snackbar">Login Successful!</div>
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Logic #}
 {% block logic %}
     <script>
         $(document).ready(function () {
@@ -68,162 +222,7 @@
                 }, 3000);
             }
         });
-
-        function show_sort() {
-            return
-        }
     </script>
 {% endblock %}
 
 
-<!--Sidebar-->
-{% block sidebar %}
-    <div class="heading">
-        <h2>Filter Games</h2>
-        <hr>
-    </div>
-    <div class="scrollable">
-        {% if user.is_authenticated %}
-            <form id="search-form" method="get" action="/library/">
-                <div id="search-game" style="position: relative">
-                    <div style="left: 0px;">
-                        <img id="search-icon" class="icon16" src="{% static 'media/search.svg' %}"></div>
-                    <input type="search" id="search" name="search" placeholder="Search Games" autofocus>
-                    <div id="search-button"
-                         style="right: 0px; cursor: pointer">
-                        <img class="icon16" src="{% static 'media/arrow-circle-right.svg' %}"></div>
-                </div>
-            </form>
-            <br>
-            <h5>Select Genre: </h5>
-            <ul class="list-unstyled genres">
-                <li>
-                    <a href="?{% param_replace genre='all' %}" style="color: #343A3E">All Games</a>
-                    ({{ count.total }})
-                </li>
-                <li>
-                    <a href="?{% param_replace genre='free' %}" style="color: #ffc107">Free to Play</a>
-                    ({{ count.free }})
-                </li>
-                {% for name, count in genres.items %}
-                    <li>
-                        <a href="?{% param_replace genre=name %}">{{ name }}</a>
-                        ({{ count }})
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <script type="text/javascript">
-                window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
-            </script>
-        {% endif %}
-    </div>
-    <a class="btn btn-outline-danger btn-block sidebar_button" href="/library/">Reset Filters</a>
-{% endblock %}
-
-<!--Main Block-->
-{% block main %}
-    <div class="heading">
-        <h1 id="explore-heading" style="text-transform: capitalize;">
-            Your Library - <span id="genre-heading"></span> Games
-        </h1>
-        <hr>
-    </div>
-    <div class="scrollable">
-        {% if games %}
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">
-                        Game
-                        <span class="sort_icon_toggle">
-                            <a href="?{% param_replace sort='desc' %}">
-                                <img class="sort_icon icon16" src="{% static 'media/sort-alpha-down.svg' %}">
-                            </a>
-                            <a href="?{% param_replace sort='asc' %}">
-                                <img class="sort_icon icon16" src="{% static 'media/sort-alpha-up.svg' %}"
-                                     style="display:none">
-                            </a>
-                        </span>
-                    </th>
-                    <th scope="col">Last Played</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for game in games %}
-                    <tr class='clickable-row' data-href="{% url 'game' game.id %}"
-                        style="cursor: pointer">
-                        <td style="display: grid; grid-template-columns:170px auto;">
-                            {% if game.image %}
-                                <img draggable="false" class="table-image" src="{{ game.image }}">
-                            {% else %}
-                                <img draggable="false" class="table-image" src="{% static 'media/no-image.png' %}">
-                            {% endif %}
-                            <div>
-                                <span style="font-weight: 700">{{ game.name }}</span>
-                                <br>{{ game.genre }}
-                                <br><a class="btn btn-outline-success btn-sm" style="margin-top: 0"
-                                       href="{% url 'game' game.id %}">Play</a>
-                                {% if user == game.developer %}
-                                    <a class="btn btn-outline-primary btn-sm" style="margin-top: 0"
-                                       href="{% url 'gameEdit' game.id %}">Edit Game</a>
-                                {% endif %}
-                            </div>
-                        </td>
-                        <td>
-                            DD/MM/YYYY <br>
-                            Score: {{ game.highscore }}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <h5>No games found.</h5>
-            {% if user.inventory.all %}
-                <p>Also try different filters or reset the filters.</p>
-            {% else %}
-                <p>You don't own any games. Explore some.</p>
-                <a class="btn btn-outline-primary" href="/explore/">Explore Games</a>
-            {% endif %}
-        {% endif %}
-    </div>
-    {% if games.paginator.num_pages > 1 %}
-        <div style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-evenly">
-            <nav aria-label="navigation">
-                <ul class="pagination">
-                    {% if games.has_previous %}
-                        <li class="page-item"><a class="page-link"
-                                                 href="?{% param_replace page=games.previous_page_number %}">
-                            Previous</a></li>
-                    {% else %}
-                        <li class="page-item disabled"><a class="page-link" href="#">
-                            Previous</a></li>
-                    {% endif %}
-                    {% for page in games.paginator.page_range %}
-                        <li id="page_{{ page }}" class="page-item">
-                            <a class="page-link" href="?{% param_replace page=page %}">
-                                {{ page }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                    {% if games.has_next %}
-                        <li class="page-item"><a class="page-link"
-                                                 href="?{% param_replace page=games.next_page_number %}">
-                            Next</a></li>
-                    {% else %}
-                        <li class="page-item disabled"><a class="page-link" href="#">
-                            Next</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    {% endif %}
-{% endblock %}
-
-
-{% block extra %}
-    {% if user.is_authenticated %}
-        <div id="snackbar">Login Successful!</div>
-    {% endif %}
-{% endblock %}

@@ -119,3 +119,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Configure our extended AbstractUser as default User model
 AUTH_USER_MODEL = 'app.User'
+
+# for HTTPS put TRUE
+SECURE_SSL_REDIRECT = False

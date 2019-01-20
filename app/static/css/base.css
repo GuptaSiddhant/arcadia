@@ -21,18 +21,6 @@ body {
     border-radius: 10px;
     display: grid;
     grid-template-rows: 60px 1fr;
-    /*flex: 80px 1fr;*/
-}
-
-.floater {
-    justify-self: center;
-    align-self: center;
-    background-color: #ffffff;
-    margin: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    display: grid;
-    grid-template-rows: 60px 1fr;
 }
 
 #page > main {
@@ -48,9 +36,24 @@ body {
     grid-area: foot;
     text-align: center;
     align-self: center;
-    padding-top: 0;
+    margin-top: 0;
     background-color: inherit;
+    display: none;
 }
+
+
+.floater {
+    grid-area: side;
+    justify-self: center;
+    align-self: center;
+    background-color: #ffffff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-rows: 60px 1fr;
+}
+
 
 /* Desktop Layout */
 @media (min-width: 801px) {
@@ -62,7 +65,7 @@ body {
         display: grid;
         width: 100%;
         height: 100vh;
-        grid-template-areas: "head head" "side main" "foot  foot";
+        grid-template-areas: "head head" "side main";
         grid-template-rows: 60px 1fr;
         grid-template-columns: 300px 1fr;
     }
@@ -77,12 +80,11 @@ body {
 
     #page > main {
         margin: 20px 20px 20px 0;
-        overflow-y: hidden;
+        overflow: hidden;
     }
 
     aside {
-        overflow-y: hidden;
-        overflow-x: hidden;
+        overflow: hidden;
     }
 
     .heading {
@@ -101,9 +103,10 @@ body {
 @media (max-width: 800px) {
     #page {
         display: grid;
-        width: 100%;
+        width: 100vw;
+        overflow-x: hidden;
         grid-template-areas: "head" "main" "side" "foot";
-        grid-template-rows: 60px auto auto;
+        grid-template-rows: 60px auto auto 60px;
         grid-template-columns: 1fr;
     }
 
@@ -116,7 +119,19 @@ body {
     }
 
     #page > main {
-        margin: 20px;
+        margin: 20px 0 !important;
+        grid-template-rows: auto auto !important;
+        border-radius: 0 !important;
+    }
+
+    aside {
+        margin: 0px !important;
+        grid-template-rows: auto auto !important;
+        border-radius: 0 !important;
+    }
+
+    footer {
+        display: block !important;
     }
 }
 
@@ -195,7 +210,7 @@ h5 {
 
 .registration {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     grid-column-gap: 20px;
     grid-row-gap: 10px;
 }
@@ -208,7 +223,23 @@ h5 {
 }
 
 .help-text {
-    color: gray;
+    color: gray !important;
+    font-size: 0.9rem !important;
+    margin: 5px 0;
+}
+
+.help-text + ul {
+    color: gray !important;
+    font-size: 0.9rem !important;
+    list-style-position: inside !important;
+    margin: 5px 0 5px -40px;
+}
+
+.errorlist {
+    font-size: 0.9rem !important;
+    color: red !important;
+    list-style-type: none !important;
+    margin: 5px 0 5px -40px;
 }
 
 .btn {
@@ -295,6 +326,13 @@ input:focus {
 .table-image {
     width: 150px;
     height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.table-image-small {
+    width: 50px;
+    height: 50px;
     object-fit: cover;
     border-radius: 5px;
 }

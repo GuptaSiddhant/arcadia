@@ -9,16 +9,17 @@ class User(AbstractUser):
     image = models.URLField(blank=True, null=True, default='https://pngimage.net/wp-content/uploads/'
                                                            '2018/05/default-user-profile-image-png-2.png')
     is_dev = models.BooleanField(default=False)
+    email_confirmed = models.BooleanField(default=False)
 
 
 class Game(models.Model):
     developer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE, null=False)
-    url = models.URLField(unique=True)
+    url = models.URLField(unique=True, null=False)
     price = models.FloatField(default=0)
     name = models.CharField(max_length=100, unique=True)
     image = models.URLField(default=None, blank=True)
-    description = models.TextField()
+    description = models.TextField(null=False)
     highscore = models.PositiveIntegerField(default=0)
 
     class Meta:

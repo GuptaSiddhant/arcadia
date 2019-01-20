@@ -1,33 +1,17 @@
+{# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
+{% load arcadia_tags %}
+
+
+{# Section : Header #}
 {% block title %} Update Profile {% endblock %}
+{% block meta %} {# empty MetaTags #} {% endblock %}
 
-{% block logic %}
-<script>
-    $(document).ready(function () {
 
-        // Thumbnail Initialize
-        $('#user_image').attr('src', $('#id_image').val());
-        $('#preview_name').text($('#id_first_name').val() + ' ' + $('#id_last_name').val());
-        $('#preview_email').text($('#id_email').val());
-
-        // Thumbnail Update
-        $('#user-form').on("change paste keyup", function () {
-            $('#user_image').attr('src', $('#id_image').val());
-            $('#preview_name').text($('#id_first_name').val() + ' ' + $('#id_last_name').val());
-            $('#preview_email').text($('#id_email').val());
-        });
-    });
-</script>
-{% endblock %}
-
-{% block sidebar %}
-{% if user.is_authenticated %}
-<div class="heading">
-    <h2>Preview</h2>
-    <hr>
-</div>
-<div class="scrollable">
+{# Section : Sidebar #}
+{% block side_head %} Preview {% endblock %}
+{% block side_body %}
     <div style="width: 100%; text-align: center; margin-bottom: 1rem">
         <img id="user_image" draggable="false" src="{{ user.image }}">
     </div>
@@ -35,9 +19,9 @@
         <label>Name:</label>
         <span id="preview_name">
         {% if user.first_name == '' %}
-        We don't know your name.
+            We don't know your name.
         {% else %}
-        {{ user.first_name }} {{ user.last_name }}
+            {{ user.first_name }} {{ user.last_name }}
         {% endif %}
         </span>
     </div>
@@ -52,38 +36,29 @@
     <div class="form-group">
         <label>Account Type:</label>
         {% if user.is_dev == False %}
-        Player
+            Player
         {% else %}
-        Developer
+            Developer
         {% endif %}
     </div>
-</div>
-{% else %}
-<script type="text/javascript">
-    window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
-</script>
-{% endif %}
 {% endblock %}
+{% block side_foot %} {# empty footer #} {% endblock %}
 
-{% block main %}
-<div class="heading">
-    <h1 id="form_heading">
-        Update Profile
-    </h1>
-    <hr>
-</div>
-<div class="scrollable ">
+
+{# Section : Main #}
+{% block main_head %} Update Profile {% endblock %}
+{% block main_body %}
     <form method="post" class="registration" id="user-form">
         {% csrf_token %}
         {% for field in form %}
-        <div class="form-group">
-            {{ field.errors }}
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.help_text %}
-            <p class="help-text">{{ field.help_text|safe }}</p>
-            {% endif %}
-        </div>
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+                {% if field.help_text %}
+                    <p class="help-text">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
         {% endfor %}
     </form>
     <div class="flex_space_between">
@@ -97,5 +72,38 @@
             <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
         </div>
     </div>
-</div>
+{% endblock %}
+{% block main_foot %} {# empty footer #} {% endblock %}
+
+
+{# Section : Extra Code #}
+{% block extra %}
+    {% if user.is_authenticated %}
+    {% else %}
+        {# Redirct to login #}
+        <script type="text/javascript">
+            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
+        </script>
+    {% endif %}
+{% endblock %}
+
+
+{# Section : Logic #}
+{% block logic %}
+    <script>
+        $(document).ready(function () {
+
+            // Thumbnail Initialize
+            $('#user_image').attr('src', $('#id_image').val());
+            $('#preview_name').text($('#id_first_name').val() + ' ' + $('#id_last_name').val());
+            $('#preview_email').text($('#id_email').val());
+
+            // Thumbnail Update
+            $('#user-form').on("change paste keyup", function () {
+                $('#user_image').attr('src', $('#id_image').val());
+                $('#preview_name').text($('#id_first_name').val() + ' ' + $('#id_last_name').val());
+                $('#preview_email').text($('#id_email').val());
+            });
+        });
+    </script>
 {% endblock %}
