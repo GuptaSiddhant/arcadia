@@ -24,39 +24,40 @@
 <div class="navigation">
     <ul class="nav">
         {% if user.is_authenticated %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'explore' %}">Explore</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'library' %}">Library</a>
-        </li>
-        <li id="nav-profile" class="nav-item">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-               id="dropdownProfile" href="{% url 'profile' %}">
-                {% if user.first_name == '' %}
-                {{ user.username }}
-                {% else %}
-                {{ user.first_name }}
-                {% endif %}
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownProfile">
-                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </div>
-        </li>
-        <li id='nav-logout' class="nav-item hidden">
-            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'explore' %}">Explore</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'library' %}">Library</a>
+            </li>
+            {% if user.is_dev %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dev' %}">Dev Corner</a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}">
+                    {% if user.first_name == '' %}
+                        {{ user.username }}
+                    {% else %}
+                        {{ user.first_name }} {{ user.last_name }}
+                    {% endif %}
+                    {% if user.image != '' and 'no-image' not in user.image %}
+                        &nbsp <img class="nav_profile_image" src="{{ user.image }}">
+                    {% endif %}
+                </a>
+            </li>
+
         {% else %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'explore' %}">Explore</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Login</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'signup' %}">Register</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'explore' %}">Explore</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'signup' %}">Register</a>
+            </li>
         {% endif %}
     </ul>
 </div>
@@ -69,13 +70,16 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
             {% if user.is_authenticated %}
-            <a class="dropdown-item" href="{% url 'explore' %}">Explore</a>
-            <a class="dropdown-item" href="{% url 'library' %}">Library</a>
-            <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                <a class="dropdown-item" href="{% url 'explore' %}">Explore</a>
+                <a class="dropdown-item" href="{% url 'library' %}">Library</a>
+                {% if user.is_dev %}
+                    <a class="dropdown-item" href="{% url 'dev' %}">Dev Corner</a>
+                {% endif %}
+                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
             {% else %}
-            <a class="dropdown-item" href="{% url 'explore' %}">Explore</a>
-            <a class="dropdown-item" href="{% url 'login' %}">Login</a>
-            <a class="dropdown-item" href="{% url 'signup' %}">Register</a>
+                <a class="dropdown-item" href="{% url 'explore' %}">Explore</a>
+                <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                <a class="dropdown-item" href="{% url 'signup' %}">Register</a>
             {% endif %}
         </div>
     </div>
