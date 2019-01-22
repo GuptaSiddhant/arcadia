@@ -118,12 +118,12 @@
                                 {{ game.highscore }} by Username
                             </td>
                             <td>
-                                {% if game.price == 0 %}
-                                    <a class="btn btn-outline-warning btn-sm" style="margin-top: 0"
-                                       href="{% url 'game' game.id %}">Free to Play</a>
-                                {% elif  user == game.developer %}
+                                {% if  user == game.developer %}
                                     <a class="btn btn-outline-info btn-sm" style="margin-top: 0"
                                        href="{% url 'gameEdit' game.id %}">Edit Game</a>
+                                {% elif game.price == 0 %}
+                                    <a class="btn btn-outline-warning btn-sm" style="margin-top: 0"
+                                       href="{% url 'game' game.id %}">Free to Play</a>
                                 {% elif game in user.inventory.all %}
                                     <a class="btn btn-outline-success btn-sm" style="margin-top: 0"
                                        href="{% url 'game' game.id %}">Play</a>

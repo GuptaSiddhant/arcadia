@@ -87,6 +87,7 @@
             window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
         </script>
     {% endif %}
+    {% if game %}
     {# Delete Modal #}
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteGame"
          aria-hidden="true">
@@ -118,6 +119,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 

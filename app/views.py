@@ -227,7 +227,7 @@ def game_add_view(request):
             game = form.save(commit=False)
             game.developer = request.user
             game.save()
-            return redirect('library')
+            return redirect('/library/')
     else:
         form = GameForm()
     return render(request, 'game/game_form.html', {'form': form, 'redirect': red_tag})
@@ -239,7 +239,7 @@ def game_edit_view(request, game_id):
         game_to_edit = Game.objects.get(pk=game_id)
         form = GameForm(request.POST, instance=game_to_edit)
         form.save()
-        return redirect('library')
+        return redirect('/library/')
     else:
         form = GameForm()
 
@@ -268,10 +268,10 @@ def game_delete_view(request, game_id):
         return render(request, '404.html', {'redirect': red_tag})
 
     if request.user == game.developer:
-        logger.error('delete')
         game.is_active = False
         game.save()
         return redirect('/dev/?redirect=delete')
+    return render(request, '404.html', {'redirect': red_tag})
 
 
 def game_api_latest(request):
