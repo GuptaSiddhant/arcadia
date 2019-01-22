@@ -107,9 +107,17 @@ def library_view(request):
     page_tag = request.GET.get('page', 1)
     sort_tag = request.GET.get('sort', 'asc')
 
-    games = request.user.inventory.all()
+    library_type = request.get_full_path()
 
-    logger.error(games)
+    if library_type.__contains__('/dev/'):
+        if request.user.is_dev:
+            games = Game.objects.filter(developer=request.user)
+        else:
+            return render(request, '404.html', {'redirect': red_tag})
+    else:
+        games = request.user.inventory.all()
+
+    logger.error(library_type)
     count = {'total': games.count,
              'free': games.filter(price=0).count}
 
@@ -312,7 +320,7 @@ def payment_result_view(request):
                 'redirect': red_tag,
                 'reference': reference_tag,
                 'result': result_tag,
-                'validity': valid_transaction }
+                'validity': valid_transaction}
         return render(request, 'payment/result.html', args)
 
     # If the payment result was 'cancel' update the transaction

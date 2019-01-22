@@ -42,11 +42,9 @@
     </div>
 {% endblock %}
 {% block side_foot %}
-    <button type="button" class="btn btn-outline-primary btn-block" onclick="location.href='{% url 'profileEdit' %}'">
+    <button type="button" class="btn btn-outline-info btn-block"
+            onclick="location.href='{% url 'profileEdit' %}'">
         Update Profile
-    </button>
-    <button type="button" class="btn btn-outline-danger btn-block" onclick="location.href='{% url 'logout' %}'">
-        Logout
     </button>
 {% endblock %}
 
@@ -61,13 +59,9 @@
     <h5>You are a star!</h5> See your stats here.
 {% endblock %}
 {% block main_foot %}
-    <div>
-        {% if user.is_dev %}
-            <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'gameAdd' %}'">
-                Add New Game
-            </button>
-        {% endif %}
-    </div>
+    <button type="button" class="btn btn-danger btn-block" onclick="location.href='{% url 'logout' %}'">
+        Logout
+    </button>
 {% endblock %}
 
 
