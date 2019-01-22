@@ -143,11 +143,17 @@
                 }
             });
 
-            $('#fb-share').attr('href','http://www.facebook.com/share.php?u=' + encodeURIComponent(location.href) + '&amp;src=sdkpreparse');
+            $('#fb-share').attr('href', 'http://www.facebook.com/share.php?u=' + encodeURIComponent(location.href) + '&amp;src=sdkpreparse');
 
             $(window).on('message', function (evt) {
+                let current_score = 0;
                 // Get data out of message
-                var data = evt.originalEvent.data;
+                let data = evt.originalEvent.data;
+
+                let message = {
+                    messageType: "ERROR"
+                };
+
                 // Filter Message
                 switch (data.messageType) {
                     case 'SETTING':
@@ -162,38 +168,105 @@
                         }
                         $('#status').text("Size = width:" + gWidth + ", height:" + gHeight);
                         break;
+
                     case 'SCORE':
-                        console.log(data.score);
-                        $('#status').text("Score = " + data.score);
+                        let score = parseFloat(data.score);
+                        console.log(score);
+                        if (isNaN(score)) {
+                            message.info = "Invalid Score";
+                            sendMessageToIFrame(message);
+                            return;
+                        }
+                        current_score = score;
+                        sendData(data, '#');
+                        $('#status').text("Score = " + score);
                         break;
+
                     case 'SAVE':
                         console.log(data.gameState);
-                        $('#status').text("Saved Player Items = " + data.gameState.playerItems);
+                        if (!tryParseJSON(JSON.stringify(data.gameState))) {
+                            message.info = 'Invalid JSON format';
+                            sendMessageToIFrame(message);
+                            return;
+                        }
+                        data.gameState = JSON.stringify(data.gameState);
+                        sendData(data, '#');
+                        $('#status').text("Saved Player Items = " + data.gameState);
                         break;
+
                     case 'LOAD_REQUEST':
                         console.log("Load Req");
                         $('#status').text("Load Requested");
-                        var message = {
-                            messageType: "LOAD",
-                            gameState: {
-                                playerItems: [
-                                    "Sword",
-                                    "Wizard Hat"
-                                ],
-                                score: 506.0 // Float
-                            }
-                        };
-                        var messageE = {
-                            messageType: "ERROR",
-                            info: "Gamestate could not be loaded"
-                        };
-                        var game_frame = document.getElementById('game_frame').contentWindow;
-                        game_frame.postMessage(message, "*");
+                        sendData(data, '#');
                         break;
                 }
             });
 
-            if (redirect.includes('free')) {
+            function sendMessageToIFrame(message) {
+                let iframe = document.getElementById('game_frame');
+                if (iframe) {
+                    iframe.contentWindow.postMessage(message, "*");
+                } else {
+                    $('#status').text("Ops, game not found!");
+                    {#$("#modalInfo").removeClass('info done');#}
+                    {#$("#modalInfo").addClass('error');#}
+                    {#$("#modalInfo").modal();#}
+                }
+            }
+
+            function sendData(data, url) {
+                data.csrfmiddlewaretoken = "{{ csrf_token  }}";
+                var message = {};
+                $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: data,
+                    success: function (data) {
+                        if (data.error) {
+                            message = {
+                                messageType: "ERROR",
+                                info: data.error
+                            };
+                            sendMessageToIFrame(message);
+                        } else {
+                            if (data.result) {
+                                message.messageType = "LOAD";
+                                message.gameState = jQuery.parseJSON(data.result);
+                                sendMessageToIFrame(message);
+                                $('#status').text(message.score);
+                            }
+                            /*
+                            $('#modalMessage').text("Done!");
+                            $("#modalInfo").removeClass('info error');
+                            $("#modalInfo").addClass('done');
+                            $("#modalInfo").modal();
+                            */
+                        }
+                    },
+                    error: function (data) {
+                        if (data.error) {
+                            message = {
+                                messageType: "ERROR",
+                                info: data.error
+                            };
+                            sendMessageToIFrame(message);
+                        }
+                    }
+                });
+            }
+
+            function tryParseJSON(jsonString) {
+                try {
+                    var o = JSON.parse(jsonString);
+                    if (o && typeof o === "object" && o !== null) {
+                        return true;
+                    }
+                } catch (e) {
+                }
+                return false;
+            }
+
+            if (redirect && redirect.includes('free')) {
                 var x = document.getElementById("snackbar");
                 x.className = "show";
                 setTimeout(function () {

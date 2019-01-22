@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -49,13 +50,12 @@ class Transaction(models.Model):
 class GameState(models.Model):
     player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)
-    settings = models.TextField()
-    game_state = models.TextField()
-    timestamp = models.DateTimeField(auto_now=True)
+    gameState = models.TextField()
+    saveDate = models.DateTimeField(default=timezone.now())
 
 
 class GameScore(models.Model):
     player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)
     score = models.PositiveIntegerField(default=0)
-    timestamp = models.DateTimeField(auto_now=True)
+    scoreDate = models.DateTimeField(default=timezone.now())

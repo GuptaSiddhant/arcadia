@@ -99,10 +99,8 @@
                             <br>{{ game.genre }}
                             <br>
                             {% if user == game.developer %}
-                                <a class="btn btn-outline-info btn-sm" style="margin-top: 0"
+                                <a class="btn btn-outline-info btn-sm row-button" style="margin-top: 0"
                                    href="{% url 'gameEdit' game.id %}">Edit Game</a>
-                                <a class="btn btn-outline-danger btn-sm" style="margin-top: 0"
-                                   href="{% url 'gameEdit' game.id %}">Delete Game</a>
                             {% else %}
                                 <a class="btn btn-outline-success btn-sm" style="margin-top: 0"
                                    href="{% url 'game' game.id %}">Play</a>
@@ -118,6 +116,7 @@
             </tbody>
         </table>
     {% else %}
+        <br>
         <h5>No games found.</h5>
         {% if 'dev/' in request.path %}
             <p>You have not submitted any games. Try adding a game.</p>
@@ -165,7 +164,7 @@
 {# Section : Extra Code #}
 {% block extra %}
     {% if user.is_authenticated %}
-        <div id="snackbar">Login Successful!</div>
+        <div id="snackbar"></div>
     {% endif %}
 {% endblock %}
 
@@ -214,28 +213,38 @@
             });
 
             $(".clickable-row").click(function (e) {
-                console.log($(this).data('href'));
                 window.location = $(this).data('href');
             });
+
 
             if (sort === 'desc') {
                 $('.sort_icon_toggle').find('img').toggle();
             }
 
             if (page === null) {
-                page = 1
+                page = 1;
+            } else {
+                var page_id = document.getElementById('page_' + page);
+                page_id.className = 'page-item active';
             }
-            var page_id = document.getElementById('page_' + page);
-            page_id.className = 'page-item active';
 
             if (redirect.includes('login')) {
                 var x = document.getElementById("snackbar");
+                x.textContent = "Login Successful!";
+                x.className = "show";
+                setTimeout(function () {
+                    x.className = x.className.replace("show", "");
+                }, 3000);
+            } else if (redirect.includes('delete')) {
+                var x = document.getElementById("snackbar");
+                x.textContent = "Game Successfully Deleted!";
                 x.className = "show";
                 setTimeout(function () {
                     x.className = x.className.replace("show", "");
                 }, 3000);
             }
         });
+
     </script>
 {% endblock %}
 
