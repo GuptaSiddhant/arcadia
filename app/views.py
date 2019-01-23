@@ -4,14 +4,15 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import force_text, force_bytes
-from django.utils.http import urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth import login
+from django.urls import reverse
 from app.tokens import account_activation_token
 from app.models import User, Game, Genre, Transaction, GameScore, GameState
 from app.forms import GameForm, SignUpForm, UpdateProfile
 from app.forms import MessageForm, MessageScoreForm, MessageLoadForm, MessageSaveForm
-from project.settings import SECRET_KEY, sid
+from django.conf import settings
 from hashlib import md5
 import logging
 import datetime
@@ -177,10 +178,19 @@ def game_play_view(request, game_id):
                 resp['error'] = form.errors
                 return JsonResponse(status=400, data=resp)
 
-            GameScore.objects.create(player=request.user,
-                                     game=game,
-                                     score=score_form.cleaned_data['score'],
-                                     scoreDate=datetime.datetime.utcnow())
+            new_score = GameScore.objects.create(player=request.user,
+                                                 game=game,
+                                                 score=score_form.cleaned_data['score'],
+                                                 scoreDate=datetime.datetime.utcnow())
+
+            # Check if there is a high score for this game, and update it if the new_score is better,
+            # or create a new one if there isn't any
+            try:
+                game_high_score = game.high_score.score
+                if new_score.score > game_high_score:
+                    Game.objects.filter(pk=game_id).update(high_score=new_score)
+            except AttributeError:
+                Game.objects.filter(pk=game_id).update(high_score=new_score)
 
             return JsonResponse(status=201, data=resp)
 
