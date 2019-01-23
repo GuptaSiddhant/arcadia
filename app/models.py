@@ -51,11 +51,17 @@ class GameState(models.Model):
     player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)
     gameState = models.TextField()
-    saveDate = models.DateTimeField(default=timezone.now())
+    saveDate = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.game.name + '_' + str(self.pk) + '.save')
 
 
 class GameScore(models.Model):
     player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)
     score = models.PositiveIntegerField(default=0)
-    scoreDate = models.DateTimeField(default=timezone.now())
+    scoreDate = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.game.name + '_' + str(self.pk) + '.score')

@@ -64,7 +64,7 @@ class MessageForm(forms.Form):
 
 
 class MessageScoreForm(MessageForm):
-    score = forms.DecimalField(required=True, widget=forms.HiddenInput())
+    score = forms.IntegerField(required=True, widget=forms.HiddenInput())
 
     def clean_messageType(self):
         if self.cleaned_data['messageType'] != 'SCORE':
