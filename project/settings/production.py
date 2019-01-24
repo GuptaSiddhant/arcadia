@@ -6,7 +6,7 @@ DEBUG = config('DEBUG')
 
 sid = config('sid')
 
-ALLOWED_HOSTS = ['arcadiagames.herokuapp.com']
+ALLOWED_HOSTS = ['lit-hamlet-73485.herokuapp.com', 'arcadiagames.herokuapp.com']
 
 CACHES = {
     'default': {
