@@ -97,10 +97,12 @@ WEEK 3 Sprint
 
 WEEK 4 Sprint
 - Post message from Template to View (Siddhant)
+- Delete Game (Siddhant)
 - Dummy transaction for free games (Henri)
 - Update Model-Game - (Santeri)
 
 WEEK 5 Sprint
+- Highscores 
 - Security (https enforcing and other django settings):  
 https://observatory.mozilla.org/analyze/wsd-arcadia.herokuapp.com
 

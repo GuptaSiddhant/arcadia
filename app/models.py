@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -20,7 +21,8 @@ class Game(models.Model):
     name = models.CharField(max_length=100, unique=True)
     image = models.URLField(default=None, blank=True)
     description = models.TextField(null=False)
-    highscore = models.PositiveIntegerField(default=0)
+    high_score = models.OneToOneField('GameScore', on_delete=models.PROTECT, related_name='high_score_in', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['name', 'genre']
@@ -48,13 +50,18 @@ class Transaction(models.Model):
 class GameState(models.Model):
     player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)
-    settings = models.TextField()
-    game_state = models.TextField()
-    timestamp = models.DateTimeField(auto_now=True)
+    gameState = models.TextField()
+    saveDate = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.game.name + '_' + str(self.pk) + '.save')
 
 
 class GameScore(models.Model):
     player = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)
     score = models.PositiveIntegerField(default=0)
-    timestamp = models.DateTimeField(auto_now=True)
+    scoreDate = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.game.name + '_' + str(self.pk) + '.score')

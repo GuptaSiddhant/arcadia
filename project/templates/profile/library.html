@@ -53,8 +53,18 @@
 
 
 {# Section : Main #}
-{% block main_head %} Your Library - <span id="genre-heading"></span> Games {% endblock %}
+{% block main_head %}
+    {% if '/dev/' in request.path %}
+        Development Corner
+    {% else %}
+        Your Library - <span id="genre-heading"></span> Games
+    {% endif %}
+{% endblock %}
 {% block main_body %}
+    {% if '/dev/' in request.path %}
+        <a class="btn btn-block btn-primary" style="margin-top: 0 !important;"
+           href="{% url 'gameAdd' %}"> + Submit New Game </a>
+    {% endif %}
     {% if games %}
         <table class="table table-hover">
             <thead>
@@ -87,11 +97,13 @@
                         <div>
                             <span style="font-weight: 700">{{ game.name }}</span>
                             <br>{{ game.genre }}
-                            <br><a class="btn btn-outline-success btn-sm" style="margin-top: 0"
-                                   href="{% url 'game' game.id %}">Play</a>
+                            <br>
                             {% if user == game.developer %}
-                                <a class="btn btn-outline-primary btn-sm" style="margin-top: 0"
+                                <a class="btn btn-outline-info btn-sm row-button" style="margin-top: 0"
                                    href="{% url 'gameEdit' game.id %}">Edit Game</a>
+                            {% else %}
+                                <a class="btn btn-outline-success btn-sm" style="margin-top: 0"
+                                   href="{% url 'game' game.id %}">Play</a>
                             {% endif %}
                         </div>
                     </td>
@@ -104,18 +116,19 @@
             </tbody>
         </table>
     {% else %}
+        <br>
         <h5>No games found.</h5>
-        {% if user.inventory.all %}
-            <p>Also try different filters or reset the filters.</p>
+        {% if 'dev/' in request.path %}
+            <p>You have not submitted any games. Try adding a game.</p>
         {% else %}
-            <p>You don't own any games. Explore some.</p>
-            <a class="btn btn-outline-primary" href="/explore/">Explore Games</a>
+            <p>You don't own any such games. Explore some.</p>
+            <a class="btn btn-outline-primary" href="/explore/">Explore More Games</a>
         {% endif %}
     {% endif %}
 {% endblock %}
 {% block main_foot %}
-    {% if games.paginator.num_pages > 1 %}
-        <div style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-evenly">
+    <div style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-evenly">
+        {% if games.paginator.num_pages > 1 %}
             <nav aria-label="navigation">
                 <ul class="pagination">
                     {% if games.has_previous %}
@@ -143,15 +156,15 @@
                     {% endif %}
                 </ul>
             </nav>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}
 
 
 {# Section : Extra Code #}
 {% block extra %}
     {% if user.is_authenticated %}
-        <div id="snackbar">Login Successful!</div>
+        <div id="snackbar"></div>
     {% endif %}
 {% endblock %}
 
@@ -200,28 +213,38 @@
             });
 
             $(".clickable-row").click(function (e) {
-                console.log($(this).data('href'));
                 window.location = $(this).data('href');
             });
+
 
             if (sort === 'desc') {
                 $('.sort_icon_toggle').find('img').toggle();
             }
 
             if (page === null) {
-                page = 1
+                page = 1;
+            } else {
+                var page_id = document.getElementById('page_' + page);
+                page_id.className = 'page-item active';
             }
-            var page_id = document.getElementById('page_' + page);
-            page_id.className = 'page-item active';
 
             if (redirect.includes('login')) {
                 var x = document.getElementById("snackbar");
+                x.textContent = "Login Successful!";
+                x.className = "show";
+                setTimeout(function () {
+                    x.className = x.className.replace("show", "");
+                }, 3000);
+            } else if (redirect.includes('delete')) {
+                var x = document.getElementById("snackbar");
+                x.textContent = "Game Successfully Deleted!";
                 x.className = "show";
                 setTimeout(function () {
                     x.className = x.className.replace("show", "");
                 }, 3000);
             }
         });
+
     </script>
 {% endblock %}
 

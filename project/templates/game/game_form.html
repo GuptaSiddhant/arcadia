@@ -30,9 +30,9 @@
 {% block side_foot %}
     {% if user.is_dev %}
         {% if game %}
-            <button type="button" class="btn btn-outline-danger btn-block sidebar_button"
-                    onclick="location.href='#'">
-                Delete Game
+            <button class="btn btn-outline-danger btn-block row-button" style="margin-top: 10px"
+                    data-toggle="modal"
+                    data-target="#deleteModal">Delete Game
             </button>
         {% endif %}
     {% endif %}
@@ -46,34 +46,34 @@
 {% endblock %}
 {% block main_body %}
     {% if user.is_dev %}
-            <form method="post" class="registration" id="game-form">
-                {% csrf_token %}
-                {% for field in form %}
-                    <div class="form-group">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.help_text %}
-                            <p class="help-text">{{ field.help_text|safe }}</p>
-                        {% endif %}
-                        {{ field.errors }}
-                    </div>
-                {% endfor %}
-            </form>
-            <div class="flex_space_between">
-                <button type="submit" class="btn btn-primary btn-lg "
-                        onclick="$('#game-form').submit()">Save Game
-                </button>
-                <div>
-                    <button type="reset" class="btn btn-outline-secondary btn-lg"
-                            onclick="$('#game-form')[0].reset()">Reset
-                    </button>
-                    <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
+        <form method="post" class="registration" id="game-form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.help_text %}
+                        <p class="help-text">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                    {{ field.errors }}
                 </div>
+            {% endfor %}
+        </form>
+        <div class="flex_space_between">
+            <button type="submit" class="btn btn-primary btn-lg "
+                    onclick="$('#game-form').submit()">Save Game
+            </button>
+            <div>
+                <button type="reset" class="btn btn-outline-secondary btn-lg"
+                        onclick="$('#game-form')[0].reset()">Reset
+                </button>
+                <a class="btn btn-outline-secondary btn-lg" href="javascript:history.back()">Cancel</a>
             </div>
-        {% else %}
-            <h5>You do not have access to this page.</h5>
-            <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
-        {% endif %}
+        </div>
+    {% else %}
+        <h5>You do not have access to this page.</h5>
+        <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
+    {% endif %}
 {% endblock %}
 {% block main_foot %} {# empty footer #} {% endblock %}
 
@@ -86,6 +86,39 @@
         <script type="text/javascript">
             window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
         </script>
+    {% endif %}
+    {% if game %}
+    {# Delete Modal #}
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteGame"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete {{ game.name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure that you want to remove your game from Arcadia?</h5>
+                    This might cause some issues:
+                    <ul>
+                        <li>Players who have purchased the game will no longer have access to it. They might get angry
+                            😡.
+                        </li>
+                        <li>All related data to the game will be removed.</li>
+                    </ul>
+                    <span class="help-text">
+                        In order to restore game, contact Arcadia team and hope our backup isn't corrupted.
+                    </span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" href="{% url 'gameDelete' game.id %}">I'm sure. Delete the Game.</a>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endif %}
 {% endblock %}
 

@@ -1,21 +1,19 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse, reverse_lazy
-from django.views import generic
 from django.utils.encoding import force_text, force_bytes
-from django.utils.http import urlsafe_base64_decode
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth import login
+from django.urls import reverse
 from app.tokens import account_activation_token
-from app.models import User, Game, Genre, Transaction
+from app.models import User, Game, Genre, Transaction, GameScore, GameState
 from app.forms import GameForm, SignUpForm, UpdateProfile
+from app.forms import MessageForm, MessageScoreForm, MessageLoadForm, MessageSaveForm
 from django.conf import settings
 from hashlib import md5
-
 import logging
 import datetime
 
@@ -80,7 +78,7 @@ def explore_view(request):
     red_tag = request.GET.get('redirect', None)
     page = request.GET.get('page', 1)
 
-    games = Game.objects.all()
+    games = Game.objects.filter(is_active=True)
     count_g = {'total': games.count,
                'free': games.filter(price=0).count}
 
@@ -107,9 +105,18 @@ def library_view(request):
     page_tag = request.GET.get('page', 1)
     sort_tag = request.GET.get('sort', 'asc')
 
-    games = request.user.inventory.all()
+    library_type = request.get_full_path()
 
-    logger.error(games)
+    if library_type.__contains__('/dev/'):
+        if request.user.is_dev:
+            games = Game.objects.filter(developer=request.user, is_active=True)
+        else:
+            return render(request, '404.html', {'redirect': red_tag})
+    else:
+        games = request.user.inventory.all()
+        games = games.filter(is_active=True)
+
+    logger.error(library_type)
     count = {'total': games.count,
              'free': games.filter(price=0).count}
 
@@ -143,13 +150,83 @@ def library_view(request):
 
 def game_play_view(request, game_id):
     red_tag = request.GET.get('redirect', None)
+
     try:
-        game = Game.objects.get(pk=game_id)
+        game = Game.objects.get(pk=game_id, is_active=True)
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
 
-    args = {'game': game, 'redirect': red_tag}
-    return render(request, 'game/game_play.html', args)
+    if request.method == 'GET':
+        args = {'game': game, 'redirect': red_tag}
+        return render(request, 'game/game_play.html', args)
+
+    elif request.method == 'POST':
+        resp = {
+            "error": None,
+            "result": None
+        }
+
+        form = MessageForm(request.POST)
+        if not form.is_valid():
+            resp['error'] = form.errors
+            return JsonResponse(status=400, data=resp)
+
+        # Specific message:
+        if form.cleaned_data['messageType'] == 'SCORE':
+            score_form = MessageScoreForm(request.POST)
+            if not score_form.is_valid():
+                resp['error'] = form.errors
+                return JsonResponse(status=400, data=resp)
+
+            new_score = GameScore.objects.create(player=request.user,
+                                                 game=game,
+                                                 score=score_form.cleaned_data['score'],
+                                                 scoreDate=datetime.datetime.utcnow())
+
+            # Check if there is a high score for this game, and update it if the new_score is better,
+            # or create a new one if there isn't any
+            try:
+                game_high_score = game.high_score.score
+                if new_score.score > game_high_score:
+                    Game.objects.filter(pk=game_id).update(high_score=new_score)
+            except AttributeError:
+                Game.objects.filter(pk=game_id).update(high_score=new_score)
+
+            return JsonResponse(status=201, data=resp)
+
+        elif form.cleaned_data['messageType'] == 'SAVE':
+            save_form = MessageSaveForm(request.POST)
+            if not save_form.is_valid():
+                resp['error'] = form.errors
+                return JsonResponse(status=400, data=resp)
+
+            GameState.objects.create(player=request.user,
+                                     game=game,
+                                     saveDate=datetime.datetime.utcnow(),
+                                     gameState=save_form.cleaned_data['gameState'])
+            return JsonResponse(status=201, data=resp)
+
+        elif form.cleaned_data['messageType'] == 'LOAD_REQUEST':
+            load_form = MessageLoadForm(request.POST)
+            if not load_form.is_valid():
+                resp['error'] = form.errors
+                return JsonResponse(status=400, data=resp)
+
+            save_game = GameState.objects.filter(player=request.user, game=game).order_by("-saveDate")
+
+            if save_game.exists():
+                resp['result'] = save_game[0].gameState
+                return JsonResponse(status=200, data=resp)
+            else:
+                resp['result'] = None
+                resp['error'] = "No save game found."
+                return JsonResponse(status=400, data=resp)
+
+        else:
+            resp['error'] = 'Invalid message type.'
+            return JsonResponse(status=400, data=resp)
+    else:
+        return HttpResponse(status=405, content='Invalid method.')
 
 
 def game_add_view(request):
@@ -160,7 +237,7 @@ def game_add_view(request):
             game = form.save(commit=False)
             game.developer = request.user
             game.save()
-            return redirect('library')
+            return redirect('/library/')
     else:
         form = GameForm()
     return render(request, 'game/game_form.html', {'form': form, 'redirect': red_tag})
@@ -172,7 +249,7 @@ def game_edit_view(request, game_id):
         game_to_edit = Game.objects.get(pk=game_id)
         form = GameForm(request.POST, instance=game_to_edit)
         form.save()
-        return redirect('library')
+        return redirect('/library/')
     else:
         form = GameForm()
 
@@ -193,6 +270,20 @@ def game_edit_view(request, game_id):
         return render(request, 'game/game_form.html', {'form': form, 'game': game, 'redirect': red_tag})
 
 
+def game_delete_view(request, game_id):
+    red_tag = request.GET.get('redirect', None)
+    try:
+        game = Game.objects.get(pk=game_id)
+    except ObjectDoesNotExist:
+        return render(request, '404.html', {'redirect': red_tag})
+
+    if request.user == game.developer:
+        game.is_active = False
+        game.save()
+        return redirect('/dev/?redirect=delete')
+    return render(request, '404.html', {'redirect': red_tag})
+
+
 def game_api_latest(request):
     game = Game.objects.latest('pk')
     data = {
@@ -200,7 +291,6 @@ def game_api_latest(request):
             'id': game.id,
             'name': game.name,
             'genre': game.genre.name,
-            'url': game.url,
             'price': game.price,
             'image': game.image,
             'desc': game.description,
@@ -312,7 +402,7 @@ def payment_result_view(request):
                 'redirect': red_tag,
                 'reference': reference_tag,
                 'result': result_tag,
-                'validity': valid_transaction }
+                'validity': valid_transaction}
         return render(request, 'payment/result.html', args)
 
     # If the payment result was 'cancel' update the transaction
@@ -336,7 +426,7 @@ def payment_result_view(request):
         transaction.payment_reference = reference_tag
         transaction.save()
 
-        message = "An error occured while processing the transaction. Please try again"
+        message = "An error occurred while processing the transaction. Please try again"
         args = {'game': transaction.game,
                 'message': message,
                 'redirect': red_tag,

@@ -358,6 +358,14 @@ input:focus {
     object-fit: cover;
 }
 
+.nav_profile_image {
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+    background: #ffffff;
+}
+
 .pagination {
     margin: 10px 0 0 0 !important;
 }

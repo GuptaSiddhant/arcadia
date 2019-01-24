@@ -28,9 +28,11 @@ urlpatterns += [
 urlpatterns += [
     path('explore/', views.explore_view, name='explore'),
     path('library/', views.library_view, name='library'),
+    path('dev/', views.library_view, name='dev'),
     path('game/add/', views.game_add_view, name='gameAdd'),
     path('game/<int:game_id>/', views.game_play_view, name='game'),
     path('game/<int:game_id>/edit/', views.game_edit_view, name='gameEdit'),
+    path('game/<int:game_id>/delete/', views.game_delete_view, name='gameDelete'),
     path('game/<int:game_id>/purchase/', views.pay_purchase_view, name='purchase'),
 ]
 
