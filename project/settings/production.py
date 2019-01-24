@@ -1,11 +1,12 @@
 # Settings for deploying to Heroku
 from .base import *
 
+
 DEBUG = config('DEBUG')
 
 sid = config('sid')
 
-ALLOWED_HOSTS = ['wsd-arcadia.herokuapp.com']
+ALLOWED_HOSTS = ['arcadiagames.herokuapp.com']
 
 CACHES = {
     'default': {
