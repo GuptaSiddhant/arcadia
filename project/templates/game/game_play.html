@@ -41,7 +41,7 @@
     </div>
 
     {% if user.is_authenticated %}
-        {% if game.price == 0 or game in user.inventory.all %}
+        {% if game.price == 0 or game in user.inventory.all or game.developer == user %}
             <br>
             <div class="form-group">
                 <h5>Status Updates:</h5>
@@ -49,6 +49,10 @@
             </div>
         {% endif %}
     {% endif %}
+    <div class="form-group">
+        <label>High Scores:</label>
+        <br>{{ game.scores}}
+    </div>
 {% endblock %}
 {% block side_foot %}
     {% if user == game.developer %}
