@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils import timezone
 from django.template.loader import render_to_string
 from django.contrib.auth import login
 from django.urls import reverse
@@ -15,7 +16,6 @@ from app.forms import MessageForm, MessageScoreForm, MessageLoadForm, MessageSav
 from django.conf import settings
 from hashlib import md5
 import logging
-import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -181,7 +181,7 @@ def game_play_view(request, game_id):
             new_score = GameScore.objects.create(player=request.user,
                                                  game=game,
                                                  score=score_form.cleaned_data['score'],
-                                                 scoreDate=datetime.datetime.utcnow())
+                                                 scoreDate=timezone.now())
 
             # Check if there is a high score for this game, and update it if the new_score is better,
             # or create a new one if there isn't any
@@ -202,7 +202,7 @@ def game_play_view(request, game_id):
 
             GameState.objects.create(player=request.user,
                                      game=game,
-                                     saveDate=datetime.datetime.utcnow(),
+                                     saveDate=timezone.now(),
                                      gameState=save_form.cleaned_data['gameState'])
             return JsonResponse(status=201, data=resp)
 
@@ -339,7 +339,7 @@ def pay_purchase_view(request, game_id):
     # Create temporary transaction and store payment_result with "initialized" state
     transaction = Transaction.objects.create(player=request.user,
                                              game=game,
-                                             timestamp=datetime.datetime.now(),
+                                             timestamp=timezone.now(),
                                              payment_reference=0,
                                              payment_result="initialized")
     pid = transaction.pk
@@ -393,7 +393,7 @@ def payment_result_view(request):
         transaction.payment_result = "success"
         transaction.amount = transaction.game.price
         transaction.payment_reference = reference_tag
-        transaction.timestamp = datetime.datetime.now()
+        transaction.timestamp = timezone.now()
         transaction.save()
 
         message = "Thank you for purchasing the game"
