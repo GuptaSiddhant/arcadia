@@ -12,32 +12,16 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import django_heroku
-
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
-# Setting default development secret key, and django_heroku will handle the
-# production secret key config
-SECRET_KEY = 'e-pzjz^rl!f@1*bDvmp=ci!wpgmq6&c(o+mwet*tr^(ap=jy7x'
-sid = 'arcadia'
-
-# os.environ.get('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -64,7 +48,7 @@ TEMPLATES = [
 
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'project/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,20 +66,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'project.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# Default local database. django-heroku handles the heroku database
-# setup from DATABASE_URL
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 
 # Password validation
@@ -134,18 +104,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+# django_heroku.settings(locals(), databases=False, test_runner=False, allowed_hosts=False,
+#                       logging=False, secret_key=False)
+
 
 # Login / logout redirect urls
 LOGIN_REDIRECT_URL = '/library/?redirect=login'
 LOGOUT_REDIRECT_URL = '/?redirect=logout'
 
-# Configure Django App for Heroku.
-django_heroku.settings(locals(), test_runner=False)
 
 # Console email backend settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Configure our extended AbstractUser as default User model
 AUTH_USER_MODEL = 'app.User'
 
 # for HTTPS put TRUE

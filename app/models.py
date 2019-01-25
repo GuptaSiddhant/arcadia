@@ -27,6 +27,9 @@ class Game(models.Model):
     class Meta:
         ordering = ['name', 'genre']
 
+    def scores(self):
+        return self.gamescore_set.order_by('-score')[:5]
+
     def __str__(self):
         return str(self.name)
 
@@ -64,4 +67,4 @@ class GameScore(models.Model):
     scoreDate = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.game.name + '_' + str(self.pk) + '.score')
+        return str(self.player.username + ": " + str(self.score))
