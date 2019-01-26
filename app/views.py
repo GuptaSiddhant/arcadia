@@ -343,8 +343,8 @@ def pay_purchase_view(request, game_id):
                                              payment_reference=0,
                                              payment_result="initialized")
     pid = transaction.pk
-    sid = "ar20ga19"
-    SECRET_KEY = "fbd947351c5047a19b47636402760ccc"
+    sid = settings.SID
+    SECRET_KEY = settings.SECRET_KEY
     checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, game.price, SECRET_KEY)
     checksum = md5(checksumstr.encode("ascii")).hexdigest()
     absolute_payment_url = request.build_absolute_uri(reverse("payment"))
@@ -362,7 +362,7 @@ def payment_result_view(request):
 
     # Check if the transaction is valid
     valid_transaction = False
-    SECRET_KEY = "fbd947351c5047a19b47636402760ccc"
+    SECRET_KEY = settings.SECRET_KEY
     checksumstr = "pid={}&ref={}&result={}&token={}".format(pid_tag, reference_tag, result_tag, SECRET_KEY)
     checksum = md5(checksumstr.encode("ascii")).hexdigest()
     if checksum_tag == checksum:

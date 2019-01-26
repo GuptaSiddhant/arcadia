@@ -6,7 +6,7 @@ from .base import *
 
 DEBUG = config('DEBUG') == 'True'
 
-sid = config('sid')
+SID = config('sid')
 
 ALLOWED_HOSTS = ['lit-hamlet-73485.herokuapp.com', 'arcadiagames.herokuapp.com']
 

@@ -4,7 +4,7 @@ from .base import *
 
 DEBUG = True
 
-sid = 'arcadia'
+SID = 'arcadia'
 
 SECRET_KEY = 'oo-wpc9+8k3ec8ldd3jc4sg(q5ec2qu5ubl@#71!n*!f44gz$'
 
