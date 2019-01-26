@@ -344,8 +344,8 @@ def pay_purchase_view(request, game_id):
                                              payment_result="initialized")
     pid = transaction.pk
     sid = settings.SID
-    SECRET_KEY = settings.SECRET_KEY
-    checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, game.price, SECRET_KEY)
+    PAYMENT_SECRET_KEY = settings.PAYMENT_SECRET_KEY
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(pid, sid, game.price, PAYMENT_SECRET_KEY)
     checksum = md5(checksumstr.encode("ascii")).hexdigest()
     absolute_payment_url = request.build_absolute_uri(reverse("payment"))
     args = {'game': game, 'redirect': red_tag, 'checksum': checksum, 'sid': sid, 'pid': pid, 'amount': game.price,
@@ -362,8 +362,8 @@ def payment_result_view(request):
 
     # Check if the transaction is valid
     valid_transaction = False
-    SECRET_KEY = settings.SECRET_KEY
-    checksumstr = "pid={}&ref={}&result={}&token={}".format(pid_tag, reference_tag, result_tag, SECRET_KEY)
+    PAYMENT_SECRET_KEY = settings.PAYMENT_SECRET_KEY
+    checksumstr = "pid={}&ref={}&result={}&token={}".format(pid_tag, reference_tag, result_tag, PAYMENT_SECRET_KEY)
     checksum = md5(checksumstr.encode("ascii")).hexdigest()
     if checksum_tag == checksum:
         valid_transaction = True
