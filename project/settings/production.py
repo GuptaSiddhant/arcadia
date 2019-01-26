@@ -8,6 +8,8 @@ DEBUG = config('DEBUG') == 'True'
 
 SID = config('sid')
 
+PAYMENT_SECRET_KEY = config('PAYMENT_SECRET_KEY')
+
 ALLOWED_HOSTS = ['lit-hamlet-73485.herokuapp.com', 'arcadiagames.herokuapp.com']
 
 CACHES = {
