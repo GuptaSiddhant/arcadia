@@ -68,6 +68,7 @@
 {# Section : Extra Code #}
 {% block extra %}
     {% if user.is_authenticated %}
+        <div id="snackbar"></div>
     {% else %}
         {# Redirct to login #}
         <script type="text/javascript">
@@ -78,4 +79,21 @@
 
 
 {# Section : Logic #}
-{% block logic %} {# empty logic #} {% endblock %}
+{% block logic %}
+    <script>
+        $(document).ready(function () {
+            let params = (new URL(document.location)).searchParams;
+            let redirect = params.get("redirect");
+
+            if (redirect.includes('activate')) {
+                var x = document.getElementById("snackbar");
+                x.textContent = "Account activated!";
+                x.className = "show";
+                setTimeout(function () {
+                    x.className = x.className.replace("show", "");
+                }, 3000);
+            }
+        });
+
+    </script>
+ {% endblock %}

@@ -58,7 +58,7 @@ def activate(request, uidb64, token):
         user.email_confirmed = True
         user.save()
         login(request, user)
-        return redirect('profile')
+        return redirect('/profile/?redirect=activated')
     else:
         return render(request, 'email/account_activation_invalid.html')
 
@@ -165,6 +165,18 @@ def game_play_view(request, game_id):
             "error": None,
             "result": None
         }
+
+        transaction = None
+        try:
+            transaction = Transaction.objects.get(game=game, player=request.user)
+        except ObjectDoesNotExist:
+            transaction = Transaction.objects.create(game=game,
+                                                     player=request.user,
+                                                     amount=0,
+                                                     payment_reference=0,
+                                                     timestamp=timezone.now(),
+                                                     payment_result='success')
+            request.user.inventory.add(transaction.game)
 
         form = MessageForm(request.POST)
         if not form.is_valid():
