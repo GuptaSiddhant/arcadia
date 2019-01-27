@@ -17,6 +17,9 @@ DATABASES = {
     }
 }
 
+#Console email backend settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # django-heroku handles the allowed hosts, secret key and staticfiles
 # setups
 django_heroku.settings(locals(), test_runner=False, databases=False)

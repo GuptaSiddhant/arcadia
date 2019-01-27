@@ -10,6 +10,8 @@ SID = config('sid')
 
 PAYMENT_SECRET_KEY = config('PAYMENT_SECRET_KEY')
 
+GMAIL_SMTP_PW = config('GMAIL_SMTP_PW')
+
 ALLOWED_HOSTS = ['lit-hamlet-73485.herokuapp.com', 'arcadiagames.herokuapp.com']
 
 CACHES = {
@@ -18,6 +20,14 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
+# Gmail SMTP settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'arcadiagames.ga@gmail.com'
+EMAIL_HOST_PASSWORD = GMAIL_SMTP_PW
+EMAIL_USE_TLS = True
 
 # Database and Staticfiles, django-heroku handles the heroku database, secret key and staticfiles
 # setups
