@@ -98,19 +98,27 @@ WEEK 3 Sprint
 WEEK 4 Sprint
 - Post message from Template to View (Siddhant)
 - Delete Game (Siddhant)
-- Dummy transaction for free games (Henri)
 - Update Model-Game - (Santeri)
 
 WEEK 5 Sprint
-- Highscores 
+- Highscores (Game & library) - (Siddhant)
+- sales statistics (Siddhant)
+- Testing Python files (Henri)
+- RestfulAPI (Henri)
+- Linting - (Santeri)
+- 3rd party Login (Santeri)
 - Security (https enforcing and other django settings):  
 https://observatory.mozilla.org/analyze/wsd-arcadia.herokuapp.com
 
 WEEK 6 Sprint
-- Extra features
+- Testing
+- Commenting
+- Reporting
 
 WEEK 7 Sprint
 - Testing
+- Commenting
+- Reporting 
 
 Final date 19th of Feb
 
