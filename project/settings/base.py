@@ -113,8 +113,6 @@ LOGIN_REDIRECT_URL = '/library/?redirect=login'
 LOGOUT_REDIRECT_URL = '/?redirect=logout'
 
 
-# Console email backend settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Configure our extended AbstractUser as default User model
 AUTH_USER_MODEL = 'app.User'
