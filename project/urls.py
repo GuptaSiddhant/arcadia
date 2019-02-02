@@ -43,3 +43,7 @@ urlpatterns += [
 urlpatterns += [
     path('api/game/latest/', views.game_api_latest, name='api_game_latest')
 ]
+
+urlpatterns += [
+    path('api/v1/', include('api.urls')),
+]
