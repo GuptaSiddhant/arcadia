@@ -381,6 +381,29 @@ input:focus {
     z-index: 10;
 }
 
+.back-icon {
+    position: fixed;
+    left: 10px;
+    top: 18px;
+    width: 24px;
+    height: 24px;
+    fill: #E5E5E5;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+    box-shadow: 0 0 10px #6E42C0;
+    z-index: 50;
+}
+
+#dropdownMenuButton {
+    position: fixed;
+    top:10px;
+    right: 10px;
+    z-index: 50;
+}
+
 .shown {
     display: block !important;
 }

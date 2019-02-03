@@ -56,15 +56,7 @@
 </head>
 <body>
 <section id="page">
-    <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 40">
-        <div class="logo">
-            <!--Replace Logo URL-->
-            <a href="{% url 'index' %}">
-                <img class="logo" src="{% static 'media/logo-light.png' %}" alt="Arcadia Logo">
-            </a>
-        </div>
-        {% include 'include/nav.html' %}
-    </header>
+    {% include 'include/nav.html' %}
     {% block content %}
         <aside>
             {% block sidebar %}
