@@ -42,6 +42,10 @@ def signup_view(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 
+def base_layout(request):
+    return render(request, 'base.html')
+
+
 def account_activation_sent(request):
     return render(request, 'email/account_activation_sent.html')
 

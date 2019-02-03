@@ -43,7 +43,7 @@
                         {{ user.first_name }} {{ user.last_name }}
                     {% endif %}
                     {% if user.image != '' and 'no-image' not in user.image %}
-                        &nbsp <img class="nav_profile_image" src="{{ user.image }} alt={{ user.username }}">
+                        &nbsp <img class="nav_profile_image" src="{{ user.image }}" alt="{{ user.username }}">
                     {% endif %}
                 </a>
             </li>

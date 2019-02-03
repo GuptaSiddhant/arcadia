@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.index_view, name='index'),
     path('admin/', admin.site.urls),
     url('', include('pwa.urls')),
+    path('base_layout/', views.base_layout)
 ]
 
 # Add Django site authentication urls (for login, logout, password management)
