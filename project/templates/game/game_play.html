@@ -90,7 +90,7 @@
     {% if user.is_authenticated %}
         {% if game in user.inventory.all or game.price == 0  or game.developer == user %}
             <div style="text-align: center; overflow-x: scroll">
-                <iframe id="game_frame"
+                <iframe id="game_frame" title="{{ game.name }}"
                         style="border: 1px solid #000000; border-radius: 5px;  width: 100%; height: 300px"
                         src="{{ game.url }}"></iframe>
             </div>
@@ -110,7 +110,8 @@
         </div>
     </div>
     <div class="sharethis-inline-share-buttons"></div>
-
+{% endblock %}
+{% block main_foot %}
     {% if user.is_authenticated %}
         <!--Purchase Button-->
         {% if game in user.inventory.all or game.price == 0 or game.developer == user %}
@@ -118,7 +119,6 @@
             <a class="btn btn-primary btn-block btn-lg" href="{% url 'purchase' game.id %}">
                 Purchase Game €{{ game.price }}
             </a>
-            <br>
         {% endif %}
     {% else %}
         <div>
@@ -131,8 +131,6 @@
                role="button">Create an Account</a>
         </div>
     {% endif %}
-{% endblock %}
-{% block main_foot %}
 {% endblock %}
 
 
