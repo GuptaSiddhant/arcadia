@@ -61,10 +61,6 @@
     {% endif %}
 {% endblock %}
 {% block main_body %}
-    {% if '/dev/' in request.path %}
-        <a class="btn btn-block btn-primary" style="margin-top: 0 !important;"
-           href="{% url 'gameAdd' %}"> + Submit New Game </a>
-    {% endif %}
     {% if games %}
         <table class="table table-hover">
             <thead>
@@ -129,9 +125,24 @@
                 </tr>
             {% endfor %}
             </tbody>
+            <tfoot>
+            <th>Total Games: {{ games|length }} </th>
+            {% if '/dev/' in request.path %}
+                <th>Total Sale: {{ user.total_sale }} (€ {{ user.amount_earned }})</th>
+            {% endif %}
+            </tfoot>
         </table>
+
+        {# Sales Visualisations #}
+        {% if '/dev/' in request.path %}
+            <hr>
+            <h5>Sales Statistics:</h5>
+            <div style="display: flex; flex-wrap: wrap; flex-direction: row">
+                <div id="chart_pie">Pie Chart</div>
+                <div id="chart_bar">Bar Graph</div>
+            </div>
+        {% endif %}
     {% else %}
-        <br>
         <h5>No games found.</h5>
         {% if 'dev/' in request.path %}
             <p>You have not submitted any games. Try adding a game.</p>
@@ -173,6 +184,11 @@
             </nav>
         {% endif %}
     </div>
+
+    {% if '/dev/' in request.path %}
+        <a class="btn btn-block btn-primary" style="margin-top: 0 !important;"
+           href="{% url 'gameAdd' %}"> + Submit New Game </a>
+    {% endif %}
 {% endblock %}
 
 
@@ -186,6 +202,62 @@
 
 {# Section : Logic #}
 {% block logic %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages': ['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+
+            // Create the data table.
+            var data_quantity = new google.visualization.DataTable();
+            data_quantity.addColumn('string', 'Game');
+            data_quantity.addColumn('number', 'Quanity');
+            data_quantity.addRows([
+                {% for game in games %}
+                    ['{{ game.name }}', {{ game.sale_quantity }}],
+                {% endfor %}
+            ]);
+
+            var data_sale = new google.visualization.DataTable();
+            data_sale.addColumn('string', 'Game');
+            data_sale.addColumn('number', 'Amount (€)');
+            data_sale.addRows([
+                {% for game in games %}
+                    ['{{ game.name }}', {{ game.sale_amount }}],
+                {% endfor %}
+            ]);
+
+            // Set chart options
+            var options_quantity = {
+                'title': 'Sale Numbers (Total sale = {{ user.total_sale }})',
+                'is3D': true,
+                'width': 400,
+                'height': 400
+            };
+
+            // Set chart options
+            var options_sale = {
+                'title': 'Amount earned (Total = € {{ user.amount_earned }})',
+                pieHole: 0.4,
+                'width': 600,
+                'height': 400
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart_quantity = new google.visualization.PieChart(document.getElementById('chart_pie'));
+            var chart_sale = new google.visualization.ColumnChart(document.getElementById('chart_bar'));
+            chart_quantity.draw(data_quantity, options_quantity);
+            chart_sale.draw(data_sale, options_sale);
+        }
+    </script>
     <script>
         $(document).ready(function () {
             let params = (new URL(document.location)).searchParams;

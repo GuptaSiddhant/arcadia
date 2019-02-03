@@ -30,6 +30,13 @@ class User(AbstractUser):
             transactions += game.transaction_set.all()
         return sorted(transactions, key=lambda instance: instance.timestamp)
 
+    def total_sale(self):
+        games = self.game_set.all()
+        quantity = 0
+        for game in games:
+            quantity += game.sale_quantity()
+        return quantity
+
     def amount_earned(self):
         games = self.game_set.all()
         amount = 0

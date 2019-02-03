@@ -35,11 +35,7 @@
     </div>
     <div class="form-group">
         <label>Account Type:</label>
-        {% if user.is_dev == False %}
-            Player
-        {% else %}
-            Developer
-        {% endif %}
+        <span id="preview_dev"></span>
     </div>
 {% endblock %}
 {% block side_foot %} {# empty footer #} {% endblock %}
@@ -97,12 +93,22 @@
             $('#user_image').attr('src', $('#id_image').val());
             $('#preview_name').text($('#id_first_name').val() + ' ' + $('#id_last_name').val());
             $('#preview_email').text($('#id_email').val());
+            if (document.getElementById('id_is_dev').checked) {
+                $('#preview_dev').text('Developer');
+            } else {
+                $('#preview_dev').text('Player');
+            }
 
             // Thumbnail Update
             $('#user-form').on("change paste keyup", function () {
                 $('#user_image').attr('src', $('#id_image').val());
                 $('#preview_name').text($('#id_first_name').val() + ' ' + $('#id_last_name').val());
                 $('#preview_email').text($('#id_email').val());
+                if (document.getElementById('id_is_dev').checked) {
+                    $('#preview_dev').text('Developer');
+                } else {
+                    $('#preview_dev').text('Player');
+                }
             });
         });
     </script>
