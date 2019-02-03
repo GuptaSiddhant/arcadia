@@ -1,11 +1,8 @@
 # Todo
 
-* ext-profile
-    - highscore
-- Gameplay
-    - last saved
 - PWA
     - db
+    - back button
     - apk
     - ipa
     

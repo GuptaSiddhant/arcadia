@@ -1,3 +1,4 @@
+from django.core import serializers
 from django.http import JsonResponse, HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator
@@ -40,10 +41,6 @@ def signup_view(request):
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
-
-
-def base_layout(request):
-    return render(request, 'base.html')
 
 
 def account_activation_sent(request):
@@ -308,6 +305,16 @@ def game_delete_view(request, game_id):
     return render(request, '404.html', {'redirect': red_tag})
 
 
+def base_layout(request):
+    return render(request, 'base.html')
+
+
+def game_api_all(request):
+    results = Game.objects.filter(is_active=True)
+    jsondata = serializers.serialize('json', results)
+    return HttpResponse(jsondata)
+
+
 def game_api_latest(request):
     game = Game.objects.latest('pk')
     data = {
@@ -335,6 +342,9 @@ def external_profile_view(request, username):
         user2 = User.objects.get(username=username)
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
+
+    if not user2.is_active:
+        return render(request, '404.html', {'redirect': 'inactive'})
 
     games = Game.objects.filter(developer=user2)
 

@@ -95,6 +95,9 @@
                         src="{{ game.url }}"></iframe>
             </div>
             <span style="font-weight: 500">Updates: </span><span id="status"> </span>
+            {{ game.last_save_date }}
+            <br>Last Saved:
+            <label>{% call_method game 'last_save_date' user %}</label>
             <br><br>
         {% endif %}
     {% endif %}

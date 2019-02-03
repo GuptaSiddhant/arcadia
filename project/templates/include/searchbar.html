@@ -1,0 +1,10 @@
+{% load static %}
+
+<div id="search-game" style="position: relative">
+    <div style="left: 0px;">
+        <img id="search-icon" class="icon16" src="{% static 'media/search.svg' %}" alt="Search icon"></div>
+    <input type="search" id="search" name="search" placeholder="Search Games" aria-label="Search games">
+    <div id="search-button"
+         style="right: 0px; cursor: pointer">
+        <img class="icon16" src="{% static 'media/arrow-circle-right.svg' %}" alt="Search button"></div>
+</div>

@@ -63,21 +63,7 @@
                     x.className = x.className.replace("show", "");
                 }, 3000);
             }
-            fetch("{% url 'api_game_latest' %}", {method: 'GET'})
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (data) {
-                    let game = data.game;
-                    let HTML = "<a href='/game/" + game.id + "/'>" +
-                        "<div class='game-list-item' style='margin-left: 0px !important; width: 100% !important;'>" +
-                        "<img draggable='false' src='" + game.image + "'>" +
-                        "<button class='list-action btn btn-light'>€ " + game.price + "</button>" +
-                        "<div class='information'>" + game.genre + "<h4>" + game.name + "</h4>" +
-                        "</div></div></a>" +
-                        game.desc + "";
-                    $('#new_game').html(HTML);
-                });
+            latest_game();
         });
     </script>
 {% endblock %}

@@ -14,14 +14,7 @@
 {% block side_body %}
     {% if user.is_authenticated %}
         <form id="search-form" method="get" action="/library/">
-            <div id="search-game" style="position: relative">
-                <div style="left: 0px;">
-                    <img id="search-icon" class="icon16" src="{% static 'media/search.svg' %}"></div>
-                <input type="search" id="search" name="search" placeholder="Search Games">
-                <div id="search-button"
-                     style="right: 0px; cursor: pointer">
-                    <img class="icon16" src="{% static 'media/arrow-circle-right.svg' %}"></div>
-            </div>
+            {% include 'include/searchbar.html' %}
         </form>
         <br>
         <h5>Select Genre: </h5>
@@ -31,7 +24,7 @@
                 ({{ count.total }})
             </li>
             <li>
-                <a href="?{% param_replace genre='free' %}" style="color: #ffc107">Free to Play</a>
+                <a href="?{% param_replace genre='free' %}" style="color: #8B0000">Free to Play</a>
                 ({{ count.free }})
             </li>
             {% for name, count in genres.items %}
@@ -68,11 +61,11 @@
                 <th scope="col">
                     Game
                     <span class="sort_icon_toggle">
-                        <a href="?{% param_replace sort='desc' %}">
-                            <img class="sort_icon icon16" src="{% static 'media/sort-alpha-down.svg' %}">
+                        <a href="?{% param_replace sort='desc' %}" aria-label="Sort Z-A">
+                            <img class="sort_icon icon16" src="{% static 'media/sort-alpha-down.svg' %}" alt="sort-down">
                         </a>
-                        <a href="?{% param_replace sort='asc' %}">
-                            <img class="sort_icon icon16" src="{% static 'media/sort-alpha-up.svg' %}"
+                        <a href="?{% param_replace sort='asc' %}" aria-label="Sort A-Z">
+                            <img class="sort_icon icon16" src="{% static 'media/sort-alpha-up.svg' %}" alt="sort-up"
                                  style="display:none">
                         </a>
                     </span>
@@ -85,9 +78,9 @@
                 <tr class='clickable-row' data-href="{% url 'game' game.id %}">
                     <td style="display: grid; grid-template-columns:170px auto;">
                         {% if game.image %}
-                            <img draggable="false" class="table-image" src="{{ game.image }}">
+                            <img draggable="false" class="table-image" src="{{ game.image }}" alt="{{ game.name }}">
                         {% else %}
-                            <img draggable="false" class="table-image" src="{% static 'media/no-image.png' %}">
+                            <img draggable="false" class="table-image" src="{% static 'media/no-image.png' %}" alt="{{ game.name }}">
                         {% endif %}
                         <div>
                             <span style="font-weight: 700">{{ game.name }}</span>
@@ -272,7 +265,7 @@
             let page = params.get("page");
             let sort = params.get("sort");
 
-            if($(window).width() <= 800) {
+            if ($(window).width() <= 800) {
                 $('.extra_col').addClass('hidden');
             }
 

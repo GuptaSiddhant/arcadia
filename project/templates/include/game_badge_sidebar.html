@@ -7,9 +7,9 @@
     <a href="{% url 'game' game.id %}">
         <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
             {% if game.image %}
-                <img draggable="false" id="thumbnail_image" src="{{ game.image }}">
+                <img draggable="false" id="thumbnail_image" src="{{ game.image }}" alt="{{ game.name }}">
             {% else %}
-                <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}">
+                <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}" alt="{{ game.name }}">
             {% endif %}
 
             <button id="thumbnail_price" class="list-action btn btn-light">€ {{ game.price }}</button>

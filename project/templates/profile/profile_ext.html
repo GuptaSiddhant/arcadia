@@ -115,7 +115,8 @@
                                 </div>
                             </td>
                             <td class="extra_col">
-                                {{ game.highscore }} by Username
+                                {{ game.high_score.score }}
+                                (<a href="{% url 'user_profile' game.high_score.player.username %}">{{ game.high_score.player.username }}</a>)
                             </td>
                             <td>
                                 {% if  user == game.developer %}

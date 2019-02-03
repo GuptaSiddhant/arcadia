@@ -65,8 +65,8 @@
 <div class="navigation-mobile">
     <div class="dropdown">
         <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="{% static 'media/bars.svg' %}">
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Menu">
+            <img src="{% static 'media/bars.svg' %}" alt="Menu Icon">
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
             {% if user.is_authenticated %}
