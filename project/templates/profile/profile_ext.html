@@ -14,7 +14,7 @@
 {% block side_body %}
     {% with games=user2.inventory.all %}
         {% if games %}
-            <table class="table table-hover table-responsive" style="width: 100%">
+            <table class="table table-hover " style="width: 100%">
                 <tbody>
                 {% for game in games %}
                     <tr class='clickable-row' data-href="{% url 'game' game.id %}"
