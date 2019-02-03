@@ -161,7 +161,10 @@ def game_play_view(request, game_id):
         return render(request, '404.html', {'redirect': red_tag})
 
     if not request.user.is_anonymous:
-        transaction = Transaction.objects.get(game=game, player=request.user, payment_result='success')
+        try:
+            transaction = Transaction.objects.get(game=game, player=request.user, payment_result='success')
+        except ObjectDoesNotExist:
+            transaction = 0
     else:
         transaction = 0
 
