@@ -12,15 +12,7 @@
 {% block side_head %} Filter Games {% endblock %}
 {% block side_body %}
     <form id="search-form" method="get" action="/explore/">
-        <div id="search-game" style="position: relative">
-            <div style="left: 0; ">
-                <img id="search-icon" class="icon16" src="{% static 'media/search.svg' %}">
-            </div>
-            <input type="search" id="search" name="search" placeholder="Search Games">
-            <div id="search-button" style="right: 0; cursor: pointer">
-                <img class="icon16" src="{% static 'media/arrow-circle-right.svg' %}">
-            </div>
-        </div>
+        {% include 'include/searchbar.html' %}
     </form>
     <br>
     <h5>Select Genre: </h5>
@@ -30,7 +22,7 @@
             ({{ count.total }})
         </li>
         <li>
-            <a href="?{% param_replace genre='free' %}" style="color: #ffc107">Free to Play</a>
+            <a href="?{% param_replace genre='free' %}" style="color: #8B0000">Free to Play</a>
             ({{ count.free }})
         </li>
         {% for genre in genres %}
@@ -55,9 +47,9 @@
                 <a href="{% url 'game' game.id %}">
                     <div class="game-list-item">
                         {% if game.image %}
-                            <img draggable="false" src="{{ game.image }}">
+                            <img draggable="false" src="{{ game.image }}" alt="{{ game.name }}">
                         {% else %}
-                            <img draggable="false" src="{% static 'media/no-image.png' %}">
+                            <img draggable="false" src="{% static 'media/no-image.png' %}" alt="{{ game.name }}">
                         {% endif %}
                         {% if game.price == 0 %}
                             <button class="list-action btn btn-warning">Free to Play</button>

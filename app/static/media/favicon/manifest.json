@@ -20,6 +20,8 @@
     ],
     "theme_color": "#6e42c0",
     "background_color": "#6e42c0",
-    "display": "standalone"
-    "start_url": "/explore/"
+    "display": "standalone",
+    "start_url": "/explore/",
+    "lang": "en-US",
+    "orientation": "any"
 }

@@ -156,6 +156,10 @@ body {
     padding: 0.5rem;
 }
 
+a {
+    color: #004794;
+}
+
 .navigation a {
     color: #E8E4EE;
     font-weight: 500;
@@ -223,13 +227,13 @@ h5 {
 }
 
 .help-text {
-    color: gray !important;
+    color: #545454 !important;
     font-size: 0.9rem !important;
     margin: 5px 0;
 }
 
 .help-text + ul {
-    color: gray !important;
+    color: #545454 !important;
     font-size: 0.9rem !important;
     list-style-position: inside !important;
     margin: 5px 0 5px -40px;
