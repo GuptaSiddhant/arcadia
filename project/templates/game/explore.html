@@ -175,7 +175,9 @@
                 page = 1;
             }
             let page_id = document.getElementById('page_' + page);
-            page_id.className = 'page-item active';
+            if (page_id) {
+                page_id.className = 'page-item active';
+            }
         });
     </script>
 {% endblock %}

@@ -1,5 +1,6 @@
 {% load static %}
 {% load kwacros %}
+{% load pwa %}
 {% kwacro title %}{% block title %}{% endblock %}{% endkwacro %}
 
 <!DOCTYPE html>
@@ -9,6 +10,10 @@
     <!-- Meta start -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {# Progressive WebApp #}
+    {% progressive_web_app_meta %}
+    <link rel="manifest" href="/static/media/favicon/manifest.json">
 
     <meta property="og:title" content="{% usekwacro title %}"/>
     <meta property="og:description" content="{% block meta_desc %}Arcadia is online Game-Shop.{% endblock %}"/>
@@ -29,7 +34,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/static/media/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/static/media/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/media/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/static/media/favicon/site.webmanifest">
     <link rel="mask-icon" href="/static/media/favicon/safari-pinned-tab.svg" color="#6e42c0">
     <link rel="shortcut icon" href="/static/media/favicon/favicon.ico">
     <meta name="apple-mobile-web-app-title" content="Arcadia">

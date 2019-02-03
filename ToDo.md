@@ -1,8 +1,7 @@
 # Todo
-* inventory
-    * ext-profile
-    * library
-    * gameplay
+
+* ext-profile
+   - highscore
     
 
 ## User
