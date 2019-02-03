@@ -1,12 +1,5 @@
 # Todo
 
-- PWA
-    - db
-    - back button
-    - apk
-    - ipa
-    
-
 ## User
 * Groups - Admins, Developers, Gamers
 * Login
