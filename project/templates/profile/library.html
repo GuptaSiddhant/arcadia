@@ -72,22 +72,22 @@
                 <th scope="col">
                     Game
                     <span class="sort_icon_toggle">
-                            <a href="?{% param_replace sort='desc' %}">
-                                <img class="sort_icon icon16" src="{% static 'media/sort-alpha-down.svg' %}">
-                            </a>
-                            <a href="?{% param_replace sort='asc' %}">
-                                <img class="sort_icon icon16" src="{% static 'media/sort-alpha-up.svg' %}"
-                                     style="display:none">
-                            </a>
-                        </span>
+                        <a href="?{% param_replace sort='desc' %}">
+                            <img class="sort_icon icon16" src="{% static 'media/sort-alpha-down.svg' %}">
+                        </a>
+                        <a href="?{% param_replace sort='asc' %}">
+                            <img class="sort_icon icon16" src="{% static 'media/sort-alpha-up.svg' %}"
+                                 style="display:none">
+                        </a>
+                    </span>
                 </th>
-                <th scope="col">Last Played</th>
+                <th scope="col">Stats
+                </td>
             </tr>
             </thead>
             <tbody>
             {% for game in games %}
-                <tr class='clickable-row' data-href="{% url 'game' game.id %}"
-                    style="cursor: pointer">
+                <tr class='clickable-row' data-href="{% url 'game' game.id %}">
                     <td style="display: grid; grid-template-columns:170px auto;">
                         {% if game.image %}
                             <img draggable="false" class="table-image" src="{{ game.image }}">
@@ -97,19 +97,34 @@
                         <div>
                             <span style="font-weight: 700">{{ game.name }}</span>
                             <br>{{ game.genre }}
+                            {% if '/dev/' in request.path %} | € {{ game.price }}{% endif %}
                             <br>
                             {% if user == game.developer %}
-                                <a class="btn btn-outline-info btn-sm row-button" style="margin-top: 0"
+                                <a class="btn btn-outline-info btn-sm row-button"
                                    href="{% url 'gameEdit' game.id %}">Edit Game</a>
                             {% else %}
-                                <a class="btn btn-outline-success btn-sm" style="margin-top: 0"
+                                <a class="btn btn-outline-success btn-sm"
                                    href="{% url 'game' game.id %}">Play</a>
                             {% endif %}
                         </div>
                     </td>
                     <td>
-                        DD/MM/YYYY <br>
-                        Score: {{ game.highscore }}
+                        {% if '/dev/' in request.path %}
+                            <label>{{ game.sale_quantity }}</label> copies sold
+                            {% if game.price != 0 %}
+                                <br>
+                                <label>€ {{ game.sale_amount }}</label> earned
+                            {% endif %}
+                        {% else %}
+                            High Score:
+                            <label>
+                                {% call_method game 'player_high_score' user %}
+                            </label>
+                            <br>
+                            Last Saved:
+                            <label>{% call_method game 'last_save_date' user %}</label>
+
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

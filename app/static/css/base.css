@@ -198,7 +198,7 @@ h4 {
 
 h5 {
     font-size: 1rem !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     color: #343A3E !important;
 }
 
@@ -242,15 +242,12 @@ h5 {
     margin: 5px 0 5px -40px;
 }
 
-.btn {
-    margin-top: 10px;
-}
-
-.sort_icon {
+.sort_icon, .clickable-row {
     cursor: pointer;
 }
 
-label {
+
+label, th {
     font-size: 1rem;
     font-weight: 500;
     color: #343A3E;
