@@ -1,7 +1,13 @@
 # Todo
 
 * ext-profile
-   - highscore
+    - highscore
+- Gameplay
+    - last saved
+- PWA
+    - db
+    - apk
+    - ipa
     
 
 ## User
