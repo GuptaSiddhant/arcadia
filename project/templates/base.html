@@ -18,7 +18,7 @@
     <meta property="og:title" content="{% usekwacro title %}"/>
     <meta property="og:description" content="{% block meta_desc %}Arcadia is online Game-Shop.{% endblock %}"/>
     <meta property="og:image"
-          content="{% block meta_img %}{% static 'media/favicon/android-chrome-384x384.png' %}{% endblock %}"/>
+          content="{% block meta_img %}{% static 'media/favicon/android-chrome-512x512.png' %}{% endblock %}"/>
     <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
     <meta property="og:type" content="website"/>
     <meta property="og:site_name" content="Arcadia"/>
@@ -54,7 +54,7 @@
 </head>
 <body>
 <section id="page">
-    <header>
+    <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 100">
         <div class="logo">
             <!--Replace Logo URL-->
             <a href="{% url 'index' %}">
