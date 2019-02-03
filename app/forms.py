@@ -39,8 +39,9 @@ class UpdateProfile(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'image')
-
+        fields = ('first_name', 'last_name', 'email', 'image', 'is_dev')
+        labels = {'is_dev': 'Act as Developer', }
+        help_texts = {'is_dev': 'Tick the box to become a developer.'}
 
 class GameForm(forms.ModelForm):
     class Meta:

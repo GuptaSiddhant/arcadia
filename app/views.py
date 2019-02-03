@@ -156,8 +156,13 @@ def game_play_view(request, game_id):
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
 
+    try:
+        transaction = Transaction.objects.get(game=game, player=request.user, payment_result='success')
+    except ObjectDoesNotExist:
+        transaction = 0
+
     if request.method == 'GET':
-        args = {'game': game, 'redirect': red_tag}
+        args = {'game': game, 'transaction': transaction, 'redirect': red_tag}
         return render(request, 'game/game_play.html', args)
 
     elif request.method == 'POST':
@@ -168,7 +173,7 @@ def game_play_view(request, game_id):
 
         transaction = None
         try:
-            transaction = Transaction.objects.get(game=game, player=request.user)
+            transaction = Transaction.objects.get(game=game, player=request.user, payment_result='success')
         except ObjectDoesNotExist:
             transaction = Transaction.objects.create(game=game,
                                                      player=request.user,
@@ -381,7 +386,6 @@ def payment_result_view(request):
         valid_transaction = True
 
     # Verify the transaction exists
-    transaction = None
     try:
         transaction = Transaction.objects.get(id=pid_tag)
     except ObjectDoesNotExist:

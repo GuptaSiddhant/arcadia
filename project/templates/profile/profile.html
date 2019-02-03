@@ -19,14 +19,15 @@
     <div class="form-group">
         <label>Name:</label>
         {% if user.first_name == '' %}
-            We don't know your name.
+            <span class="help-text">We don't know your name.
+                <a href="{% url 'profileEdit' %}">Update Profile</a></span>
         {% else %}
             {{ user.first_name }} {{ user.last_name }}
         {% endif %}
     </div>
     <div class="form-group">
         <label>Username: {{ user.username }} </label>
-        <span style="font-size: 0.8rem;">({{ user.email }})</span>
+        <span class="help-text">{{ user.email }}</span>
     </div>
     <div class="form-group">
         <label>Password:</label>
@@ -39,12 +40,24 @@
         {% else %}
             Developer
         {% endif %}
+        <a class="help-text" href="{% url 'profileEdit' %}">Change account type.</a>
+    </div>
+    <hr>
+    <div class="form-group">
+        <h5>Total Amount</h5>
+        Spent: <label>€ {{ user.amount_spent }}</label>
+        {% if user.is_dev %}
+            <br> Earned: <label>€ {{ user.amount_earned }}</label>
+        {% endif %}
     </div>
 {% endblock %}
 {% block side_foot %}
     <button type="button" class="btn btn-outline-info btn-block"
             onclick="location.href='{% url 'profileEdit' %}'">
         Update Profile
+    </button>
+    <button type="button" class="btn btn-danger btn-block" onclick="location.href='{% url 'logout' %}'">
+        Logout
     </button>
 {% endblock %}
 
@@ -56,12 +69,101 @@
     {% else %} {{ user.first_name }} {% endif %} !
 {% endblock %}
 {% block main_body %}
-    <h5>You are a star!</h5> See your stats here.
+    {% if user.is_dev %}
+        <h5 id="trans_dev">Developer Transaction History:</h5>
+        {% with transactions=user.transactions_dev %}
+            {% if transactions %}
+                <table class="table table-striped table-sm table-hover"
+                       style="width: 100%; margin-bottom: 0 !important;">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Game</th>
+                        <th scope="col">Player</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Result</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in transactions %}
+                        {% with result=transaction.payment_result %}
+                            {% if result == 'success' %}
+                                <tr class=" table-success clickable-row"
+                                    data-href="{% url 'game' transaction.game.id %}">
+                                    {% elif result == 'error' %}
+                                <tr class=" table-danger">
+                                    {% else %}
+                                <tr class="">
+                            {% endif %}
+                        <td>{{ transaction.timestamp|date:'d-m-Y, H:i' }}</td>
+                        <td>{{ transaction.game }}</td>
+                        <td>{{ transaction.player }}</td>
+                        <td>€ {{ transaction.amount }}</td>
+                        <td>{{ result }}</td>
+                        </tr>
+                        {% endwith %}
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <th colspan="3">Total Amount Earned:</th>
+                    <th colspan="2">€ {{ user.amount_earned }}</th>
+                    </tfoot>
+                </table>
+            {% else %}
+                <span>No transactions found.</span><br>
+                <span class="help-text">Either you have not submitted any games or no other user has purchased your games yet.</span>
+            {% endif %}
+        {% endwith %}
+        <hr>
+    {% endif %}
+    <h5 id="trans_player">Player Transaction History:</h5>
+    {% with transactions=user.transactions_all %}
+        {% if transactions %}
+            <table class="table table-striped table-sm table-hover" style="width: 100%; margin-bottom: 0 !important;">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Game</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Result</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for transaction in transactions %}
+                    {% with result=transaction.payment_result %}
+                        {% if result == 'success' %}
+                            <tr class=" table-success clickable-row" data-href="{% url 'game' transaction.game.id %}">
+                                {% elif result == 'error' %}
+                            <tr class=" table-danger">
+                                {% else %}
+                            <tr class="">
+                        {% endif %}
+                    <td>{{ transaction.timestamp|date:'d-m-Y, H:i' }}</td>
+                    <td>{{ transaction.game }}</td>
+                    <td>€ {{ transaction.amount }}</td>
+                    <td>{{ result }}</td>
+                    </tr>
+                    {% endwith %}
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <th colspan="2">Total Amount Spent:</th>
+                <th colspan="2">€ {{ user.amount_spent }}</th>
+                </tfoot>
+            </table>
+        {% else %}
+            <span>No transactions found.</span><br>
+            <span class="help-text">You might wanna explore the store.</span>
+        {% endif %}
+    {% endwith %}
 {% endblock %}
 {% block main_foot %}
-    <button type="button" class="btn btn-danger btn-block" onclick="location.href='{% url 'logout' %}'">
-        Logout
-    </button>
+    {% if user.is_dev %}
+        <div style="width: 100%; text-align: center">
+            <a role="button" class="btn btn-outline-primary" href="#trans_dev">Developer Transaction History</a>
+            <a role="button" class="btn btn-outline-primary" href="#trans_player">Player Transaction History</a>
+        </div>
+    {% endif %}
 {% endblock %}
 
 
@@ -85,7 +187,7 @@
             let params = (new URL(document.location)).searchParams;
             let redirect = params.get("redirect");
 
-            if (redirect.includes('activate')) {
+            if (redirect && redirect.includes('activate')) {
                 var x = document.getElementById("snackbar");
                 x.textContent = "Account activated!";
                 x.className = "show";
@@ -93,7 +195,11 @@
                     x.className = x.className.replace("show", "");
                 }, 3000);
             }
+
+            $(".clickable-row").click(function (e) {
+                window.location = $(this).data('href');
+            });
         });
 
     </script>
- {% endblock %}
+{% endblock %}

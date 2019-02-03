@@ -3,7 +3,6 @@
 {% load static %}
 {% load arcadia_tags %}
 
-
 {# Section : Header #}
 {% block title %} Login {% endblock %}
 {% block meta %} {# empty MetaTags #} {% endblock %}
@@ -64,7 +63,6 @@
                     x.className = x.className.replace("show", "");
                 }, 3000);
             }
-
             fetch("{% url 'api_game_latest' %}", {method: 'GET'})
                 .then(function (response) {
                     return response.json();
@@ -77,7 +75,7 @@
                         "<button class='list-action btn btn-light'>€ " + game.price + "</button>" +
                         "<div class='information'>" + game.genre + "<h4>" + game.name + "</h4>" +
                         "</div></div></a>" +
-                        game.desc + ""
+                        game.desc + "";
                     $('#new_game').html(HTML);
                 });
         });

@@ -43,9 +43,10 @@
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/popper.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5c4346ee058f100011a5aa93&product=social-ab' async='async'></script>
+    <script type='text/javascript'
+            src='//platform-api.sharethis.com/js/sharethis.js#property=5c4346ee058f100011a5aa93&product=social-ab'
+            async='async'></script>
     <!-- JS end -->
-
 </head>
 <body>
 <section id="page">
@@ -70,7 +71,9 @@
                 <div class="scrollable">
                     {% block side_body %}{% endblock %}
                 </div>
-                {% block side_foot %}{% endblock %}
+                <div style="margin-top: 10px !important;">
+                    {% block side_foot %}{% endblock %}
+                </div>
             {% endblock %}
         </aside>
 
@@ -85,7 +88,9 @@
                 <div class="scrollable">
                     {% block main_body %}{% endblock %}
                 </div>
-                {% block main_foot %}{% endblock %}
+                <div style="margin-top: 10px !important;">
+                    {% block main_foot %}{% endblock %}
+                </div>
             {% endblock %}
         </main>
     {% endblock %}
