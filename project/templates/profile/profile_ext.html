@@ -14,7 +14,7 @@
 {% block side_body %}
     {% with games=user2.inventory.all %}
         {% if games %}
-            <table class="table table-hover" style="width: 100%">
+            <table class="table table-hover table-responsive" style="width: 100%">
                 <tbody>
                 {% for game in games %}
                     <tr class='clickable-row' data-href="{% url 'game' game.id %}"
@@ -94,7 +94,7 @@
                         <th scope="col">
                             Developed Games
                         </th>
-                        <th scope="col">High Score</th>
+                        <th scope="col" class="extra_col">High Score</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -114,7 +114,7 @@
                                     <br>{{ game.genre }}
                                 </div>
                             </td>
-                            <td>
+                            <td class="extra_col">
                                 {{ game.highscore }} by Username
                             </td>
                             <td>
@@ -166,6 +166,11 @@
                 console.log($(this).data('href'));
                 window.location = $(this).data('href');
             });
+
+            if($(window).width() <= 800) {
+                $('.extra_col').addClass('hidden');
+            }
+
         });
     </script>
 {% endblock %}

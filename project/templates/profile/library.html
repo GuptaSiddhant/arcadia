@@ -17,7 +17,7 @@
             <div id="search-game" style="position: relative">
                 <div style="left: 0px;">
                     <img id="search-icon" class="icon16" src="{% static 'media/search.svg' %}"></div>
-                <input type="search" id="search" name="search" placeholder="Search Games" autofocus>
+                <input type="search" id="search" name="search" placeholder="Search Games">
                 <div id="search-button"
                      style="right: 0px; cursor: pointer">
                     <img class="icon16" src="{% static 'media/arrow-circle-right.svg' %}"></div>
@@ -77,8 +77,7 @@
                         </a>
                     </span>
                 </th>
-                <th scope="col">Stats
-                </td>
+                <th scope="col" class="extra_col">Stats</th>
             </tr>
             </thead>
             <tbody>
@@ -104,7 +103,7 @@
                             {% endif %}
                         </div>
                     </td>
-                    <td>
+                    <td class="extra_col">
                         {% if '/dev/' in request.path %}
                             <label>{{ game.sale_quantity }}</label> copies sold
                             {% if game.price != 0 %}
@@ -128,7 +127,7 @@
             <tfoot>
             <th>Total Games: {{ games|length }} </th>
             {% if '/dev/' in request.path %}
-                <th>Total Sale: {{ user.total_sale }} (€ {{ user.amount_earned }})</th>
+                <th class="extra_col">Total Sale: {{ user.total_sale }} (€ {{ user.amount_earned }})</th>
             {% endif %}
             </tfoot>
         </table>
@@ -138,8 +137,8 @@
             <hr>
             <h5>Sales Statistics:</h5>
             <div style="display: flex; flex-wrap: wrap; flex-direction: row">
-                <div id="chart_pie">Pie Chart</div>
-                <div id="chart_bar">Bar Graph</div>
+                <div id="chart_pie">Sales visualisations are not available on mobile device.</div>
+                <div id="chart_bar"></div>
             </div>
         {% endif %}
     {% else %}
@@ -239,27 +238,28 @@
             var options_quantity = {
                 'title': 'Sale Numbers (Total sale = {{ user.total_sale }})',
                 'is3D': true,
-                'width': 400,
-                'height': 400
+                'width': 300,
+                'height': 350
             };
 
             // Set chart options
             var options_sale = {
                 'title': 'Amount earned (Total = € {{ user.amount_earned }})',
                 pieHole: 0.4,
-                'width': 600,
-                'height': 400
+                'width': 500,
+                'height': 350
             };
 
             // Instantiate and draw our chart, passing in some options.
-
-            if (document.getElementById('chart_pie')) {
-                var chart_quantity = new google.visualization.PieChart(document.getElementById('chart_pie'));
-                chart_quantity.draw(data_quantity, options_quantity);
-            }
-            if (document.getElementById('chart_bar')) {
-                var chart_sale = new google.visualization.ColumnChart(document.getElementById('chart_bar'));
-                chart_sale.draw(data_sale, options_sale);
+            if ($(window).width() > 800) {
+                if (document.getElementById('chart_pie')) {
+                    var chart_quantity = new google.visualization.PieChart(document.getElementById('chart_pie'));
+                    chart_quantity.draw(data_quantity, options_quantity);
+                }
+                if (document.getElementById('chart_bar')) {
+                    var chart_sale = new google.visualization.ColumnChart(document.getElementById('chart_bar'));
+                    chart_sale.draw(data_sale, options_sale);
+                }
             }
         }
     </script>
@@ -271,6 +271,10 @@
             let redirect = params.get("redirect");
             let page = params.get("page");
             let sort = params.get("sort");
+
+            if($(window).width() <= 800) {
+                $('.extra_col').addClass('hidden');
+            }
 
             if (search != null && search !== '') {
                 $('#explore-heading').text('Search Results for \"' + search + '\" in Library');
