@@ -1,13 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from django.conf.urls import include
+from django.conf.urls import include, url
 from django.views.generic.base import TemplateView
 from app import views
 
 urlpatterns = [
     path('', views.index_view, name='index'),
     path('admin/', admin.site.urls),
+    url('', include('pwa.urls')),
+    path('base_layout/', views.base_layout)
 ]
 
 # Add Django site authentication urls (for login, logout, password management)

@@ -252,10 +252,15 @@
             };
 
             // Instantiate and draw our chart, passing in some options.
-            var chart_quantity = new google.visualization.PieChart(document.getElementById('chart_pie'));
-            var chart_sale = new google.visualization.ColumnChart(document.getElementById('chart_bar'));
-            chart_quantity.draw(data_quantity, options_quantity);
-            chart_sale.draw(data_sale, options_sale);
+
+            if (document.getElementById('chart_pie')) {
+                var chart_quantity = new google.visualization.PieChart(document.getElementById('chart_pie'));
+                chart_quantity.draw(data_quantity, options_quantity);
+            }
+            if (document.getElementById('chart_bar')) {
+                var chart_sale = new google.visualization.ColumnChart(document.getElementById('chart_bar'));
+                chart_sale.draw(data_sale, options_sale);
+            }
         }
     </script>
     <script>
@@ -315,14 +320,14 @@
                 page_id.className = 'page-item active';
             }
 
-            if (redirect.includes('login')) {
+            if (redirect && redirect.includes('login')) {
                 var x = document.getElementById("snackbar");
                 x.textContent = "Login Successful!";
                 x.className = "show";
                 setTimeout(function () {
                     x.className = x.className.replace("show", "");
                 }, 3000);
-            } else if (redirect.includes('delete')) {
+            } else if (redirect && redirect.includes('delete')) {
                 var x = document.getElementById("snackbar");
                 x.textContent = "Game Successfully Deleted!";
                 x.className = "show";

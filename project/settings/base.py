@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'api',
-    'rest_framework'
+    'rest_framework',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +133,29 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     )
 }
+
+
+PWA_APP_NAME = 'Arcadia'
+PWA_APP_DESCRIPTION = "Arcadia is online Game-Shop."
+PWA_APP_THEME_COLOR = '#6e42c0'
+PWA_APP_BACKGROUND_COLOR = '#E8E4EE'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_START_URL = '/'
+PWA_APP_ICONS = [
+    {
+        "src": "/static/media/favicon/android-chrome-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    },
+    {
+        "src": "/static/media/favicon/android-chrome-384x384.png",
+        "sizes": "384x384",
+        "type": "image/png"
+    },
+    {
+        "src": "/static/media/favicon/android-chrome-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }
+]
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, '../app/static/js', 'serviceworker.js')
