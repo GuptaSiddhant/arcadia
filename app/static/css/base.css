@@ -381,6 +381,9 @@ input:focus {
     z-index: 10;
 }
 
+#back-button, #back-button:hover {
+    text-decoration: none;
+}
 .back-icon {
     position: fixed;
     left: 10px;
