@@ -9,7 +9,8 @@
             {% if game.image %}
                 <img draggable="false" id="thumbnail_image" src="{{ game.image }}" alt="{{ game.name }}">
             {% else %}
-                <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}" alt="{{ game.name }}">
+                <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}"
+                     alt="{{ game.name }}">
             {% endif %}
 
             <button id="thumbnail_price" class="list-action btn btn-light">€ {{ game.price }}</button>

@@ -7,7 +7,7 @@
     <script>
         /* global $, alert */
 
-        $(document).ready( function() {
+        $(document).ready(function () {
             "use strict";
 
             // These variable track the state of this "game"
@@ -15,7 +15,7 @@
             var points = 0;
 
             // Simulates "game over" when a score would be sent
-            $("#submit_score").click( function () {
+            $("#submit_score").click(function () {
                 var msg = {
                     "messageType": "SCORE",
                     "score": parseFloat($("#score").text())
@@ -26,7 +26,7 @@
             // Sends this game's state to the service.
             // The format of the game state is decided
             // by the game
-            $("#save").click( function () {
+            $("#save").click(function () {
                 var msg = {
                     "messageType": "SAVE",
                     "gameState": {
@@ -39,7 +39,7 @@
 
             // Sends a request to the service for a
             // state to be sent, if there is one.
-            $("#load").click( function () {
+            $("#load").click(function () {
                 var msg = {
                     "messageType": "LOAD_REQUEST",
                 };
@@ -54,8 +54,8 @@
             //
             // Also handles any errors that the service
             // wants to send (displays them as an alert).
-            window.addEventListener("message", function(evt) {
-                if(evt.data.messageType === "LOAD") {
+            window.addEventListener("message", function (evt) {
+                if (evt.data.messageType === "LOAD") {
                     playerItems = evt.data.gameState.playerItems;
                     points = evt.data.gameState.score;
                     $("#score").text(points);
@@ -70,7 +70,7 @@
             // service.
             //
             // Adds an item to the players inventory
-            $("#add_item").click( function () {
+            $("#add_item").click(function () {
                 playerItems.push("A rock");
                 $("#new_item").val("");
                 updateItems();
@@ -96,7 +96,7 @@
 
             // Request the service to set the resolution of the
             // iframe correspondingly
-            var message =  {
+            var message = {
                 messageType: "SETTING",
                 options: {
                     "width": 700, //Integer
@@ -115,9 +115,10 @@
 
 <h3>Backbag</h3>
 <ul id="item_list"></ul>
-<div><span  id="score">0</span> Points</div>
+<div><span id="score">0</span> Points</div>
 
-<button id="submit_score">Submit score</button><br>
+<button id="submit_score">Submit score</button>
+<br>
 
 <button id="save">Save</button>
 <button id="load">Load</button>

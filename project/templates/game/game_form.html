@@ -88,37 +88,38 @@
         </script>
     {% endif %}
     {% if game %}
-    {# Delete Modal #}
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteGame"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete {{ game.name }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h5>Are you sure that you want to remove your game from Arcadia?</h5>
-                    This might cause some issues:
-                    <ul>
-                        <li>Players who have purchased the game will no longer have access to it. They might get angry
-                            😡.
-                        </li>
-                        <li>All related data to the game will be removed.</li>
-                    </ul>
-                    <span class="help-text">
+        {# Delete Modal #}
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteGame"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete {{ game.name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Are you sure that you want to remove your game from Arcadia?</h5>
+                        This might cause some issues:
+                        <ul>
+                            <li>Players who have purchased the game will no longer have access to it. They might get
+                                angry
+                                😡.
+                            </li>
+                            <li>All related data to the game will be removed.</li>
+                        </ul>
+                        <span class="help-text">
                         In order to restore game, contact Arcadia team and hope our backup isn't corrupted.
                     </span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-danger" href="{% url 'gameDelete' game.id %}">I'm sure. Delete the Game.</a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-danger" href="{% url 'gameDelete' game.id %}">I'm sure. Delete the Game.</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     {% endif %}
 {% endblock %}
 

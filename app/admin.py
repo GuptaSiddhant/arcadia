@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from app.models import User, Game, Genre, Transaction, GameState, GameScore
 
 

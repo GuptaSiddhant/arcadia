@@ -1,5 +1,7 @@
 # Settings for deploying to Heroku
 from .base import *
+import django_heroku
+from decouple import config
 
 # In Production environment (heroku) Django fetches the SECRET_KEY, sid, Debug and DATABASE
 # from heroku's environment variables
@@ -34,7 +36,6 @@ EMAIL_USE_TLS = True
 
 # Configure Django App for Heroku.
 django_heroku.settings(locals(), test_runner=False, allowed_hosts=False)
-
 
 # Security
 CSRF_COOKIE_SECURE = True

@@ -79,9 +79,9 @@
                     <tr>
                         <th scope="col">Date</th>
                         <th scope="col">Game</th>
-                        <th scope="col" class="extra_col" >Player</th>
+                        <th scope="col" class="extra_col">Player</th>
                         <th scope="col">Amount</th>
-                        <th scope="col" class="extra_col" >Result</th>
+                        <th scope="col" class="extra_col">Result</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -97,16 +97,16 @@
                             {% endif %}
                         <td>{{ transaction.timestamp|date:'d-m-Y, H:i' }}</td>
                         <td>{{ transaction.game }}</td>
-                        <td class="extra_col" >{{ transaction.player }}</td>
+                        <td class="extra_col">{{ transaction.player }}</td>
                         <td>€ {{ transaction.amount }}</td>
-                        <td class="extra_col" >{{ result }}</td>
+                        <td class="extra_col">{{ result }}</td>
                         </tr>
                         {% endwith %}
                     {% endfor %}
                     </tbody>
                     <tfoot>
                     <th colspan="2">Total Amount Earned:</th>
-                    <th class="extra_col" ></th>
+                    <th class="extra_col"></th>
                     <th colspan="1">€ {{ user.amount_earned }}</th>
                     </tfoot>
                 </table>
@@ -143,7 +143,7 @@
                     <td>{{ transaction.timestamp|date:'d-m-Y, H:i' }}</td>
                     <td>{{ transaction.game }}</td>
                     <td>€ {{ transaction.amount }}</td>
-                    <td class="extra_col" >{{ result }}</td>
+                    <td class="extra_col">{{ result }}</td>
                     </tr>
                     {% endwith %}
                 {% endfor %}
