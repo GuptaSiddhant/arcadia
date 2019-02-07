@@ -3,15 +3,15 @@
 {% block title %} Error 500 {% endblock %}
 
 {% block content %}
-<div class="floater">
-    <div class="heading">
-        <h1>Something isn't right</h1>
-        <hr>
+    <div class="floater">
+        <div class="heading">
+            <h1>Something isn't right</h1>
+            <hr>
+        </div>
+        <div class="scrollable">
+            <h5>Something has wrong on our end.</h5>
+            <p>You can try to refresh, go back or use navigation to find something new.</p>
+            <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
+        </div>
     </div>
-    <div class="scrollable">
-        <h5>Something has wrong on our end.</h5>
-        <p>You can try to refresh, go back or use navigation to find something new.</p>
-        <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
-    </div>
-</div>
 {% endblock %}

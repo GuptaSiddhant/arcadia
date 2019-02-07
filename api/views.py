@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
-from app.models import Game, Genre, Transaction, GameState, GameScore
+from rest_framework import viewsets
+
 from api.serializers import UserSerializer, GameSerializer, GenreSerializer, \
     TransactionSerializer, GameStateSerializer, GameScoreSerializer
-
-from rest_framework import viewsets
+from app.models import Game, Genre, Transaction, GameState, GameScore
 
 
 # ViewSets define the view behavior.

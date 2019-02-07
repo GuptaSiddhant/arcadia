@@ -1,6 +1,7 @@
 # Settings for local development
 from .base import *
-
+import django_heroku
+from decouple import config
 
 DEBUG = True
 
@@ -17,7 +18,7 @@ DATABASES = {
     }
 }
 
-#Console email backend settings
+# Console email backend settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # django-heroku handles the allowed hosts, secret key and staticfiles

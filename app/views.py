@@ -1,22 +1,24 @@
-from django.core import serializers
-from django.http import JsonResponse, HttpResponse
+import logging
+from hashlib import md5
+
+from django.conf import settings
+from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404
+from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils import timezone
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils import timezone
-from django.template.loader import render_to_string
-from django.contrib.auth import login
-from django.urls import reverse
-from app.tokens import account_activation_token
-from app.models import User, Game, Genre, Transaction, GameScore, GameState
+
 from app.forms import GameForm, SignUpForm, UpdateProfile
 from app.forms import MessageForm, MessageScoreForm, MessageLoadForm, MessageSaveForm
-from django.conf import settings
-from hashlib import md5
-import logging
+from app.models import User, Game, Genre, Transaction, GameScore, GameState
+from app.tokens import account_activation_token
 
 logger = logging.getLogger(__name__)
 

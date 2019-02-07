@@ -11,12 +11,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import django_heroku
-from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -70,7 +67,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -89,7 +85,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -103,7 +98,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -114,8 +108,6 @@ USE_TZ = True
 # Login / logout redirect urls
 LOGIN_REDIRECT_URL = '/library/?redirect=login'
 LOGOUT_REDIRECT_URL = '/?redirect=logout'
-
-
 
 # Configure our extended AbstractUser as default User model
 AUTH_USER_MODEL = 'app.User'
@@ -129,11 +121,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-   #     'rest_framework.authentication.BasicAuthentication',
+        #     'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     )
 }
-
 
 PWA_APP_NAME = 'Arcadia'
 PWA_APP_DESCRIPTION = "Arcadia is online Game-Shop."

@@ -1,10 +1,11 @@
-from django import forms
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth import get_user_model
-from app.models import Game, Genre, Transaction, GameState, GameScore
-from django.core.exceptions import ValidationError
 import json
+
+from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.core.exceptions import ValidationError
+
+from app.models import Game
 
 User = get_user_model()
 
@@ -15,11 +16,13 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
     image = forms.URLField(required=False, label='Profile Picture URL', help_text="[Optional]")
     dev_registration = forms.BooleanField(required=False, label='Register as Developer',
-                                          help_text='Yes, I want to register as a Developer. Being a developer allows you to submit games to Arcadia.')
+                                          help_text='Yes, I want to register as a Developer. Being a developer allows '
+                                                    'you to submit games to Arcadia.')
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'image', 'dev_registration')
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'image',
+                  'dev_registration')
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
@@ -43,6 +46,7 @@ class UpdateProfile(UserChangeForm):
         labels = {'is_dev': 'Act as Developer', }
         help_texts = {'is_dev': 'Tick the box to become a developer.'}
 
+
 class GameForm(forms.ModelForm):
     class Meta:
         model = Game
@@ -58,7 +62,8 @@ MAX_JSON_DATA_LEN = 2048
 
 
 class MessageForm(forms.Form):
-    # Every message should conform to this basic form. We use it as a base class for all the other forms about messaging
+    # Every message should conform to this basic form. We use it as a base class for all
+    # the other forms about messaging
     messageType = forms.ChoiceField(required=True,
                                     choices=[('SCORE', 'score'), ('SAVE', 'save'), ('LOAD_REQUEST', 'load_request')],
                                     widget=forms.HiddenInput())
