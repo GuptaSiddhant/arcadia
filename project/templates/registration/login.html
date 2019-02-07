@@ -34,6 +34,8 @@
         {{ form.non_field_errors }}
     </form>
     <button type="submit" onclick="$('.registration').submit()" class="btn btn-primary btn-lg btn-block">Login</button>
+    <p><strong>-- OR --</strong></p>
+    <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
 {% endblock %}
 {% block main_foot %}
     <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
