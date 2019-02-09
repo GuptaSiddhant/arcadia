@@ -34,8 +34,16 @@
         {{ form.non_field_errors }}
     </form>
     <button type="submit" onclick="$('.registration').submit()" class="btn btn-primary btn-lg btn-block">Login</button>
-    <p><strong>-- OR --</strong></p>
-    <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
+    <hr>
+    <a class="btn btn-block btn-social btn-lg btn-github" href="{% url 'social:begin' 'github' %}">
+        <span class="fa fa-github"></span> Login with GitHub
+    </a>
+    <a class="btn btn-block btn-social btn-lg btn-google" href="{% url 'social:begin' 'google-oauth2' %}">
+        <span class="fa fa-google"></span> Login with Google
+    </a>
+    <a class="btn btn-block btn-social btn-lg btn-twitter" href="{% url 'social:begin' 'twitter' %}">
+        <span class="fa fa-twitter"></span> Login with Twitter
+    </a>
 {% endblock %}
 {% block main_foot %}
     <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
