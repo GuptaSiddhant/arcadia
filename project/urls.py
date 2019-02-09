@@ -22,6 +22,11 @@ urlpatterns += [
     path('account/profile/edit/', views.profile_edit_view, name='profileEdit'),
 ]
 
+# Social Auth urls
+urlpatterns += [
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
+]
+
 urlpatterns += [
     path('profile/', TemplateView.as_view(template_name='profile/profile.html')),
     path('profile/<slug:username>/', views.external_profile_view, name='user_profile'),

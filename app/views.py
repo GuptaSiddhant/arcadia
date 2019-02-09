@@ -60,7 +60,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.email_confirmed = True
         user.save()
-        login(request, user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/profile/?redirect=activated')
     else:
         return render(request, 'email/account_activation_invalid.html')
