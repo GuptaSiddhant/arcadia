@@ -3,7 +3,7 @@ body {
     font-family: 'Montserrat', sans-serif !important;
     margin: 0 !important;
     height: 100vh !important;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 #page > header {
