@@ -15,11 +15,11 @@
 {% block side_body %}
     <div class="form-group">
         <label>Genre:</label>
-        <a href="{% url 'profile' %}">{{ game.genre }}</a>
+        <a href="/explore/?genre={{ game.genre }}">{{ game.genre }}</a>
     </div>
     <div class="form-group">
         <label>Developer:</label>
-        <a href="/profile/{{ game.developer.username }}">
+        <a href="{% url 'user_profile'  game.developer.username %}">
             {% if game.developer.first_name != '' %}
                 <br>{{ game.developer.first_name }} {{ game.developer.last_name }} ({{ game.developer.username }})
             {% else %}
@@ -96,7 +96,7 @@
             </div>
             <span style="font-weight: 500">Updates: </span><span id="status"> </span>
             {{ game.last_save_date }}
-            <br>Last Saved:
+            <br>Last Save:
             <label>{% call_method game 'last_save_date' user %}</label>
             <br><br>
         {% endif %}
@@ -287,9 +287,15 @@
                 return false;
             }
 
+            var x = document.getElementById("snackbar");
             if (redirect && redirect.includes('free')) {
-                var x = document.getElementById("snackbar");
                 x.textContent = "It's a Free game. Enjoy!";
+                x.className = "show";
+                setTimeout(function () {
+                    x.className = x.className.replace("show", "");
+                }, 3000);
+            } else if (redirect && redirect.includes('purchase')) {
+                x.textContent = "Purchase Successful!";
                 x.className = "show";
                 setTimeout(function () {
                     x.className = x.className.replace("show", "");

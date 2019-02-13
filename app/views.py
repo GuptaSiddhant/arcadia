@@ -24,6 +24,10 @@ logger = logging.getLogger(__name__)
 
 
 def signup_view(request):
+
+    if not request.user.is_anonymous:
+        return redirect('/explore/')
+
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -110,45 +114,49 @@ def library_view(request):
 
     library_type = request.get_full_path()
 
-    if library_type.__contains__('/dev/'):
-        if request.user.is_dev:
-            games = Game.objects.filter(developer=request.user, is_active=True)
+    if not request.user.is_anonymous:
+
+        if library_type.__contains__('/dev/'):
+            if request.user.is_dev:
+                games = Game.objects.filter(developer=request.user, is_active=True)
+            else:
+                return render(request, '404.html', {'redirect': red_tag})
         else:
-            return render(request, '404.html', {'redirect': red_tag})
-    else:
-        games = request.user.inventory.all()
-        games = games.filter(is_active=True)
+            games = request.user.inventory.all()
+            games = games.filter(is_active=True)
 
-    logger.error(library_type)
-    count = {'total': games.count,
-             'free': games.filter(price=0).count}
+        logger.error(library_type)
+        count = {'total': games.count,
+                 'free': games.filter(price=0).count}
 
-    genres = {}
-    for game in games:
-        if game.genre.name in genres:
-            genres[game.genre.name] += 1
-        else:
-            genres[game.genre.name] = 1
+        genres = {}
+        for game in games:
+            if game.genre.name in genres:
+                genres[game.genre.name] += 1
+            else:
+                genres[game.genre.name] = 1
 
-    if genre_tag == 'free':
-        games = games.filter(price=0)
-    elif genre_tag != 'all':
-        games = games.filter(genre__name__icontains=genre_tag)
+        if genre_tag == 'free':
+            games = games.filter(price=0)
+        elif genre_tag != 'all':
+            games = games.filter(genre__name__icontains=genre_tag)
 
-    if search_tag is not None:
-        games = games.filter(name__icontains=search_tag)
+        if search_tag is not None:
+            games = games.filter(name__icontains=search_tag)
 
-    if sort_tag == 'desc':
-        games = games.order_by('-name')
-    elif sort_tag == 'asc':
-        games = games.order_by('name')
+        if sort_tag == 'desc':
+            games = games.order_by('-name')
+        elif sort_tag == 'asc':
+            games = games.order_by('name')
 
-    # Pagination
-    pages = Paginator(games, per_page=10, orphans=0)
-    game_list = pages.get_page(page_tag)
+        # Pagination
+        pages = Paginator(games, per_page=10, orphans=0)
+        game_list = pages.get_page(page_tag)
 
-    args = {'games': game_list, 'genres': genres, 'count': count, 'redirect': red_tag}
-    return render(request, 'profile/library.html', args)
+        args = {'games': game_list, 'genres': genres, 'count': count, 'redirect': red_tag}
+        return render(request, 'profile/library.html', args)
+
+    return render(request, '404.html', {'redirect': red_tag})
 
 
 def game_play_view(request, game_id):
@@ -161,7 +169,7 @@ def game_play_view(request, game_id):
 
     if not request.user.is_anonymous:
         try:
-            transaction = Transaction.objects.get(game=game, player=request.user, payment_result='success')
+            transaction = Transaction.objects.filter(game=game, player=request.user, payment_result='success').first()
         except ObjectDoesNotExist:
             transaction = 0
     else:
@@ -260,7 +268,7 @@ def game_add_view(request):
             game = form.save(commit=False)
             game.developer = request.user
             game.save()
-            return redirect('/library/')
+            return redirect('/dev/?redirect=new_game')
     else:
         form = GameForm()
     return render(request, 'game/game_form.html', {'form': form, 'redirect': red_tag})
@@ -272,7 +280,7 @@ def game_edit_view(request, game_id):
         game_to_edit = Game.objects.get(pk=game_id)
         form = GameForm(request.POST, instance=game_to_edit)
         form.save()
-        return redirect('/library/')
+        return redirect('/dev/?redirect=edit_game')
     else:
         form = GameForm()
 
@@ -349,8 +357,9 @@ def external_profile_view(request, username):
         return render(request, '404.html', {'redirect': 'inactive'})
 
     games = Game.objects.filter(developer=user2)
-
-    return render(request, 'profile/profile_ext.html', {'user2': user2, 'games': games, 'redirect': red_tag})
+    logger.error(user2)
+    logger.error(games)
+    return render(request, 'profile/profile_ext.html', {'user2': user2, 'dev_games': games, 'redirect': red_tag})
 
 
 def profile_edit_view(request):
@@ -372,6 +381,7 @@ def pay_purchase_view(request, game_id):
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
 
+    logger.error(game)
     # Create temporary transaction and store payment_result with "initialized" state
     transaction = Transaction.objects.create(player=request.user,
                                              game=game,
@@ -401,6 +411,7 @@ def payment_result_view(request):
     PAYMENT_SECRET_KEY = settings.PAYMENT_SECRET_KEY
     checksumstr = "pid={}&ref={}&result={}&token={}".format(pid_tag, reference_tag, result_tag, PAYMENT_SECRET_KEY)
     checksum = md5(checksumstr.encode("ascii")).hexdigest()
+
     if checksum_tag == checksum:
         valid_transaction = True
 
@@ -410,62 +421,65 @@ def payment_result_view(request):
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
 
-    # Check the user is allowed to manipulate the transaction
-    if transaction.player != request.user:
-        message = "You are not allowed to manipulate this transaction"
-        args = {'game': transaction.game, 'message': message}
-        return render(request, 'payment/result.html', args)
+    if request.user.is_anonymous:
+        return render(request, '404.html', {'redirect': 'access'})
+    else:
+        # Check the user is allowed to manipulate the transaction
+        if transaction.player != request.user:
+            message = "You are not allowed to manipulate this transaction"
+            args = {'game': transaction.game, 'message': message}
+            return render(request, 'payment/result.html', args)
 
-    # Check that the result_tag is valid
-    if result_tag not in ["success", "cancel", "error"]:
-        message = "The payment result was invalid"
-        args = {'game': transaction.game, 'message': message}
-        return render(request, 'payment/result.html', args)
+        # Check that the result_tag is valid
+        if result_tag not in ["success", "cancel", "error"]:
+            message = "The payment result was invalid"
+            args = {'game': transaction.game, 'message': message}
+            return render(request, 'payment/result.html', args)
 
-    # If the payment result was ok add the game to inventory and update the transaction
-    if result_tag == "success":
-        request.user.inventory.add(transaction.game)
-        transaction.payment_result = "success"
-        transaction.amount = transaction.game.price
-        transaction.payment_reference = reference_tag
-        transaction.timestamp = timezone.now()
-        transaction.save()
+        # If the payment result was ok add the game to inventory and update the transaction
+        if result_tag == "success":
+            request.user.inventory.add(transaction.game)
+            transaction.payment_result = "success"
+            transaction.amount = transaction.game.price
+            transaction.payment_reference = reference_tag
+            transaction.timestamp = timezone.now()
+            transaction.save()
 
-        message = "Thank you for purchasing the game"
-        args = {'game': transaction.game,
-                'message': message,
-                'redirect': red_tag,
-                'reference': reference_tag,
-                'result': result_tag,
-                'validity': valid_transaction}
-        return render(request, 'payment/result.html', args)
+            message = "Thank you for purchasing the game"
+            args = {'game': transaction.game,
+                    'message': message,
+                    'redirect': red_tag,
+                    'reference': reference_tag,
+                    'result': result_tag,
+                    'validity': valid_transaction}
+            return redirect('/game/' + str(transaction.game.id) + '/?redirect=purchase')
 
-    # If the payment result was 'cancel' update the transaction
-    elif result_tag == "cancel":
-        transaction.payment_result = "cancel"
-        transaction.payment_reference = reference_tag
-        transaction.save()
+        # If the payment result was 'cancel' update the transaction
+        elif result_tag == "cancel":
+            transaction.payment_result = "cancel"
+            transaction.payment_reference = reference_tag
+            transaction.save()
 
-        message = "The transaction was canceled"
-        args = {'game': transaction.game,
-                'message': message,
-                'redirect': red_tag,
-                'reference': reference_tag,
-                'result': result_tag,
-                'validity': valid_transaction}
-        return render(request, 'payment/result.html', args)
+            message = "The transaction was canceled"
+            args = {'game': transaction.game,
+                    'message': message,
+                    'redirect': red_tag,
+                    'reference': reference_tag,
+                    'result': result_tag,
+                    'validity': valid_transaction}
+            return render(request, 'payment/result.html', args)
 
-    # If the payment result was 'error' update the transaction
-    elif result_tag == "error":
-        transaction.payment_result = "error"
-        transaction.payment_reference = reference_tag
-        transaction.save()
+        # If the payment result was 'error' update the transaction
+        elif result_tag == "error":
+            transaction.payment_result = "error"
+            transaction.payment_reference = reference_tag
+            transaction.save()
 
-        message = "An error occurred while processing the transaction. Please try again"
-        args = {'game': transaction.game,
-                'message': message,
-                'redirect': red_tag,
-                'reference': reference_tag,
-                'result': result_tag,
-                'validity': valid_transaction}
-        return render(request, 'payment/result.html', args)
+            message = "An error occurred while processing the transaction. Please try again"
+            args = {'game': transaction.game,
+                    'message': message,
+                    'redirect': red_tag,
+                    'reference': reference_tag,
+                    'result': result_tag,
+                    'validity': valid_transaction}
+            return render(request, 'payment/result.html', args)

@@ -87,7 +87,7 @@
     </div>
     {% if user2.is_dev %}
         <div>
-            {% if games %}
+            {% if dev_games %}
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -99,7 +99,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for game in games %}
+                    {% for game in dev_games %}
                         <tr class='clickable-row' data-href="{% url 'game' game.id %}"
                             style="cursor: pointer">
                             <td style="display: grid; grid-template-columns:60px auto;">
@@ -115,8 +115,12 @@
                                 </div>
                             </td>
                             <td class="extra_col">
-                                {{ game.high_score.score }}
+                                {% if game.high_score %}
+                                    {{ game.high_score.score }}
                                 (<a href="{% url 'user_profile' game.high_score.player.username %}">{{ game.high_score.player.username }}</a>)
+                                {% else %}
+                                    No Scores
+                                {% endif %}
                             </td>
                             <td>
                                 {% if  user == game.developer %}

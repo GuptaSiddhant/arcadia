@@ -286,6 +286,14 @@ input:focus {
     width: 16px
 }
 
+.icon24 {
+    width: 24px
+}
+
+.icon32 {
+    width: 32px
+}
+
 .genres > li {
     line-height: 1.5 !important;
 }

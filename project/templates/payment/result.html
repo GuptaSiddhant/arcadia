@@ -14,10 +14,10 @@
 {% endblock %}
 {% block side_foot %} {# empty footer #} {% endblock %}
 
-{% block main %}
-    <div class="heading">
-        <body>
-        <b>{{ message }}</b>
-        </body>
-    </div>
+{% block main_head %}
+Payment Result
+{% endblock %}
+{% block main_body %}
+        <h5>{{ message }}</h5>
+        <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
 {% endblock %}

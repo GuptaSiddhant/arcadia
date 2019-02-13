@@ -108,7 +108,7 @@ WEEK 5 Sprint
 - Linting - (Santeri)
 - 3rd party Login (Santeri)
 - Security (https enforcing and other django settings):  
-https://observatory.mozilla.org/analyze/wsd-arcadia.herokuapp.com
+https://observatory.mozilla.org/analyze/arcadiagames.herokuapp.com
 
 WEEK 6 Sprint
 - Testing

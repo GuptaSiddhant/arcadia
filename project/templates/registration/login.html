@@ -35,15 +35,17 @@
     </form>
     <button type="submit" onclick="$('.registration').submit()" class="btn btn-primary btn-lg btn-block">Login</button>
     <hr>
-    <a class="btn btn-block btn-social btn-lg btn-github" href="{% url 'social:begin' 'github' %}">
-        <span class="fa fa-github"></span> Login with GitHub
-    </a>
-    <a class="btn btn-block btn-social btn-lg btn-google" href="{% url 'social:begin' 'google-oauth2' %}">
-        <span class="fa fa-google"></span> Login with Google
-    </a>
-    <a class="btn btn-block btn-social btn-lg btn-twitter" href="{% url 'social:begin' 'twitter' %}">
-        <span class="fa fa-twitter"></span> Login with Twitter
-    </a>
+    <div id="social_auth" class="registration">
+        <a class="btn btn-block btn-social btn-lg btn-github" href="{% url 'social:begin' 'github' %}">
+            <span><img src="{% static 'media/github.svg' %}" class="icon24"></span> Login with GitHub
+        </a>
+        <a class="btn btn-block btn-social btn-lg btn-google" href="{% url 'social:begin' 'google-oauth2' %}">
+            <span><img src="{% static 'media/google.svg' %}" class="icon24"></span> Login with Google
+        </a>
+        <a class="btn btn-block btn-social btn-lg btn-twitter" href="{% url 'social:begin' 'twitter' %}">
+            <span><img src="{% static 'media/twitter.svg' %}" class="icon24"></span> Login with Twitter
+        </a>
+    </div>
 {% endblock %}
 {% block main_foot %}
     <div>Forgot Password? <a href="{% url 'password_reset' %}">Reset.</a></div>
@@ -55,6 +57,11 @@
 {% block extra %}
     {% if user.is_authenticated == False %}
         <div id="snackbar">Login to gain access!</div>
+    {% endif %}
+    {% if not user.is_anonymous %}
+        <script type="text/javascript">
+            window.location = "{% url 'index' %}"
+        </script>
     {% endif %}
 {% endblock %}
 

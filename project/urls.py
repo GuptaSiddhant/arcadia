@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.views.generic.base import TemplateView
 
 from app import views
@@ -29,7 +29,7 @@ urlpatterns += [
 
 urlpatterns += [
     path('profile/', TemplateView.as_view(template_name='profile/profile.html')),
-    path('profile/<slug:username>/', views.external_profile_view, name='user_profile'),
+    path('profile/<str:username>/', views.external_profile_view, name='user_profile'),
 ]
 
 urlpatterns += [
