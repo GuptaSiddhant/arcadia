@@ -47,5 +47,5 @@ python manage.py migrate
 python manage.py runserver
 
 heroku login
-heroku git:remote -a wsd-arcadia
+heroku git:remote -a arcadiagames
 git push heroku master
