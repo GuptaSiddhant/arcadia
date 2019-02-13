@@ -51,7 +51,9 @@
                         {% else %}
                             <img draggable="false" src="{% static 'media/no-image.png' %}" alt="{{ game.name }}">
                         {% endif %}
-                        {% if game.price == 0 %}
+                        {% if game in user.inventory.all %}
+                            <button class="list-action btn btn-success">Play</button>
+                        {% elif game.price == 0 %}
                             <button class="list-action btn btn-warning">Free to Play</button>
                         {% else %}
                             <button class="list-action btn btn-light">€ {{ game.price }}</button>
