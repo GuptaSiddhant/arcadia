@@ -5,6 +5,7 @@ from django.views.generic.base import TemplateView
 
 from app import views
 
+# Admin and base urls
 urlpatterns = [
     path('', views.index_view, name='index'),
     path('admin/', admin.site.urls),
@@ -22,16 +23,18 @@ urlpatterns += [
     path('account/profile/edit/', views.profile_edit_view, name='profileEdit'),
 ]
 
-# Social Auth urls
+# 3rd party social authentication urls
 urlpatterns += [
     url(r'^oauth/', include('social_django.urls', namespace='social')),
 ]
 
+# Public profile urls (login required)
 urlpatterns += [
     path('profile/', TemplateView.as_view(template_name='profile/profile.html')),
     path('profile/<str:username>/', views.external_profile_view, name='user_profile'),
 ]
 
+# Urls of the main views
 urlpatterns += [
     path('explore/', views.explore_view, name='explore'),
     path('library/', views.library_view, name='library'),
@@ -43,15 +46,14 @@ urlpatterns += [
     path('game/<int:game_id>/purchase/', views.pay_purchase_view, name='purchase'),
 ]
 
+# Payment
 urlpatterns += [
     path('payment/', views.payment_result_view, name='payment'),
 ]
 
+# API urls
 urlpatterns += [
     path('api/game/all/', views.game_api_all, name='api_game_all'),
-    path('api/game/latest/', views.game_api_latest, name='api_game_latest')
-]
-
-urlpatterns += [
+    path('api/game/latest/', views.game_api_latest, name='api_game_latest'),
     path('api/v1/', include('api.urls')),
 ]

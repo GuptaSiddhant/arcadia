@@ -4,6 +4,9 @@ from django.conf import settings
 from django.utils import timezone
 
 
+# Modified AbstractUser to include players inventory, experience/loyalty points
+# and profile image fields as well as developer and email verification boolean fields
+# into Django's User model
 class User(AbstractUser):
     inventory = models.ManyToManyField('Game', default=None, blank=True)
     points_level = models.PositiveIntegerField(default=0)
@@ -44,6 +47,7 @@ class User(AbstractUser):
         return amount
 
 
+# Model for website's games. Games are hosted behind developer provided https secured urls
 class Game(models.Model):
     developer = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE, null=False)
@@ -96,6 +100,8 @@ class Genre(models.Model):
         return str(self.name)
 
 
+# Model for the game purchase transactions to gather data for sales statistics
+# and to verify users' owned games
 class Transaction(models.Model):
     player = models.ForeignKey(User, on_delete=models.PROTECT, null=False)
     game = models.ForeignKey('Game', on_delete=models.PROTECT, null=False)
@@ -105,6 +111,8 @@ class Transaction(models.Model):
     payment_result = models.CharField(max_length=50)
 
 
+# Model for saving the gamestate send by the game and to bind the gamestate
+# to a player and a game
 class GameState(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)
@@ -115,6 +123,9 @@ class GameState(models.Model):
         return str(self.game.name + '_' + str(self.pk) + '.save')
 
 
+# Model for saving scores from games, to distinguish the score from the gamestate,
+# for when only the score is submitted, and also to get access to the global
+# high scores of the games
 class GameScore(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)

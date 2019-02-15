@@ -5,8 +5,6 @@ from app.models import User, Game, Genre, Transaction, GameState, GameScore
 
 # Define an inline admin descriptor for User model
 # which acts a bit like a singleton
-
-
 class UserInline(admin.StackedInline):
     model = User
     verbose_name_plural = 'users'
