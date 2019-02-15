@@ -1,41 +1,69 @@
 # Arcadia: Online Game Store
- Arcadia is an online game store for JavaScript games. The service has two types of users: players and developers. Developers can add their games to the service and set a price for it. Players can buy games on the platform and then play purchased games online.
+Arcadia is an online game store for JavaScript games. 
+The service has two types of users: players and developers. 
+Developers can add their games to the service and set a price for it. 
+Players can buy games on the platform and then play purchased games, 
+developers can also be players.
  
- This is a course project for Web Software Development CS-C3170 2018-2019 at Aalto University
- 
+This is a course project for Web Software Development CS-C3170 2018-2019 at Aalto University
+
+Project online on Heroku:  
+http://arcadiagames.ga
+
 ## Team
-Henri Ahti      57237L      
+Henri Ahti      57237L  
 Siddhant Gupta  721936  
-Santeri Volkov  528142 
+Santeri Volkov  528142  
 
 ## Features
-We will implement the features defined in the project description.  In addition to mandatory requirements we are going 
+We will implement the features defined in the project description.  
+In addition to mandatory requirements we are going 
 to implement at least the following extra features:
 - Social media sharing
 - Mobile friendly
 - Save/load and resolution  
 
 ## Models and Views
-Initial plan of Models and Views we will be implementing, 
-and how they relate to each other.
 
-###### Models
-* AbstractUser(Django) -> User(Developer, Player)
-* Transaction(sales)
-* Game
-* GameState
-* GameScore
-* Genre
+### Models
+AbstractUser (Django)  
+    - username, first_name, last_name, email, password, is_active  
 
-###### WebViews
-* Login/Register
-* Explore (no-login)
-* Library(login)
-* Dev-Profile (login-dev)
-* Player-Profile (login) 
-* Details-Purchase-page (no-login) (Highscores)
-* Game-Page (login)
-* Submit-Game (login-dev)
+User(AbstractUser)  
+    - inventory, points_level, image, is_dev, email_confirmed  
+
+Game  
+	- developer, genre, url, price, name, image, description, high_score, is_active  
+
+Genre  
+	- name  
+
+Transaction  
+	- player, game, amount, timestamp, payment_reference, payment_result  
+
+GameState  
+	- player, game, gameState, saveDate  
+
+GameScore  
+	- player, game, score, scoreDate  
+
+### Views
+Signup  
+Login  
+
+Player-Profile (login)  
+Dev-Profile (login-dev)  
+External-Profile (login)  
+Profile-Edit (login)  
+
+Explore (no-login)  
+Library (login)  
+
+Game-Details-Purchase-page (no-login)  
+Game-Play (login)  
+Game-Add (login-dev)  
+Game-Edit (login-dev)  
+Game-Delete (login-dev)  
 
 ![alt text][Model relations]
 
@@ -53,10 +81,6 @@ Git
 5. Submit a pull request :D  
 
 ## Process and Time Schedule
-
-Project online on Heroku:  
-http://arcadiagames.ga
-
 WEEK 51-52
 1. Heroku setup (Santeri)
 2. Django basic setup (Henri)
@@ -65,7 +89,8 @@ WEEK 51-52
     - production configuration with Postgres
     - required middleware for Authentication etc.
     - check / configure default template system used
-3. Implement the first models (User(Django), DeveloperProfile, PlayerProfile, Transactions, Game, GameState (settings, 
+3. Implement the first models (User(Django), DeveloperProfile, 
+PlayerProfile, Transactions, Game, GameState (settings, 
 game_state) (Henri)
 4. Initial website deign (Siddhant)
 
@@ -98,7 +123,8 @@ WEEK 3 Sprint
 WEEK 4 Sprint
 - Post message from Template to View (Siddhant)
 - Delete Game (Siddhant)
-- Update Model-Game - (Santeri)
+- Update Model-Game (Santeri)
+- Settings separation (Santeri)
 
 WEEK 5 Sprint
 - Highscores (Game & library) - (Siddhant)
@@ -123,4 +149,4 @@ WEEK 7 Sprint
 Final date 19th of Feb
 
 
-[Model relations]: img/Arcadia.png "Model relations"
+[Model relations]: app/static/media/arcadia.png "Model relations"

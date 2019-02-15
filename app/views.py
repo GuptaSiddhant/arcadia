@@ -319,12 +319,14 @@ def base_layout(request):
     return render(request, 'base.html')
 
 
+# Fetch all available games with api
 def game_api_all(request):
     results = Game.objects.filter(is_active=True)
     jsondata = serializers.serialize('json', results)
     return HttpResponse(jsondata)
 
 
+# Fetch data of the latest available games with api
 def game_api_latest(request):
     game = Game.objects.latest('pk')
     data = {
@@ -346,6 +348,7 @@ def game_api_latest(request):
     return JsonResponse(data)
 
 
+# View other users' profiles
 def external_profile_view(request, username):
     red_tag = request.GET.get('redirect', None)
     try:
@@ -369,6 +372,8 @@ def profile_edit_view(request):
         if form.is_valid():
             form.save()
             return redirect('/profile/')
+        else:
+            return redirect(profile_edit_view)
     else:
         form = UpdateProfile(instance=request.user)
         return render(request, 'profile/profile_update.html', {'form': form, 'redirect': red_tag})
