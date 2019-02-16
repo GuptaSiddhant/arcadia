@@ -1,3 +1,6 @@
+{# Usage: Homepage + showcase all games. #}
+
+
 {# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
@@ -11,10 +14,13 @@
 {# Section : Sidebar #}
 {% block side_head %} Filter Games {% endblock %}
 {% block side_body %}
+
+    <!-- Search Form -->
     <form id="search-form" method="get" action="/explore/">
         {% include 'include/searchbar.html' %}
     </form>
     <br>
+    <!-- Genre List -->
     <h5>Select Genre: </h5>
     <ul class="list-unstyled genres">
         <li>
@@ -34,6 +40,7 @@
     </ul>
 {% endblock %}
 {% block side_foot %}
+    <!-- Reset Filters -->
     <a class="btn btn-outline-danger btn-block" href="/library/">Reset Filters</a>
 {% endblock %}
 
@@ -41,10 +48,12 @@
 {# Section : Main #}
 {% block main_head %} Explore <span id="genre-heading"></span> Games {% endblock %}
 {% block main_body %}
+    {# Check if there are games #}
     {% if games %}
         <div class="game-list grid--auto-fit">
             {% for game in games %}
                 <a href="{% url 'game' game.id %}">
+                    <!-- Game Badge -->
                     <div class="game-list-item">
                         {% if game.image %}
                             <img draggable="false" src="{{ game.image }}" alt="{{ game.name }}">
@@ -72,6 +81,7 @@
     {% endif %}
 {% endblock %}
 {% block main_foot %}
+    <!-- Pagination -->
     {% if games.paginator.num_pages > 1 %}
         <div style="display: flex; flex-wrap: nowrap; flex-direction: row; justify-content: space-evenly">
             <nav aria-label="navigation">
@@ -109,6 +119,7 @@
 {# Section : Extra Code #}
 {% block extra %}
     {% if user.is_authenticated == False %}
+        <!-- Notification Bar -->
         <div id="snackbar">Logout Successful!</div>
     {% endif %}
 {% endblock %}
@@ -118,12 +129,14 @@
 {% block logic %}
     <script>
         $(document).ready(function () {
+            // Read URL Parameters
             let params = (new URL(document.location)).searchParams;
             let genre = params.get("genre");
             let search = params.get("search");
             let redirect = params.get("redirect");
             let page = params.get("page");
 
+            // Logout notification
             if (redirect === 'logout') {
                 let x = document.getElementById("snackbar");
                 x.className = "show";
@@ -132,12 +145,14 @@
                 }, 3000);
             }
 
+            // Active search
             if (search != null && search !== '') {
                 $('#explore-heading').text('Search Results for \"' + search + '\"');
                 $('#search').attr('value', search);
                 $('#search-icon').attr('src', '/static/media/times-circle.svg');
             }
 
+            // Selected genre
             $(".genres a").each(function () {
                 if (genre === null) {
                     genre = 'all';
@@ -149,7 +164,7 @@
                 }
             });
 
-
+            // Search by pressing return
             $("#search").on('keypress', function (e) {
                 if (e.keyCode === 13) {
                     $(this).addClass("buttonSearch");
@@ -165,6 +180,7 @@
                 $('#search-form').submit();
             });
 
+            // Active Page
             if (page === null) {
                 page = 1;
             }

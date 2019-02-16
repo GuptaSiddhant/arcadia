@@ -10,14 +10,18 @@
 {# Section : Sidebar #}
 {% block side_head %} Game {% endblock %}
 {% block side_body %}
-    {% include 'include/game_badge_sidebar.html' %}
+    <!-- Show current game -->
+    {% if game %}
+        {% include 'include/game_badge_sidebar.html' %}
+    {% endif %}
 {% endblock %}
 {% block side_foot %} {# empty footer #} {% endblock %}
 
 {% block main_head %}
-Payment Result
+    Payment Result
 {% endblock %}
 {% block main_body %}
-        <h5>{{ message }}</h5>
-        <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
+    {# Show Payment Result #}
+    <h5>{{ message }}</h5>
+    <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
 {% endblock %}

@@ -1,3 +1,5 @@
+{# Usage: Add or edit game #}
+
 {# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
@@ -16,6 +18,7 @@
 {% block side_head %} Preview {% endblock %}
 {% block side_body %}
     {% if user.is_dev %}
+        <!-- Create Game Badge Preview -->
         Enter data in the form to preview the content.
         <div class="game-list-item" style="margin-left: 0px !important; width: 100% !important;">
             <img draggable="false" id="thumbnail_image" src="{% static 'media/no-image.png' %}">
@@ -30,6 +33,7 @@
 {% block side_foot %}
     {% if user.is_dev %}
         {% if game %}
+            <!-- Delete Game Option -->
             <button class="btn btn-outline-danger btn-block row-button" style="margin-top: 10px"
                     data-toggle="modal"
                     data-target="#deleteModal">Delete Game
@@ -46,6 +50,7 @@
 {% endblock %}
 {% block main_body %}
     {% if user.is_dev %}
+        <!-- Form -->
         <form method="post" class="registration" id="game-form">
             {% csrf_token %}
             {% for field in form %}
@@ -71,6 +76,7 @@
             </div>
         </div>
     {% else %}
+        <!-- No Access -->
         <h5>You do not have access to this page.</h5>
         <a href="javascript:history.back()" class="btn btn-outline-primary">Go Back</a>
     {% endif %}
@@ -89,6 +95,7 @@
     {% endif %}
     {% if game %}
         {# Delete Modal #}
+        <!-- Delete Game Popup -->
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteGame"
              aria-hidden="true">
             <div class="modal-dialog" role="document">

@@ -1,3 +1,6 @@
+{# Usage: Show game details and allow users to play them. #}
+
+
 {# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
@@ -13,6 +16,7 @@
 {# Section : Sidebar #}
 {% block side_head %} Game Info {% endblock %}
 {% block side_body %}
+    <!-- Game Information -->
     <div class="form-group">
         <label>Genre:</label>
         <a href="/explore/?genre={{ game.genre }}">{{ game.genre }}</a>
@@ -43,6 +47,7 @@
     </div>
 {% endblock %}
 {% block side_foot %}
+    <!-- Leaderboard - High Scored -->
     {% with scores=game.scores %}
         <h5>Leaderboard (Top 5)</h5>
         {% if scores %}
@@ -69,6 +74,8 @@
             <span class="help-text">Why don't you submit a score and shine on the leaderboard.</span>
         {% endif %}
     {% endwith %}
+
+    <!-- Edit Game for Dev -->
     {% if user == game.developer %}
         <button type="button" class="btn btn-outline-primary btn-block" style="margin-top: 10px"
                 onclick="location.href='{% url 'gameEdit' game.id %}'">
@@ -86,14 +93,16 @@
     {% endif %}
 {% endblock %}
 {% block main_body %}
-    <!--Game Frame-->
+    <!-- If user is logged_in and game is free or owned by user. -->
     {% if user.is_authenticated %}
         {% if game in user.inventory.all or game.price == 0  or game.developer == user %}
+            <!--Game Frame-->
             <div style="text-align: center; overflow-x: scroll">
                 <iframe id="game_frame" title="{{ game.name }}"
-                        style="border: 1px solid #000000; border-radius: 5px;  width: 100%; height: 300px"
+                        style="border: 1px solid #000000; border-radius: 5px;  width: 100%; height: 500px"
                         src="{{ game.url }}"></iframe>
             </div>
+            <!-- Updates about Game -->
             <span style="font-weight: 500">Updates: </span><span id="status"> </span>
             {{ game.last_save_date }}
             <br>Last Save:
@@ -124,6 +133,7 @@
             </a>
         {% endif %}
     {% else %}
+        <!-- Ask user to login or register -->
         <div>
             <br>
             <h5>Looks like you're missing out on a lot of fun. </h5>
@@ -156,6 +166,7 @@
             let gameWidth = 400;
             let statusText = $('#status');
 
+            // Initialise frame window size
             $(window).resize(function () {
                 if ($(window).width() <= 800) {
                     $('#game_frame').width('100%');
@@ -164,8 +175,7 @@
                 }
             });
 
-            $('#fb-share').attr('href', 'http://www.facebook.com/share.php?u=' + encodeURIComponent(location.href) + '&amp;src=sdkpreparse');
-
+            // On message received from frame.
             $(window).on('message', function (evt) {
                 let current_score = 0;
                 // Get data out of message
@@ -228,6 +238,7 @@
                 }
             });
 
+            // Send information back to Frame
             function sendMessageToIFrame(message) {
                 let iframe = document.getElementById('game_frame');
                 if (iframe) {
@@ -237,6 +248,7 @@
                 }
             }
 
+            // Send information to backend (POST)
             function sendData(data, url) {
                 data.csrfmiddlewaretoken = "{{ csrf_token  }}";
                 console.log('data:' + data);
@@ -288,13 +300,17 @@
             }
 
             var x = document.getElementById("snackbar");
+
+            // Free Game. No purchase required.
             if (redirect && redirect.includes('free')) {
                 x.textContent = "It's a Free game. Enjoy!";
                 x.className = "show";
                 setTimeout(function () {
                     x.className = x.className.replace("show", "");
                 }, 3000);
-            } else if (redirect && redirect.includes('purchase')) {
+            }
+            // Successful purchase
+            else if (redirect && redirect.includes('purchase')) {
                 x.textContent = "Purchase Successful!";
                 x.className = "show";
                 setTimeout(function () {

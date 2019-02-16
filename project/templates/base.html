@@ -1,9 +1,13 @@
+{# Load libraries #}
 {% load static %}
 {% load kwacros %}
 {% load pwa %}
+
+{# Define  Macros #}
 {% kwacro title %}{% block title %}{% endblock %}{% endkwacro %}
 {% kwacro desc %}{% block meta_desc %}Arcadia is online Game-Shop.{% endblock %}{% endkwacro %}
 
+{# Base HTML Starts #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {# Progressive WebApp #}
-    <link rel="manifest" href="/static/media/favicon/manifest.json">
+    <link rel="manifest" href="{% static 'media/favicon/manifest.json' %}">
     {% progressive_web_app_meta %}
 
     <meta property="og:title" content="{% usekwacro title %}"/>
@@ -57,8 +61,13 @@
 </head>
 <body>
 <section id="page">
+    {# Navigation Header #}
     {% include 'include/nav.html' %}
+
+    {# App Body #}
     {% block content %}
+
+        {# Sidebar #}
         <aside>
             {% block sidebar %}
                 <div class="heading">
@@ -76,6 +85,7 @@
             {% endblock %}
         </aside>
 
+        {# Main Body #}
         <main>
             {% block main %}
                 <div class="heading">
@@ -94,9 +104,11 @@
         </main>
     {% endblock %}
 
+    {# Footer #}
     <footer>© Arcadia 2019.</footer>
 </section>
 
+{# Extra Scripts and Logic #}
 {% block extra %}{% endblock %}
 
 <script>
@@ -122,3 +134,4 @@
 {% block logic %}{% endblock %}
 </body>
 </html>
+{# Base HTML Ends #}
