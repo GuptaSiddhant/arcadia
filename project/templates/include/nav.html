@@ -1,3 +1,5 @@
+{# Usage: Create Site Header including Navigation #}
+
 {% load static %}
 
 <script>
@@ -6,18 +8,25 @@
     function setNavigation() {
         var path = window.location.pathname;
         path = decodeURIComponent(path);
+
+        // Mark current page as active in Desktop Menu
         $(".nav a").each(function () {
             var href = $(this).attr('href');
             if (path.includes(href)) {
                 $(this).addClass('active');
             }
         });
+
+        // Mark current page as active in Mobile Menu
         $(".dropdown-menu a").each(function () {
             var href = $(this).attr('href');
             if (path.includes(href)) {
                 $(this).addClass('active');
             }
         });
+
+        // Determine if device is running iOS
+        // To add a 'Back' button
         let iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (iOS) {
             let x = document.getElementById('back-button');

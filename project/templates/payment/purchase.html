@@ -1,3 +1,6 @@
+{# Usage: To allow users to purchase a game #}
+
+
 {# Load Essentials #}
 {% extends 'base.html' %}
 {% load static %}
@@ -12,6 +15,7 @@
 {# Section : Sidebar #}
 {% block side_head %} Game {% endblock %}
 {% block side_body %}
+    <!-- Show Current Game -->
     {% include 'include/game_badge_sidebar.html' %}
 {% endblock %}
 {% block side_foot %} {# empty footer #} {% endblock %}
@@ -53,7 +57,8 @@
         <form action="http://payments.webcourse.niksula.hut.fi/pay/" method="post"
               class="registration" id="checkout-form">
             {% csrf_token %}
-            {#<input type="hidden" name="dev" value="1"/>#}
+
+            {# Hidden Fields #}
             <input type="hidden" name="pid" value="{{ pid }}"/>
             <input type="hidden" name="sid" value="{{ sid }}"/>
             <input type="hidden" name="success_url"

@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 
 
 def signup_view(request):
-
     if not request.user.is_anonymous:
         return redirect('/explore/')
 
@@ -125,7 +124,6 @@ def library_view(request):
             games = request.user.inventory.all()
             games = games.filter(is_active=True)
 
-        logger.error(library_type)
         count = {'total': games.count,
                  'free': games.filter(price=0).count}
 
@@ -357,8 +355,6 @@ def external_profile_view(request, username):
         return render(request, '404.html', {'redirect': 'inactive'})
 
     games = Game.objects.filter(developer=user2)
-    logger.error(user2)
-    logger.error(games)
     return render(request, 'profile/profile_ext.html', {'user2': user2, 'dev_games': games, 'redirect': red_tag})
 
 
@@ -381,7 +377,6 @@ def pay_purchase_view(request, game_id):
     except ObjectDoesNotExist:
         return render(request, '404.html', {'redirect': red_tag})
 
-    logger.error(game)
     # Create temporary transaction and store payment_result with "initialized" state
     transaction = Transaction.objects.create(player=request.user,
                                              game=game,
