@@ -23,6 +23,7 @@ from app.tokens import account_activation_token
 logger = logging.getLogger(__name__)
 
 
+# Signup view that sends email with new account activation link
 def signup_view(request):
     if not request.user.is_anonymous:
         return redirect('/explore/')
@@ -48,10 +49,12 @@ def signup_view(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 
+# Account activation view that confirms an account activation email was sent
 def account_activation_sent(request):
     return render(request, 'email/account_activation_sent.html')
 
 
+# Activation view that handles the account activation request link that user clicks in email
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -375,6 +378,7 @@ def profile_edit_view(request):
         return render(request, 'profile/profile_update.html', {'form': form, 'redirect': red_tag})
 
 
+# Payment view that creates initial transaction to wait the payment gets processed in the payment system
 def pay_purchase_view(request, game_id):
     red_tag = request.GET.get('redirect', None)
     try:
@@ -399,6 +403,7 @@ def pay_purchase_view(request, game_id):
     return render(request, 'payment/purchase.html', args)
 
 
+# Payment result view that checks the transaction coming from the payment system is valid and what is the payment result
 def payment_result_view(request):
     red_tag = request.GET.get('redirect', None)
     pid_tag = request.GET.get('pid', None)
