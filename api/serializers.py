@@ -26,7 +26,6 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
 class GenreSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='genre-detail')
 
-    # many = True
     class Meta:
         model = Genre
         fields = [field.name for field in model._meta.fields]
@@ -36,7 +35,6 @@ class GenreSerializer(serializers.HyperlinkedModelSerializer):
 class TransactionSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='transaction-detail')
 
-    # many = True
     class Meta:
         model = Transaction
         fields = [field.name for field in model._meta.fields]
@@ -46,7 +44,6 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
 class GameStateSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='gamestate-detail')
 
-    # many = True
     class Meta:
         model = GameState
         fields = [field.name for field in model._meta.fields]
@@ -55,7 +52,6 @@ class GameStateSerializer(serializers.HyperlinkedModelSerializer):
 
 class GameScoreSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='gamescore-detail')
-    many = True
 
     class Meta:
         model = GameScore
