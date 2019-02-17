@@ -115,6 +115,23 @@
             </nav>
         </div>
     {% endif %}
+
+    {% if devs and user.is_authenticated %}
+        <hr>
+        <h5>Arcadia's Pride: Top 5 Developers</h5>
+        <div id="arcadia_devs">
+            {% for dev in devs %}
+                <a href="{% url 'user_profile' dev.username %}" style="display: inline-block; margin: 5px; ">
+                    <div id="arcadia_devs_item" style="position: relative;">
+                        <img class="explore_profile_image" src="{{ dev.image }}" alt="{{ dev.username }}">
+                        <div class="arcadia_devs_games">
+                            {{ dev.dev_games|length }}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 

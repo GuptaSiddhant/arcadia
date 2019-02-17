@@ -161,7 +161,10 @@ def explore_view(request):
     pages = Paginator(games, per_page=10, orphans=4)
     game_list = pages.get_page(page)
 
-    args = {'games': game_list, 'genres': genres, 'count': count_games, 'redirect': red_tag}
+    # All developers
+    devs = User.objects.filter(is_dev=True).order_by('-dev_games_count', '-date_joined')[:5]
+
+    args = {'games': game_list, 'genres': genres, 'count': count_games, "devs": devs, 'redirect': red_tag}
     return render(request, 'game/explore.html', args)
 
 

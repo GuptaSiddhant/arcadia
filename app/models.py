@@ -14,6 +14,7 @@ class User(AbstractUser):
                                                            '2018/05/default-user-profile-image-png-2.png')
     is_dev = models.BooleanField(default=False)
     email_confirmed = models.BooleanField(default=False)
+    dev_games_count = models.IntegerField(default=0)
 
     def transactions_all(self):
         return self.transaction_set.all().order_by('timestamp')
@@ -25,24 +26,27 @@ class User(AbstractUser):
             amount += transaction.amount
         return amount
 
-    def transactions_dev(self):
+    def dev_games(self):
         games = self.game_set.all()
+        self.dev_games_count = games.count()
+        self.save()
+        return games
+
+    def transactions_dev(self):
         transactions = []
-        for game in games:
+        for game in self.dev_games():
             transactions += game.transaction_set.all()
         return sorted(transactions, key=lambda instance: instance.timestamp)
 
     def total_sale(self):
-        games = self.game_set.all()
         quantity = 0
-        for game in games:
+        for game in self.dev_games():
             quantity += game.sale_quantity()
         return quantity
 
     def amount_earned(self):
-        games = self.game_set.all()
         amount = 0
-        for game in games:
+        for game in self.dev_games():
             amount += game.sale_amount()
         return amount
 

@@ -10,38 +10,44 @@
 
 
 {# Section : Sidebar #}
-{% block side_head %} Player Library {% endblock %}
+{% block side_head %} Information {% endblock %}
 {% block side_body %}
-    {% with games=user2.inventory.all %}
-        {% if games %}
-            <table class="table table-hover " style="width: 100%">
-                <tbody>
-                {% for game in games %}
-                    <tr class='clickable-row' data-href="{% url 'game' game.id %}"
-                        style="cursor: pointer">
-                        <td style="display: grid; grid-template-columns:60px auto;">
-                            {% if game.image %}
-                                <img draggable="false" class="table-image-small" src="{{ game.image }}">
-                            {% else %}
-                                <img draggable="false" class="table-image-small"
-                                     src="{% static 'media/no-image.png' %}">
-                            {% endif %}
-                            <div>
-                                <span style="font-weight: 700">{{ game.name }}</span>
-                                <br>{{ game.genre }}
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <h5>No games found.</h5>
-            <p>User doesn't own any games.</p>
+    <div id="game-image"
+         style="width: 100%; text-align: center; margin-bottom: 1rem">
+        <img id="user_image" draggable="false" src="{{ user2.image }}" alt="{{ user2.username }}">
+    </div>
+    <div class="form-group">
+        {% if user2.first_name != '' %}
+            <label>Name:</label>
+            {{ user2.first_name }} {{ user2.last_name }}
         {% endif %}
-    {% endwith %}
+    </div>
+    <div class="form-group">
+        <label>Username: {{ user2.username }} </label>
+    </div>
+    <div class="form-group">
+        <label>Account Type:</label>
+        {% if user2.is_dev %}
+            Developer
+        {% else %}
+            Player
+        {% endif %}
+    </div>
+    <hr>
+    <div class="form-group">
+        <h5>Total Games</h5>
+        {% if user2.is_dev %}
+            Developed: <label>{{ dev_games|length }}</label>
+        {% endif %}<br>
+        Played: <label>{{ user2.inventory.all|length }}</label>
+    </div>
 {% endblock %}
-{% block side_foot %} {# empty footer #} {% endblock %}
+{% block side_foot %}
+    <button type="button" class="btn btn-outline-info btn-block"
+            onclick="location.href='mailto:{{ user2.email }}'">
+        Contact User
+    </button>
+{% endblock %}
 
 
 {# Section : Main #}
@@ -53,39 +59,11 @@
     <span class="heading-addon">{% if user2.is_dev %} [Dev] {% endif %}</span>
 {% endblock %}
 {% block main_body %}
-    <div id="user-info" class="form-group">
-        <div class="flex_space_between">
-            <div>
-                <div class="form-group">
-                    <label>Username: </label>
-                    <span>{{ user2.username }}</span>
-                </div>
-                <div class="form-group">
-                    <label>Email:</label>
-                    <span>{{ user2.email }}</span>
-                </div>
-                <div class="form-group">
-                    <label>Account Type:</label>
-                    {% if user2.is_dev == False %}
-                        Player
-                    {% else %}
-                        Developer
-                    {% endif %}
-                </div>
-            </div>
-            <div id="game-image"
-                 style="margin-right: 20px; width: 100%; max-width: 150px; min-width: 100px">
-                {% if user2.image %}
-                    <img id="user_image" draggable="false" src="{{ user2.image }}">
-                {% endif %}
-            </div>
-        </div>
-    </div>
     {% if user2.is_dev %}
         <div>
             {% if dev_games %}
                 <table class="table table-hover">
-                    <thead>
+                    <thead class="thead-light">
                     <tr>
                         <th scope="col">
                             Developed Games
@@ -113,7 +91,9 @@
                             <td class="extra_col">
                                 {% if game.high_score %}
                                     {{ game.high_score.score }}
-                                (<a href="{% url 'user_profile' game.high_score.player.username %}">{{ game.high_score.player.username }}</a>)
+                                    (
+                                    <a href="{% url 'user_profile' game.high_score.player.username %}">{{ game.high_score.player.username }}</a>
+                                    )
                                 {% else %}
                                     No Scores
                                 {% endif %}
@@ -142,6 +122,70 @@
                 <p>The developer hasn't submitted any games yet.</p>
             {% endif %}
         </div>
+        {% with games=user2.inventory.all %}
+            <div>
+                {% if games %}
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">
+                                Played Games
+                            </th>
+                            <th scope="col" class="extra_col">High Score</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for game in dev_games %}
+                            <tr class='clickable-row' data-href="{% url 'game' game.id %}"
+                                style="cursor: pointer">
+                                <td style="display: grid; grid-template-columns:60px auto;">
+                                    {% if game.image %}
+                                        <img draggable="false" class="table-image-small" src="{{ game.image }}">
+                                    {% else %}
+                                        <img draggable="false" class="table-image-small"
+                                             src="{% static 'media/no-image.png' %}">
+                                    {% endif %}
+                                    <div>
+                                        <span style="font-weight: 700">{{ game.name }}</span>
+                                        <br>{{ game.genre }}
+                                    </div>
+                                </td>
+                                <td class="extra_col">
+                                    {% if game.high_score %}
+                                        {{ game.high_score.score }}
+                                        (
+                                        <a href="{% url 'user_profile' game.high_score.player.username %}">{{ game.high_score.player.username }}</a>
+                                        )
+                                    {% else %}
+                                        No Scores
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if  user == game.developer %}
+                                        <a class="btn btn-outline-info btn-sm" style="margin-top: 0"
+                                           href="{% url 'gameEdit' game.id %}">Edit Game</a>
+                                    {% elif game.price == 0 %}
+                                        <a class="btn btn-outline-warning btn-sm" style="margin-top: 0"
+                                           href="{% url 'game' game.id %}">Free to Play</a>
+                                    {% elif game in user.inventory.all %}
+                                        <a class="btn btn-outline-success btn-sm" style="margin-top: 0"
+                                           href="{% url 'game' game.id %}">Play</a>
+                                    {% else %}
+                                        <a class="btn btn-outline-primary btn-sm" style="margin-top: 0"
+                                           href="{% url 'purchase' game.id %}">Buy Game € {{ game.price }}</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <h5>0 games owned.</h5>
+                    <p>The player hasn't played any games yet.</p>
+                {% endif %}
+            </div>
+        {% endwith %}
     {% endif %}
 {% endblock %}
 {% block main_foot %} {# empty footer #} {% endblock %}
