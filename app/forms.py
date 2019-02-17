@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 
 from app.models import Game
 
@@ -17,7 +18,7 @@ class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
     email = forms.EmailField(required=True)
-    image = forms.URLField(required=False, label='Profile Picture URL', help_text="[Optional]")
+    image = forms.URLField(required=False, label='Profile Picture URL', help_text="[Optional]", validators=[URLValidator(schemes=['https'])])
     dev_registration = forms.BooleanField(required=False, label='Register as Developer',
                                           help_text='Yes, I want to register as a Developer. Being a developer allows '
                                                     'you to submit games to Arcadia.')
@@ -42,11 +43,11 @@ class SignUpForm(UserCreationForm):
 # Modified UserChangeForm to include extra fields
 class UpdateProfile(UserChangeForm):
     password = None
-    email = forms.EmailField(required=True)
+    image = forms.URLField(required=False, label='Profile Picture URL', help_text="[Optional]", validators=[URLValidator(schemes=['https'])])
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'image', 'is_dev')
+        fields = ('first_name', 'last_name', 'image', 'is_dev')
         labels = {'is_dev': 'Act as Developer', }
         help_texts = {'is_dev': 'Tick the box to become a developer.'}
 
