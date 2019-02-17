@@ -271,6 +271,11 @@ input:focus {
     outline: #6E42C0 auto 1px;
 }
 
+.status-item {
+    padding: 5px 10px;
+    text-align: center;
+}
+
 #search-game > input {
     height: 40px;
     padding: 10px 30px;

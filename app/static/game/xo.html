@@ -20,7 +20,7 @@
 
         #info {
             padding: 10px;
-            margin-left: 1750px;
+            margin-left: 175px;
         }
 
         #buttons, #level_select {
@@ -175,6 +175,8 @@
             "width": 400, //Integer
             "height": 330, //Integer
             "mobile": true, //Boolean
+            "save": true, //Boolean
+            "score": true, //Boolean
         }
     };
     window.parent.postMessage(message, "*");
@@ -415,7 +417,7 @@
         clean();
         moves = initMove();
         var msg = {
-            "messageType": "SCORE",
+            "messageType": "SCORE_UPDATE",
             "score": parseFloat($("#score").text())
         };
         window.parent.postMessage(msg, "*");
