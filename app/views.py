@@ -104,12 +104,12 @@ def signup_view(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 
-# Show message that activation mail is sent
+# Account activation view that confirms an account activation email was sent
 def account_activation_sent(request):
     return render(request, 'email/account_activation_sent.html')
 
 
-# Check validity of Activation Link
+# Activation view that handles the account activation request link that user clicks in email
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -361,8 +361,7 @@ def external_profile_view(request, username):
 
 # -- Payment Views ------------------------------------- #
 
-# Shows a checkout page with payment details
-@login_required(login_url="login")
+# Payment view that creates initial transaction to wait the payment gets processed in the payment system
 def pay_purchase_view(request, game_id):
     red_tag = request.GET.get('redirect', None)
     try:
@@ -387,8 +386,7 @@ def pay_purchase_view(request, game_id):
     return render(request, 'payment/purchase.html', args)
 
 
-# Check if result of payment and acts accordingly
-@login_required(login_url="login")
+# Payment result view that checks the transaction coming from the payment system is valid and what is the payment result
 def payment_result_view(request):
     red_tag = request.GET.get('redirect', None)
     pid_tag = request.GET.get('pid', None)
