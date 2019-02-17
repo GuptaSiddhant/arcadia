@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 
-from app.models import Game
+from app.models import Game, Genre
 
 User = get_user_model()
 
@@ -45,7 +45,8 @@ class SignUpForm(UserCreationForm):
 # Modified UserChangeForm to include extra fields
 class UpdateProfile(UserChangeForm):
     password = None
-    image = forms.URLField(required=False, label='Profile Picture URL', help_text="[Optional]", validators=[URLValidator(schemes=['https'])])
+    image = forms.URLField(required=False, label='Profile Picture URL', help_text="[Optional]",
+                           validators=[URLValidator(schemes=['https'])])
 
     class Meta:
         model = User
@@ -58,6 +59,8 @@ class UpdateProfile(UserChangeForm):
 
 # Form for adding games to the site, to be sold and played
 class GameForm(forms.ModelForm):
+    genre = forms.ModelChoiceField(queryset=Genre.objects.all(), required=True)
+
     class Meta:
         model = Game
         fields = ('name', 'genre', 'url', 'description', 'price', 'image')
@@ -66,7 +69,8 @@ class GameForm(forms.ModelForm):
             'url': 'Add the link the javascript game (hosted elsewhere). The game url should begin with "https://".',
             'description': 'Few words about game to entice player to purchase.',
             'price': 'Leave it 0 and offer the game as Free to Play.',
-            'image': 'Preferred square image with width >= 500px. The image url should begin with "https://". [Optional]', }
+            'image': 'Preferred square image with width >= 500px. The image url should begin with "https://". '
+                     '[Optional]', }
 
 
 class MessageForm(forms.Form):
