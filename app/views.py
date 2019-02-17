@@ -480,6 +480,10 @@ def payment_result_view(request):
 @login_required(login_url="login")
 def game_add_view(request):
     red_tag = request.GET.get('redirect', None)
+
+    if not request.user.is_dev:
+        return render(request, '403.html', {'redirect': red_tag})
+
     if request.method == 'POST':
         form = GameForm(request.POST)
         if form.is_valid():
