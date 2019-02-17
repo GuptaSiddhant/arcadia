@@ -19,6 +19,8 @@ from app.models import User, Game, Genre, Transaction, GameScore, GameState
 from app.tokens import account_activation_token
 
 from hashlib import md5
+
+
 # import logging
 # logger = logging.getLogger(__name__)
 
@@ -135,7 +137,7 @@ def activate(request, uidb64, token):
 # Default View where all games are listed to explore
 def explore_view(request):
     # Get all required information
-    genres = Genre.objects.all()
+    genres = Genre.objects.all().order_by('name')
     genre_tag = request.GET.get('genre', 'all')
     search_tag = request.GET.get('search', None)
     red_tag = request.GET.get('redirect', None)

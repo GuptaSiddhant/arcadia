@@ -34,7 +34,9 @@
         {% for genre in genres %}
             <li>
                 <a href="?{% param_replace genre=genre %}">{{ genre }}</a>
-                ({{ genre.game_set.count }})
+                {% if genre.game_set.count > 0 %}
+                    ({{ genre.game_set.count }})
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

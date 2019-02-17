@@ -59,7 +59,7 @@ class UpdateProfile(UserChangeForm):
 
 # Form for adding games to the site, to be sold and played
 class GameForm(forms.ModelForm):
-    genre = forms.ModelChoiceField(queryset=Genre.objects.all(), required=True)
+    genre = forms.ModelChoiceField(queryset=Genre.objects.all().order_by('name'), required=True)
 
     class Meta:
         model = Game
