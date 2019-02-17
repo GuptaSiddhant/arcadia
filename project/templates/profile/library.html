@@ -37,10 +37,6 @@
                 </li>
             {% endfor %}
         </ul>
-    {% else %}
-        <script type="text/javascript">
-            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}"
-        </script>
     {% endif %}
 {% endblock %}
 {% block side_foot %}

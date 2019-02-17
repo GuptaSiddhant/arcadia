@@ -5,7 +5,11 @@
 
 {# Define  Macros #}
 {% kwacro title %}{% block title %}{% endblock %}{% endkwacro %}
-{% kwacro desc %}{% block meta_desc %}Arcadia is online Game-Shop.{% endblock %}{% endkwacro %}
+{% kwacro desc %}{% block meta_desc %}Arcadia is an online game store for JavaScript games.
+    The service has two types of users: players and developers.
+    Developers can add their games to the service and set a price for it.
+    Players can buy games on the platform and then play purchased games,
+    developers can also be players.{% endblock %}{% endkwacro %}
 
 {# Base HTML Starts #}
 <!DOCTYPE html>
@@ -79,7 +83,7 @@
                 <div class="scrollable">
                     {% block side_body %}{% endblock %}
                 </div>
-                <div style="margin-top: 10px !important;">
+                <div style="margin-top: 10px">
                     {% block side_foot %}{% endblock %}
                 </div>
             {% endblock %}
@@ -97,7 +101,7 @@
                 <div class="scrollable">
                     {% block main_body %}{% endblock %}
                 </div>
-                <div style="margin-top: 10px !important;">
+                <div style="margin-top: 10px">
                     {% block main_foot %}{% endblock %}
                 </div>
             {% endblock %}
