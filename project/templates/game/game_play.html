@@ -187,7 +187,6 @@
                 // Filter Message
                 switch (data.messageType) {
                     case 'SETTING':
-                        console.log(data.options);
                         let gWidth = data.options.width;
                         gameWidth = gWidth;
                         let gHeight = data.options.height;
@@ -199,7 +198,11 @@
                             message = "Game loaded with width=100% and height=" + gHeight + ".";
                         }
 
-                        statusText.text(message);
+                        if (data.options.mobile) {
+                            statusText.text(message + " + Mobile Ready");
+                        } else {
+                            statusText.text(message + " The game is not obtimised for Touch-Mobile Interfaces.");
+                        }
                         break;
 
                     case 'SCORE':
