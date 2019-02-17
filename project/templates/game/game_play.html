@@ -282,10 +282,10 @@
                                 }
 
                                 if ($(window).width() > 800) {
-                                    $('#game_frame').width(gameWidth).height(gameHeight);
+                                    $('#game_frame').width(gameWidth + 10).height(gameHeight + 10);
                                     message = gameWidth + " x " + gameHeight;
                                 } else {
-                                    $('#game_frame').width('100%').height(gameHeight);
+                                    $('#game_frame').width('100%').height(gameHeight + 10);
                                     message = "100% x " + gameHeight;
                                 }
                                 $("#status_size").text(message);
