@@ -27,7 +27,7 @@ class User(AbstractUser):
         return amount
 
     def dev_games(self):
-        games = self.game_set.all()
+        games = self.game_set.filter(is_active=True)
         self.dev_games_count = games.count()
         self.save()
         return games

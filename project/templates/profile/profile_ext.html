@@ -137,39 +137,41 @@
                         </thead>
                         <tbody>
                         {% for game in games %}
-                            <tr class='clickable-row' data-href="{% url 'game' game.id %}"
-                                style="cursor: pointer">
-                                <td style="display: grid; grid-template-columns:60px auto;">
-                                    {% if game.image %}
-                                        <img draggable="false" class="table-image-small" src="{{ game.image }}">
-                                    {% else %}
-                                        <img draggable="false" class="table-image-small"
-                                             src="{% static 'media/no-image.png' %}">
-                                    {% endif %}
-                                    <div>
-                                        <span style="font-weight: 700">{{ game.name }}</span>
-                                        <br>{{ game.genre }}
-                                    </div>
-                                </td>
-                                <td class="extra_col">
-                                    {% call_method game 'player_high_score' user %}
-                                </td>
-                                <td>
-                                    {% if  user == game.developer %}
-                                        <a class="btn btn-outline-info btn-sm" style="margin-top: 0"
-                                           href="{% url 'gameEdit' game.id %}">Edit Game</a>
-                                    {% elif game.price == 0 %}
-                                        <a class="btn btn-outline-warning btn-sm" style="margin-top: 0"
-                                           href="{% url 'game' game.id %}">Free to Play</a>
-                                    {% elif game in user.inventory.all %}
-                                        <a class="btn btn-outline-success btn-sm" style="margin-top: 0"
-                                           href="{% url 'game' game.id %}">Play</a>
-                                    {% else %}
-                                        <a class="btn btn-outline-primary btn-sm" style="margin-top: 0"
-                                           href="{% url 'purchase' game.id %}">Buy Game € {{ game.price }}</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
+                            {% if game.is_active %}
+                                <tr class='clickable-row' data-href="{% url 'game' game.id %}"
+                                    style="cursor: pointer">
+                                    <td style="display: grid; grid-template-columns:60px auto;">
+                                        {% if game.image %}
+                                            <img draggable="false" class="table-image-small" src="{{ game.image }}">
+                                        {% else %}
+                                            <img draggable="false" class="table-image-small"
+                                                 src="{% static 'media/no-image.png' %}">
+                                        {% endif %}
+                                        <div>
+                                            <span style="font-weight: 700">{{ game.name }}</span>
+                                            <br>{{ game.genre }}
+                                        </div>
+                                    </td>
+                                    <td class="extra_col">
+                                        {% call_method game 'player_high_score' user %}
+                                    </td>
+                                    <td>
+                                        {% if  user == game.developer %}
+                                            <a class="btn btn-outline-info btn-sm" style="margin-top: 0"
+                                               href="{% url 'gameEdit' game.id %}">Edit Game</a>
+                                        {% elif game.price == 0 %}
+                                            <a class="btn btn-outline-warning btn-sm" style="margin-top: 0"
+                                               href="{% url 'game' game.id %}">Free to Play</a>
+                                        {% elif game in user.inventory.all %}
+                                            <a class="btn btn-outline-success btn-sm" style="margin-top: 0"
+                                               href="{% url 'game' game.id %}">Play</a>
+                                        {% else %}
+                                            <a class="btn btn-outline-primary btn-sm" style="margin-top: 0"
+                                               href="{% url 'purchase' game.id %}">Buy Game € {{ game.price }}</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>

@@ -360,7 +360,7 @@ def external_profile_view(request, username):
     if not user2.is_active:
         return render(request, '404.html', {'redirect': 'inactive'})
 
-    games = Game.objects.filter(developer=user2)
+    games = Game.objects.filter(developer=user2, is_active=True)
     return render(request, 'profile/profile_ext.html', {'user2': user2, 'dev_games': games, 'redirect': red_tag})
 
 
