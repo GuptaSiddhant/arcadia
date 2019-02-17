@@ -321,6 +321,7 @@
                         }
                         current_score = score;
                         $("#status_score").text(current_score);
+                        {% if game.high_score %}
                         if (current_score > {{ game.high_score.score }} && high_score_beaten === 0) {
                             var x = document.getElementById("snackbar");
                             x.textContent = "You have beaten the high-score!";
@@ -330,7 +331,7 @@
                                 x.className = x.className.replace("show", "");
                             }, 2000);
                         }
-
+                        {% endif %}
                         break;
 
                     case 'SCORE':
