@@ -50,10 +50,15 @@
     <!-- Leaderboard - High Scored -->
     <div id="leader-board" style="display: none">
         {% with scores=game.scores %}
-            <h5>Leaderboard (Top 5)</h5>
+            <h5 class="flex_space_between">LEADERBOARD
+                <button class="btn btn-outline-info btn-sm"
+                        data-toggle="modal"
+                        data-target="#scoreModal">View All
+                </button>
+            </h5>
             {% if scores %}
                 <table class="table table-striped table-sm" style="width: 100%; margin-bottom: 0 !important;">
-                    <thead">
+                    <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Player</th>
@@ -62,11 +67,13 @@
                     </thead>
                     <tbody>
                     {% for score in scores %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td><a href="{% url 'user_profile' score.player.username  %}">{{ score.player }}</a></td>
-                            <td>{{ score.score }}</td>
-                        </tr>
+                        {% if forloop.counter < 6 %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a href="{% url 'user_profile' score.player.username %}">{{ score.player }}</a></td>
+                                <td>{{ score.score }}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -174,6 +181,53 @@
 {% block extra %}
     {% if user.is_authenticated %}
         <div id="snackbar"></div>
+    {% endif %}
+    {% if game %}
+        {# Score Modal #}
+        <!-- Delete Game Popup -->
+        <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="LeaderBoard"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">All Scores for {{ game.name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% with scores=game.scores %}
+                            {% if scores %}
+                                <table class="table table-striped table-sm"
+                                       style="width: 100%; margin-bottom: 0 !important;">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Player</th>
+                                        <th scope="col">Score</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for score in scores %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>
+                                                <a href="{% url 'user_profile' score.player.username %}">{{ score.player }}</a>
+                                            </td>
+                                            <td>{{ score.score }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p>No scores found for this game.</p>
+                                <span class="help-text">Why don't you submit a score and shine on the leaderboard.</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}
 

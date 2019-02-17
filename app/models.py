@@ -68,7 +68,7 @@ class Game(models.Model):
         ordering = ['name', 'genre']
 
     def scores(self):
-        return self.gamescore_set.order_by('-score')[:5]
+        return self.gamescore_set.order_by('-score')
 
     def last_save_date(self, player):
         save_date = self.gamestate_set.filter(player=player).order_by('-saveDate').first()
