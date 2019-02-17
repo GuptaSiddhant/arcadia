@@ -1,10 +1,8 @@
-import logging
-from hashlib import md5
-
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import serializers
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
@@ -20,14 +18,71 @@ from app.forms import MessageForm, MessageScoreForm, MessageLoadForm, MessageSav
 from app.models import User, Game, Genre, Transaction, GameScore, GameState
 from app.tokens import account_activation_token
 
-logger = logging.getLogger(__name__)
+from hashlib import md5
+# import logging
+# logger = logging.getLogger(__name__)
 
 
-# Signup view that sends email with new account activation link
+# -- PUBLIC VIEWS -------------------------------------- #
+# -- No login required --------------------------------- #
+
+# -- Generic Views ------------------------------------- #
+
+# Homepage view - Currently redirects to Explore View
+def index_view(request):
+    red = request.GET.get('redirect', None)
+    # Check and pass if there is a redirection message.
+    if red:
+        return redirect('/explore/?redirect=' + red)
+    else:
+        return redirect('/explore/')
+
+
+#  Generate Base Layout of app for PWA.
+def base_layout(request):
+    return render(request, 'base.html')
+
+
+# -- Unauthorised API ---------------------------------- #
+
+# Fetch all available games as JSON
+def game_api_all(request):
+    results = Game.objects.filter(is_active=True)
+    jsondata = serializers.serialize('json', results)
+    return HttpResponse(jsondata)
+
+
+# Fetch data of the latest available games as JSON
+def game_api_latest(request):
+    game = Game.objects.latest('pk')
+    data = {
+        "game": {
+            'id': game.id,
+            'name': game.name,
+            'genre': game.genre.name,
+            'price': game.price,
+            'image': game.image,
+            'desc': game.description,
+            'developer': {
+                'username': game.developer.username,
+                'first_name': game.developer.first_name,
+                'last_name': game.developer.last_name,
+                'photo': game.developer.image,
+            }
+        }
+    }
+    return JsonResponse(data)
+
+
+# -- Registration -------------------------------------- #
+
+# Registration view for creating new accounts
 def signup_view(request):
+    # Check if user is already logged-in
     if not request.user.is_anonymous:
         return redirect('/explore/')
 
+    # Check form submission validity and create new user.
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -63,101 +118,49 @@ def activate(request, uidb64, token):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
+        # Activate user account
         user.is_active = True
         user.email_confirmed = True
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        # Redirect valid user to his/her profile
         return redirect('/profile/?redirect=activated')
     else:
+        # Show error otherwise
         return render(request, 'email/account_activation_invalid.html')
 
 
-def index_view(request):
-    red = request.GET.get('redirect', None)
-    if red:
-        return redirect('/explore/?redirect=' + red)
-    else:
-        return redirect('/explore/')
+# -- Games - Explore & Play ---------------------------- #
 
-
+# Default View where all games are listed to explore
 def explore_view(request):
+    # Get all required information
     genres = Genre.objects.all()
     genre_tag = request.GET.get('genre', 'all')
     search_tag = request.GET.get('search', None)
     red_tag = request.GET.get('redirect', None)
     page = request.GET.get('page', 1)
 
+    # Get all active games and count them
     games = Game.objects.filter(is_active=True)
-    count_g = {'total': games.count,
-               'free': games.filter(price=0).count}
+    count_games = {'total': games.count,
+                   'free': games.filter(price=0).count}
 
+    # Filter games based on URL Params
     if genre_tag == 'free':
         games = games.filter(price=0)
     elif genre_tag != 'all':
-        games = games.filter(genre__name__icontains=genre_tag)
+        games = games.filter(genre__name=genre_tag)
 
     if search_tag is not None:
         games = games.filter(name__icontains=search_tag)
 
     # Pagination
-    pages = Paginator(games, per_page=10, orphans=0)
+    pages = Paginator(games, per_page=10, orphans=4)
     game_list = pages.get_page(page)
 
-    args = {'games': game_list, 'genres': genres, 'count': count_g, 'redirect': red_tag}
+    args = {'games': game_list, 'genres': genres, 'count': count_games, 'redirect': red_tag}
     return render(request, 'game/explore.html', args)
-
-
-def library_view(request):
-    genre_tag = request.GET.get('genre', 'all')
-    search_tag = request.GET.get('search', None)
-    red_tag = request.GET.get('redirect', None)
-    page_tag = request.GET.get('page', 1)
-    sort_tag = request.GET.get('sort', 'asc')
-
-    library_type = request.get_full_path()
-
-    if not request.user.is_anonymous:
-
-        if library_type.__contains__('/dev/'):
-            if request.user.is_dev:
-                games = Game.objects.filter(developer=request.user, is_active=True)
-            else:
-                return render(request, '404.html', {'redirect': red_tag})
-        else:
-            games = request.user.inventory.all()
-            games = games.filter(is_active=True)
-
-        count = {'total': games.count,
-                 'free': games.filter(price=0).count}
-
-        genres = {}
-        for game in games:
-            if game.genre.name in genres:
-                genres[game.genre.name] += 1
-            else:
-                genres[game.genre.name] = 1
-
-        if genre_tag == 'free':
-            games = games.filter(price=0)
-        elif genre_tag != 'all':
-            games = games.filter(genre__name__icontains=genre_tag)
-
-        if search_tag is not None:
-            games = games.filter(name__icontains=search_tag)
-
-        if sort_tag == 'desc':
-            games = games.order_by('-name')
-        elif sort_tag == 'asc':
-            games = games.order_by('name')
-
-        # Pagination
-        pages = Paginator(games, per_page=10, orphans=0)
-        game_list = pages.get_page(page_tag)
-
-        args = {'games': game_list, 'genres': genres, 'count': count, 'redirect': red_tag}
-        return render(request, 'profile/library.html', args)
-
-    return render(request, '404.html', {'redirect': red_tag})
 
 
 def game_play_view(request, game_id):
@@ -261,95 +264,87 @@ def game_play_view(request, game_id):
         return HttpResponse(status=405, content='Invalid method.')
 
 
-def game_add_view(request):
+# -- PRIVATE VIEWS ------------------------------------- #
+# -- Login Required as Player or Dev ------------------- #
+
+# -- User Profile -------------------------------------- #
+
+# Shows game owned by player or submitted as Developer
+@login_required(login_url="login")
+def library_view(request):
+    genre_tag = request.GET.get('genre', 'all')
+    search_tag = request.GET.get('search', None)
     red_tag = request.GET.get('redirect', None)
-    if request.method == 'POST':
-        form = GameForm(request.POST)
-        if form.is_valid():
-            game = form.save(commit=False)
-            game.developer = request.user
-            game.save()
-            return redirect('/dev/?redirect=new_game')
-    else:
-        form = GameForm()
-    return render(request, 'game/game_form.html', {'form': form, 'redirect': red_tag})
+    page_tag = request.GET.get('page', 1)
+    sort_tag = request.GET.get('sort', 'asc')
 
+    library_type = request.get_full_path()
 
-def game_edit_view(request, game_id):
-    red_tag = request.GET.get('redirect', None)
-    if request.method == 'POST':
-        game_to_edit = Game.objects.get(pk=game_id)
-        form = GameForm(request.POST, instance=game_to_edit)
-        form.save()
-        return redirect('/dev/?redirect=edit_game')
-    else:
-        form = GameForm()
+    if not request.user.is_anonymous:
+        # Check if a developer is accessing Dev center.
+        if library_type.__contains__('/dev/'):
+            if request.user.is_dev:
+                games = Game.objects.filter(developer=request.user, is_active=True)
+            else:
+                return render(request, '404.html', {'redirect': red_tag})
+        else:
+            # Else load all player's games
+            games = request.user.inventory.filter(is_active=True)
 
-        try:
-            game = Game.objects.get(pk=game_id)
-        except ObjectDoesNotExist:
-            return render(request, '404.html')
+        count = {'total': games.count,
+                 'free': games.filter(price=0).count}
 
-        if request.user != game.developer:
-            return render(request, '403.html', {'redirect': red_tag})
+        # List all genres for which there is at least one game.
+        genres = {}
+        for game in games:
+            if game.genre.name in genres:
+                genres[game.genre.name] += 1
+            else:
+                genres[game.genre.name] = 1
 
-        form.fields['name'].initial = game.name
-        form.fields['genre'].initial = game.genre
-        form.fields['url'].initial = game.url
-        form.fields['description'].initial = game.description
-        form.fields['price'].initial = game.price
-        form.fields['image'].initial = game.image
-        return render(request, 'game/game_form.html', {'form': form, 'game': game, 'redirect': red_tag})
+        # Filter games based on URL params
+        if genre_tag == 'free':
+            games = games.filter(price=0)
+        elif genre_tag != 'all':
+            games = games.filter(genre__name=genre_tag)
 
+        if search_tag is not None:
+            games = games.filter(name__icontains=search_tag)
 
-def game_delete_view(request, game_id):
-    red_tag = request.GET.get('redirect', None)
-    try:
-        game = Game.objects.get(pk=game_id)
-    except ObjectDoesNotExist:
-        return render(request, '404.html', {'redirect': red_tag})
+        if sort_tag == 'desc':
+            games = games.order_by('-name')
+        elif sort_tag == 'asc':
+            games = games.order_by('name')
 
-    if request.user == game.developer:
-        game.is_active = False
-        game.save()
-        return redirect('/dev/?redirect=delete')
+        # Pagination
+        pages = Paginator(games, per_page=10, orphans=4)
+        game_list = pages.get_page(page_tag)
+
+        args = {'games': game_list, 'genres': genres, 'count': count, 'redirect': red_tag}
+        return render(request, 'profile/library.html', args)
+
     return render(request, '404.html', {'redirect': red_tag})
 
 
-def base_layout(request):
-    return render(request, 'base.html')
+# Show form to edit current user profile
+@login_required(login_url="login")
+def profile_edit_view(request):
+    red_tag = request.GET.get('redirect', None)
+    if request.method == 'POST':
+        form = UpdateProfile(request.POST, instance=request.user)
+        # Check if form has no errors
+        if form.is_valid():
+            form.save()
+            return redirect('/profile/')
+        else:
+            return redirect(profile_edit_view)
+    else:
+        form = UpdateProfile(instance=request.user)
+        return render(request, 'profile/profile_update.html', {'form': form, 'redirect': red_tag})
 
 
-# Fetch all available games with api
-def game_api_all(request):
-    results = Game.objects.filter(is_active=True)
-    jsondata = serializers.serialize('json', results)
-    return HttpResponse(jsondata)
-
-
-# Fetch data of the latest available games with api
-def game_api_latest(request):
-    game = Game.objects.latest('pk')
-    data = {
-        "game": {
-            'id': game.id,
-            'name': game.name,
-            'genre': game.genre.name,
-            'price': game.price,
-            'image': game.image,
-            'desc': game.description,
-            'developer': {
-                'username': game.developer.username,
-                'first_name': game.developer.first_name,
-                'last_name': game.developer.last_name,
-                'photo': game.developer.image,
-            }
-        }
-    }
-    return JsonResponse(data)
-
-
-# View other users' profiles
+# View other users' profile
+@login_required(login_url="login")
 def external_profile_view(request, username):
     red_tag = request.GET.get('redirect', None)
     try:
@@ -364,19 +359,7 @@ def external_profile_view(request, username):
     return render(request, 'profile/profile_ext.html', {'user2': user2, 'dev_games': games, 'redirect': red_tag})
 
 
-def profile_edit_view(request):
-    red_tag = request.GET.get('redirect', None)
-    if request.method == 'POST':
-        form = UpdateProfile(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('/profile/')
-        else:
-            return redirect(profile_edit_view)
-    else:
-        form = UpdateProfile(instance=request.user)
-        return render(request, 'profile/profile_update.html', {'form': form, 'redirect': red_tag})
-
+# -- Payment Views ------------------------------------- #
 
 # Payment view that creates initial transaction to wait the payment gets processed in the payment system
 def pay_purchase_view(request, game_id):
@@ -488,3 +471,70 @@ def payment_result_view(request):
                     'result': result_tag,
                     'validity': valid_transaction}
             return render(request, 'payment/result.html', args)
+
+
+# -- DEVELOPER VIEWS ----------------------------------- #
+# -- Login Required as Dev ONLY ------------------------ #
+
+# View/Form to add a game
+@login_required(login_url="login")
+def game_add_view(request):
+    red_tag = request.GET.get('redirect', None)
+    if request.method == 'POST':
+        form = GameForm(request.POST)
+        if form.is_valid():
+            game = form.save(commit=False)
+            game.developer = request.user
+            game.save()
+            return redirect('/dev/?redirect=new_game')
+    else:
+        form = GameForm()
+    return render(request, 'game/game_form.html', {'form': form, 'redirect': red_tag})
+
+
+# View/Form to edit a game
+@login_required(login_url="login")
+def game_edit_view(request, game_id):
+    red_tag = request.GET.get('redirect', None)
+    if request.method == 'POST':
+        game_to_edit = Game.objects.get(pk=game_id)
+        form = GameForm(request.POST, instance=game_to_edit)
+        form.save()
+        return redirect('/dev/?redirect=edit_game')
+    else:
+        form = GameForm()
+
+        try:
+            game = Game.objects.get(pk=game_id)
+        except ObjectDoesNotExist:
+            return render(request, '404.html')
+
+        if request.user != game.developer:
+            return render(request, '403.html', {'redirect': red_tag})
+
+        # Initialise form with pre-filled data
+        form.fields['name'].initial = game.name
+        form.fields['genre'].initial = game.genre
+        form.fields['url'].initial = game.url
+        form.fields['description'].initial = game.description
+        form.fields['price'].initial = game.price
+        form.fields['image'].initial = game.image
+        return render(request, 'game/game_form.html', {'form': form, 'game': game, 'redirect': red_tag})
+
+
+# Delete game - Set game as inactive
+# So it can recovered later and doesn't affect game_saves
+@login_required(login_url="login")
+def game_delete_view(request, game_id):
+    red_tag = request.GET.get('redirect', None)
+    try:
+        game = Game.objects.get(pk=game_id)
+    except ObjectDoesNotExist:
+        return render(request, '404.html', {'redirect': red_tag})
+
+    if request.user == game.developer:
+        # Deactivate game
+        game.is_active = False
+        game.save()
+        return redirect('/dev/?redirect=delete')
+    return render(request, '404.html', {'redirect': red_tag})

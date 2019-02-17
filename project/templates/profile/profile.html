@@ -170,11 +170,6 @@
 {% block extra %}
     {% if user.is_authenticated %}
         <div id="snackbar"></div>
-    {% else %}
-        {# Redirct to login #}
-        <script type="text/javascript">
-            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
-        </script>
     {% endif %}
 {% endblock %}
 

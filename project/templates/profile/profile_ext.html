@@ -72,10 +72,6 @@
                         Developer
                     {% endif %}
                 </div>
-                <div class="form-group">
-                    <label>Points:</label>
-                    <span>{{ user2.points_level }}</span>
-                </div>
             </div>
             <div id="game-image"
                  style="margin-right: 20px; width: 100%; max-width: 150px; min-width: 100px">
@@ -153,13 +149,6 @@
 
 {# Section : Extra Code #}
 {% block extra %}
-    {% if user.is_authenticated %}
-    {% else %}
-        {# Redirct to login #}
-        <script type="text/javascript">
-            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
-        </script>
-    {% endif %}
 {% endblock %}
 
 
