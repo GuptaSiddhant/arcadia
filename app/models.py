@@ -138,3 +138,4 @@ class GameScore(models.Model):
 
     def __str__(self):
         return str(self.player.username + ": " + str(self.score))
+
