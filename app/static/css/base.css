@@ -364,14 +364,18 @@ input:focus {
 #user_image {
     border-radius: 50%;
     width: 150px;
+    max-width: 150px;
     height: 150px;
+    max-height: 150px;
     object-fit: cover;
 }
 
 .nav_profile_image {
     border-radius: 50%;
     width: 25px;
+    max-width: 25px;
     height: 25px;
+    max-height: 25px;
     object-fit: cover;
     background: #ffffff;
 }
