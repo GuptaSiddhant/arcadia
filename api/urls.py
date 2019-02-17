@@ -14,7 +14,6 @@ router.register(r'gamestates', GameStateViewSet, base_name='gamestate')
 router.register(r'gamescores', GameScoreViewSet, base_name='gamescore')
 
 # Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
 ]
