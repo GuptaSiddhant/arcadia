@@ -56,7 +56,7 @@ class Game(models.Model):
     name = models.CharField(max_length=100, unique=True)
     image = models.URLField(default=None, blank=True)
     description = models.TextField(null=False)
-    high_score = models.OneToOneField('GameScore', on_delete=models.PROTECT, related_name='high_score_in', blank=True,
+    high_score = models.OneToOneField('GameScore', on_delete=models.CASCADE, related_name='high_score_in', blank=True,
                                       null=True)
     is_active = models.BooleanField(default=True)
 
@@ -128,7 +128,7 @@ class GameState(models.Model):
 # high scores of the games
 class GameScore(models.Model):
     player = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
-    game = models.ForeignKey('Game', on_delete=models.CASCADE, null=False)
+    game = models.ForeignKey('Game', on_delete=models.PROTECT, null=False)
     score = models.PositiveIntegerField(default=0)
     scoreDate = models.DateTimeField(default=timezone.now)
 

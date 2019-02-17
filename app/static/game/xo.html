@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tris</title>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <title>XO</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
     <style>
         #tableGame {
             border-spacing: 2px;
@@ -19,8 +19,8 @@
         }
 
         #info {
-            padding: 6px 0px 0px 0px;
-            margin-left: 200px;
+            padding: 10px;
+            margin-left: 1750px;
         }
 
         #buttons, #level_select {
@@ -90,7 +90,7 @@
     <p>Score: <span id="score">0</span></p>
 </div>
 <div id="level_select">
-    <label for="level">Level <span id="level_number">0</span></label>
+    <label for="level"><b>Level <span id="level_number">0</span></b></label>
     <span>- Select between 1 (Easy) - 10 (Hard)</span>
     <input type="range" id="level" name="level" list="level_tickmarks"
            min="1" max="10" value="7" style="width: 300px;">
@@ -172,8 +172,8 @@
     var message = {
         messageType: "SETTING",
         options: {
-            "width": 340, //Integer
-            "height": 300, //Integer
+            "width": 400, //Integer
+            "height": 330, //Integer
             "mobile": true, //Boolean
         }
     };

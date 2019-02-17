@@ -146,6 +146,50 @@ WEEK 7 Sprint
 - Commenting
 - Reporting 
 
+### Features
+
+#### Authentication / 200
+- Henri
+
+#### Basic player functionalities / 300
+- Henri (payment)
+- Siddhant (games)
+- Santeri (users)
+
+#### Basic developer functionalities / 200
+- Siddhant
+- Santeri
+
+#### Game/service interaction / 200
+- Siddhant
+
+#### Quality of Work / 100
+- Santeri (quality of code, use of framework)
+- Henri (testing)
+- Siddhant (UX)
+
+#### Non-functional requirements
+- everyone
+
+### Extra features
+
+#### Save/load and resolution feature / 100
+- Siddhant
+
+#### 3rd party login / 100
+- Santeri
+
+#### RESTful API / 100
+- Henri
+
+#### Own game / 100
+- Siddhant
+
+#### Mobile Friendly / 50
+- Siddhant
+
+#### Social media sharing / 50
+- Siddhant
 Final date 19th of Feb
 
 

@@ -17,8 +17,10 @@ MAX_JSON_DATA_LEN = 2048
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)
-    email = forms.EmailField(required=True)
-    image = forms.URLField(required=False, label='Profile Picture URL', help_text="[Optional]", validators=[URLValidator(schemes=['https'])])
+    email = forms.EmailField(required=True, help_text="A confirmation mail will be sent to this email address.")
+    image = forms.URLField(required=False, label='Profile Picture URL',
+                           help_text="The image url should begin with \"https://\". [Optional]",
+                           validators=[URLValidator(schemes=['https'])])
     dev_registration = forms.BooleanField(required=False, label='Register as Developer',
                                           help_text='Yes, I want to register as a Developer. Being a developer allows '
                                                     'you to submit games to Arcadia.')
@@ -49,7 +51,9 @@ class UpdateProfile(UserChangeForm):
         model = User
         fields = ('first_name', 'last_name', 'image', 'is_dev')
         labels = {'is_dev': 'Act as Developer', }
-        help_texts = {'is_dev': 'Tick the box to become a developer.'}
+        help_texts = {
+            'image': 'The image url should begin with "https://".',
+            'is_dev': 'Tick the box to become a developer.'}
 
 
 # Form for adding games to the site, to be sold and played
@@ -58,10 +62,11 @@ class GameForm(forms.ModelForm):
         model = Game
         fields = ('name', 'genre', 'url', 'description', 'price', 'image')
         labels = {'url': 'Game URL', 'price': 'Cost (€)', 'image': 'Thumbnail Image URL', }
-        help_texts = {'url': 'Add the link the javascript game (hosted elsewhere).',
-                      'description': 'Few words about game to entice player to purchase.',
-                      'price': 'Leave it 0 and offer the game as Free to Play.',
-                      'image': '[Optional] Preferred square image with width >= 500px ', }
+        help_texts = {
+            'url': 'Add the link the javascript game (hosted elsewhere). The game url should begin with "https://".',
+            'description': 'Few words about game to entice player to purchase.',
+            'price': 'Leave it 0 and offer the game as Free to Play.',
+            'image': 'Preferred square image with width >= 500px. The image url should begin with "https://". [Optional]', }
 
 
 class MessageForm(forms.Form):
