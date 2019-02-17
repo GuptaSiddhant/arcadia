@@ -385,17 +385,18 @@ input:focus {
     height: 25px;
     max-height: 25px;
     object-fit: cover;
-    background: #ffffff;
+    background: #E8E4EE;
 }
 
 .explore_profile_image {
-    border-radius: 15px;
+    border-radius: 50%;
     width: 100px;
     max-width: 100px;
     height: 100px;
     max-height: 100px;
     object-fit: cover;
-    background: #ffffff;
+    background: #E8E4EE;
+    border: 4px solid #E8E4EE;
 }
 
 .arcadia_devs {
@@ -411,13 +412,14 @@ input:focus {
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    background: black;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #6E42C0;
     color: white;
     text-align: center;
-    line-height: 30px;
+    line-height: 31px;
+    border: 2px solid #E8E4EE;
 }
 
 .pagination {
