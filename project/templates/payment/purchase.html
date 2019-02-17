@@ -87,11 +87,6 @@
 
 {# Section : Extra Code #}
 {% block extra %}
-    {% if not user.is_authenticated %}
-        <script type="text/javascript">
-            window.location = "{% url 'login' %}?next={% firstof request.path '/' %}&redirect=access"
-        </script>
-    {% endif %}
 {% endblock %}
 
 
