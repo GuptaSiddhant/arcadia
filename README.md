@@ -1,38 +1,93 @@
-# Arcadia: Online Game Store
+# ![Arcadia](https://arcadiagames.herokuapp.com/static/media/favicon/favicon-32x32.png "Arcadia") Arcadia
+
+Deployed on Heroku:  **[http://arcadiagames.ga](https://arcadiagames.herokuapp.com)**
+
+## About
+
 Arcadia is an online game store for JavaScript games. 
-The service has two types of users: players and developers. 
-Developers can add their games to the service and set a price for it. 
-Players can buy games on the platform and then play purchased games, 
-developers can also be players.
- 
-This is a course project for Web Software Development CS-C3170 2018-2019 at Aalto University
+> Developed as a project for the Web Software Development course CS-C3170 2018-2019 at Aalto University, Finland.
 
-Project online on Heroku:  
-http://arcadiagames.ga
+The service has two types of users: players and developers. Developers can add their games to the service and set a price for it. Players can buy games on the platform and then play the purchased games. And developers can also act as players. Win-Win.
+
+### Team
+
+	57237L Henri Ahti       
+	721936 Siddhant Gupta
+	528142 Santeri Volkov   
+
+### Specifications
+
++ The service is made using [Django framework](https://www.djangoproject.com). 
++ The mockup payment service API is provided by Aalto University.
++ 3rd party login enabled for GitHub, Google and Twitter.
++ IDE: JetBrains PyCharm Professional (Education license).
++ Git version control: [Aalto University](https://version.aalto.fi)
++ Languages: Python3, HTML5, CSS, JavaScript
++ Font: [Montserrat](https://fonts.googleapis.com/css?family=Montserrat)
++ Design library: [Bootstrap 4](http://getbootstrap.com)
++ JS Library: [JQuery](http://jquery.com), [Bootstrap](http://getbootstrap.com), [ShareThis](https://www.sharethis.com)
++ Other requirements (requirements.txt):
+
+		dj-database-url==0.5.0
+		Django==2.1.7
+		django-heroku==0.3.1
+		gunicorn==19.9.0
+		whitenoise==4.1.2
+		psycopg2-binary==2.7.6.1
+		python-decouple==3.1
+		django-macros==0.4.0
+		djangorestframework==3.9.1
+		django-progressive-web-app==0.1.1
+		social-auth-app-django==3.1.0
 
 
-## Team
-Henri Ahti      57237L  
-Siddhant Gupta  721936  
-Santeri Volkov  528142  
+## Service Features
 
+- The service allows user to register as a player or developer, which later can be changed.
+- Developer can submit games to the service and see the sales. (Read more below)
+- Players and buy and play games. High scores are avaible if the game supports it.  (Read more below)
 
-## Features
+		Mention these too:
+		FreeToPlay
+
+### Mandatory Features / Points
 
 #### Authentication / 200
-- Henri
+- **Henri**
 
 #### Basic player functionalities / 300
-- Henri (payment)
-- Siddhant (games)
-- Santeri (users)
+- **Henri (payment)**
+- Player can play games. The games are loaded in an iFrame on the Game page.
+- Players are only allowed to play the games that they have purchased respectively.
+- The service has **Explore** (homepage) which showcases all the games availble on the Store. Users can filter the games with search, or by genres, or by whether the game is free or not.
+- The service also has **Library** which showcases all the purchased games. It aslo allows filtering by search, genres and if-free. Library can also sort games alphabetically (A-Z or Z-A).
+- Player can see all their transactions and moeny spent in their **Profile**.
 
 #### Basic developer functionalities / 200
-- Siddhant
-- Santeri
+- Developer can submit a game, with a Name, Description, Genre, Image-URL, Price and Game-URL. Once submitted, only that developer can edit the game details or remove the game from store.
+- Developer can see sales statistics (charts and graphs) of all games in the **Dev Center**. All transactions can be seen in the **Profile** Area, with details like Date, Game, Player, Amount and Payment_result.
+- A developer can only add games to his/her respective profile, and then only he/she can modify/remove the game. 
+- Developers can play their own submitted games without purchasing them.
 
 #### Game/service interaction / 200
-- Siddhant
+
+A game optimised for Arcadia, should send a `postMessage` to parent window containing a `messageType` and associated data. The service listens for these messages and react accordingly. The messages are processes using AJAX, so there is no need to refresh the page. The supported message-types are: 
+
+- `SETTING`: Arcadia expects this message from all games optimised for the service. Failure to deliver the message may cause Arcadia to block certain UI elements and revert to defaults. The mesaage should contain `options` which can contain some data like in the follwing sample:
+			
+		options: {
+			width: 500,		//integer, width of the game-frame in pixels
+			height: 400,	//integer, height of the game-frame in pixels
+			score: True,	//boolean, if game supports scoring
+			save: True,		//boolean, if game supoorts saving/loading
+			mobile: False,	//boolean, if game is mobile-friendly
+		}
+
+- `SCORE`: If service receives this message with valid `score`, then it records the score in game's leaderboard (high-scores). Explected when game is finished or user submits score.
+	- 	`SCORE_UPDATE`: A secondary & similar message which lets service know current score without submitting scores. This is used to display current score and check if user beat the high-score, but the score is not saved anywhere, until `SCORE` message is received.
+- `SAVE`: If service receives this message with valid `gameState`, then the service saves the state which can retrieved later.
+- `LOAD_REQUEST`: If service receives this message with, the service returns the last save-game (if any) to the game as `LOAD` message, otherwise sends back an `ERROR` message.
+
 
 #### Quality of Work / 100
 - Santeri (quality of code, use of framework)
@@ -42,7 +97,7 @@ Santeri Volkov  528142
 #### Non-functional requirements
 - everyone
 
-### Extra features
+### Extra Features / Points
 
 #### Save/load and resolution feature / 100
 - Siddhant
