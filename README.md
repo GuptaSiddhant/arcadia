@@ -47,9 +47,6 @@ The service has two types of users: players and developers. Developers can add t
 - Developer can submit games to the service and see the sales. (Read more below)
 - Players and buy and play games. High scores are avaible if the game supports it.  (Read more below)
 
-		Mention these too:
-		FreeToPlay
-
 ### Mandatory Features / Points
 
 #### Authentication / 200
@@ -68,6 +65,7 @@ The service has two types of users: players and developers. Developers can add t
 - Developer can see sales statistics (charts and graphs) of all games in the **Dev Center**. All transactions can be seen in the **Profile** Area, with details like Date, Game, Player, Amount and Payment_result.
 - A developer can only add games to his/her respective profile, and then only he/she can modify/remove the game. 
 - Developers can play their own submitted games without purchasing them.
+- Games can also be submitted for 0 price which will make the game *Free to Play*.
 
 #### Game/service interaction / 200
 
@@ -90,32 +88,49 @@ A game optimised for Arcadia, should send a `postMessage` to parent window conta
 
 
 #### Quality of Work / 100
-- Santeri (quality of code, use of framework)
-- Henri (testing)
-- Siddhant (UX)
+- **Santeri (quality of code, use of framework)** give example of using include feature for nav and search
+- **Henri (testing)**
+- Arcadia focuses a lot on user-experience. The following points are to considered:
+	- The website is styled with friendly colours with a well-defined layout. **Google Lighthouse** test gave the site overall great scores (see image). ![Lighthouse Result](app/static/media/Arcadia-Lighthouse.png "Google Lighthouse Results") 
+	- The website is mobile responsive and supports Progrssive Web-App (PWA), which means it can be installed as an app via Chrome browser on Android mobile.
+	- Store can explored without logging in and game information is availble without logging-in or purchasing the game.
+	- Store allows to filter games in multiple ways.
+	- Explore page also showcases top developers with most-submitted games. Logged-in users can check their public profile see the games they have submitted.
+	- Pagination is possible in Explore, Library & Dev Center. But page-navigation is hidden if there is only one page.
+	- Library & Dev Center shows more data about each game like high-score & last-save in Library and sales-statistics in Dev Center.
+	- Profile section allows user to see and update their profile. It also shows transaction history.
+	- The Game page shows info about game, developer, and highscores. Along with the game (when purchased), there is data like Current Score and Updates. User can see all scores by expanding Leaderboard.
+	- There are many more quirks here and there which will make the experience better on any device.
+	
 
 #### Non-functional requirements
-- everyone
+- **everyone**
 
 ### Extra Features / Points
 
 #### Save/load and resolution feature / 100
-- Siddhant
+- The service has complete support for setting frame resolution aas requested by game.
+- The service saves a valid gameState and loads the latest save when requested.
 
 #### 3rd party login / 100
-- Santeri
+- **Santeri**
 
 #### RESTful API / 100
-- Henri
+- **Henri**
 
 #### Own game / 100
-- Siddhant
+- We made a basic game '[XO](https://arcadiagames.herokuapp.com/game/7/)' which is Noughts-&-Crosses, offered for free on Store. The game communicates the settings, score, and save_games. It is included in repository under `/app/static/game/`
 
 #### Mobile Friendly / 50
-- Siddhant
+- The website is completely mobile-friendly. It contains the `viewport` meta-tag and is optimised to run on any screen size.
+- Bootstrap is NOT used for this. The website has a grid template which changes arrangements on elemetns depening on window width. 
+- The website is tested on Full HD desktops, TV, 13' Notebook, iPad, and multiple smartphones.
 
 #### Social media sharing / 50
-- Siddhant
+- Each page or game can be shared over social media / IM as it contains OpenGraph meta-tags.
+- Default tags describe the service but if a game is shared, then game's information is shared instead of default.
+- The sharing works without logging-in as the game-page is accesible without authentication.
+- We use ShareThis API to create share options for multiple services like FaceBook, Twitter, WhatsApp, etc.
 
 
 ## Models and Views
@@ -163,27 +178,53 @@ high scores of the games
 
 	(player, game, score, scoreDate)  
 
+
 ### Views
-- Signup  
-- Login  
 
-##### Profile
-- Player-Profile (login)  
-- Dev-Profile (login-dev)  
-- External-Profile (login)  
-- Profile-Edit (login)  
+#### Public Views (No Login Required)
 
-##### Browsing
-- Explore (no-login)  
-- Library (login)  
+##### Generic Views
 
-##### Game
-- Game-Details-Purchase-page (no-login)  
-- Game-Play (login)  
-- Game-Add (login-dev)  
-- Game-Edit (login-dev)  
-- Game-Delete (login-dev)  
+- `index_view` // Homepage
+- `base_layout` // Used for PWA
 
+##### Unauthorised API
+
+- `game_api_all` // Send all games as JSON (without actual game-URL)
+- `game_api_latest` // Send latest game (without actual game-URL), used to latest game when logging-in
+
+##### Registration
+
+- `signup_view` // Registration page
+- `account_activation_sent` // Shows message 'mail sent'
+- `activate` // Check for account validation
+
+##### Games
+
+- `explore_view` // Explore all games
+- `game_play_view` // See game details (and play if authenticated and purchased)
+
+#### Private Views (Login required as Player or Developer)
+
+##### User Profile
+
+- `library_view` // Shows purchased games to Players and submitted games to Devs.
+- `profile` // Show user profile
+- `profile_edit_view` // Allow user to edit profile
+- `external_profile_view` // Show's public profile of an active user
+
+##### Payment Views
+
+- `pay_purchase_view` // shows purchase form
+- `payment_result_view` // checks if payment successful
+
+##### Game Views (Login required as Developer Only)
+
+- `game_add_view` // Form to submit game
+- `game_edit_view` // Form to edit game
+- `game_delete_view` // Option to archive game
+
+---
 ![alt text][Model relations]
 
 
