@@ -274,10 +274,10 @@
                             $("#leader-board").css("display", "block");
 
                             if (data.options.width || data.options.height) {
-                                if (data.options.width) {
+                                if (data.options.width && data.options.width > 0) {
                                     gameWidth = data.options.width;
                                 }
-                                if (data.options.height) {
+                                if (data.options.height && data.options.width > 0) {
                                     gameHeight = data.options.height;
                                 }
 
@@ -319,9 +319,11 @@
                             sendMessageToIFrame(message);
                             return;
                         }
+                        $("#status-area").css("display", "flex");
+                        $("#status-unsupported").css("display", "none");
                         current_score = score;
                         $("#status_score").text(current_score);
-                        {% if game.high_score %}
+                    {% if game.high_score %}
                         if (current_score > {{ game.high_score.score }} && high_score_beaten === 0) {
                             var x = document.getElementById("snackbar");
                             x.textContent = "You have beaten the high-score!";
@@ -331,7 +333,7 @@
                                 x.className = x.className.replace("show", "");
                             }, 2000);
                         }
-                        {% endif %}
+                    {% endif %}
                         break;
 
                     case 'SCORE':
@@ -341,6 +343,9 @@
                             sendMessageToIFrame(message);
                             return;
                         }
+                        $("#status-area").css("display", "flex");
+                        $("#status-unsupported").css("display", "none");
+                        $("#leader-board").css("display", "block");
                         current_score = score;
                         console.log('cs' + current_score);
                         sendData(data, '#');
@@ -355,6 +360,9 @@
                             sendMessageToIFrame(message);
                             return;
                         }
+
+                        $("#status-area").css("display", "flex");
+                        $("#status-unsupported").css("display", "none");
                         data.gameState = JSON.stringify(data.gameState);
                         sendData(data, '#');
                         statusText.text("Game saved successfully.");

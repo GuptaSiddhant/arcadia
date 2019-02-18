@@ -494,6 +494,8 @@ def game_add_view(request):
         if form.is_valid():
             game = form.save(commit=False)
             game.developer = request.user
+            if game.price < 0:
+                game.price = 0
             game.save()
             return redirect('/dev/?redirect=new_game')
     else:
@@ -509,6 +511,9 @@ def game_edit_view(request, game_id):
         game_to_edit = Game.objects.get(pk=game_id)
         form = GameForm(request.POST, instance=game_to_edit)
         form.save()
+        if game_to_edit.price < 0:
+            game_to_edit.price = 0
+            game_to_edit.save()
         return redirect('/dev/?redirect=edit_game')
     else:
         form = GameForm()
