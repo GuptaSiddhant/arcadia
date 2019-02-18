@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+
 from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -140,7 +141,6 @@ SOCIAL_AUTH_TWITTER_SECRET = config('SOCIAL_AUTH_TWITTER_SECRET')
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_SECRET')
 SOCIAL_AUTH_GOOGLE_SCOPE = ['profile']
-
 
 # Configure our extended AbstractUser as default User model
 AUTH_USER_MODEL = 'app.User'

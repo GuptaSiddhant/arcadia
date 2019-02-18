@@ -1,8 +1,10 @@
+from hashlib import md5
+
 from django.conf import settings
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import serializers
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
@@ -17,8 +19,6 @@ from app.forms import GameForm, SignUpForm, UpdateProfile
 from app.forms import MessageForm, MessageScoreForm, MessageLoadForm, MessageSaveForm
 from app.models import User, Game, Genre, Transaction, GameScore, GameState
 from app.tokens import account_activation_token
-
-from hashlib import md5
 
 
 # import logging

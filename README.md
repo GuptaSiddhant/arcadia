@@ -59,9 +59,9 @@ The service has two types of users: players and developers. Developers can add t
 - **Henri (payment)**
 - Player can play games. The games are loaded in an iFrame on the Game page.
 - Players are only allowed to play the games that they have purchased respectively.
-- The service has **Explore** (homepage) which showcases all the games availble on the Store. Users can filter the games with search, or by genres, or by whether the game is free or not.
-- The service also has **Library** which showcases all the purchased games. It aslo allows filtering by search, genres and if-free. Library can also sort games alphabetically (A-Z or Z-A).
-- Player can see all their transactions and moeny spent in their **Profile**.
+- The service has **Explore** (homepage) which showcases all the games available on the Store. Users can filter the games with search, or by genres, or by whether the game is free or not.
+- The service also has **Library** which showcases all the purchased games. It also allows filtering by search, genres and if-free. Library can also sort games alphabetically (A-Z or Z-A).
+- Player can see all their transactions and money spent in their **Profile**.
 
 #### Basic developer functionalities / 200
 - Developer can submit a game, with a Name, Description, Genre, Image-URL, Price and Game-URL. Once submitted, only that developer can edit the game details or remove the game from store.
@@ -71,9 +71,11 @@ The service has two types of users: players and developers. Developers can add t
 
 #### Game/service interaction / 200
 
-A game optimised for Arcadia, should send a `postMessage` to parent window containing a `messageType` and associated data. The service listens for these messages and react accordingly. The messages are processes using AJAX, so there is no need to refresh the page. The supported message-types are: 
+A game optimised for Arcadia, should send a `postMessage` to parent window containing a `messageType` and associated data. The service listens for these messages and reacts accordingly. 
+The messages are processed using AJAX, so there is no need to refresh the page. The supported message-types are: 
 
-- `SETTING`: Arcadia expects this message from all games optimised for the service. Failure to deliver the message may cause Arcadia to block certain UI elements and revert to defaults. The mesaage should contain `options` which can contain some data like in the follwing sample:
+- `SETTING`: Arcadia expects this message from all games optimised for the service. Failure to deliver the message may cause Arcadia to block certain UI elements and revert to defaults. 
+The message should contain `options` which can contain some data like in the following sample:
 			
 		options: {
 			width: 500,		//integer, width of the game-frame in pixels
@@ -83,10 +85,11 @@ A game optimised for Arcadia, should send a `postMessage` to parent window conta
 			mobile: False,	//boolean, if game is mobile-friendly
 		}
 
-- `SCORE`: If service receives this message with valid `score`, then it records the score in game's leaderboard (high-scores). Explected when game is finished or user submits score.
-	- 	`SCORE_UPDATE`: A secondary & similar message which lets service know current score without submitting scores. This is used to display current score and check if user beat the high-score, but the score is not saved anywhere, until `SCORE` message is received.
+- `SCORE`: If service receives this message with valid `score`, then it records the score in the game's leader board (high-scores). Expected when game is finished or user submits score.
+	- 	`SCORE_UPDATE`: A secondary & similar message which lets service know current score without submitting scores. 
+	This is used to display current score and check if user beat the high-score, but the score is not saved anywhere, until `SCORE` message is received.
 - `SAVE`: If service receives this message with valid `gameState`, then the service saves the state which can retrieved later.
-- `LOAD_REQUEST`: If service receives this message with, the service returns the last save-game (if any) to the game as `LOAD` message, otherwise sends back an `ERROR` message.
+- `LOAD_REQUEST`: If service receives this message, it returns the last save-game (if any) to the game as `LOAD` message, otherwise sends back an `ERROR` message.
 
 
 #### Quality of Work / 100
@@ -103,7 +106,11 @@ A game optimised for Arcadia, should send a `postMessage` to parent window conta
 - Siddhant
 
 #### 3rd party login / 100
-- Santeri
+- 3rd party login was implemented via social-auth-app-django library which uses Oauth, and allows users to login with various social accounts. 
+- Github, Google, and Twitter are used for this project. 
+- When the users login to the site for the first time a new player profile is created and tied to their social account with their names, email and profile picture. 
+- One exception was that twitter won't let us use the email of their users without us having our own privacy policy and terms of service. 
+- For the profile picture part we added a new step to the pipeline to fetch the picture urls from all the services.
 
 #### RESTful API / 100
 - Henri
@@ -188,9 +195,9 @@ high scores of the games
 
 
 ## Working practices
-- We used Telegram for communication and collaboration
-- We used Gitlab as code repository
-- We divided the project into week long sprints and met once a week plan and collaborate
+- Telegram was our main channel for communication and collaboration
+- We used Aalto's Gitlab as code repository
+- We divided the project into week long sprints and met once a week to plan and collaborate
 
 
 ## Process and Time Schedule plan

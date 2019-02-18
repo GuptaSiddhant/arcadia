@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.urls import path, re_path
+from django.urls import path
 from django.views.generic.base import TemplateView
 
 from app import views

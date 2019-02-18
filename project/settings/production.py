@@ -1,6 +1,7 @@
 # Settings for deploying to Heroku
-from .base import *
 import django_heroku
+
+from .base import *
 
 # In Production environment (heroku) Django fetches the SECRET_KEY, sid, Debug and DATABASE
 # from heroku's environment variables

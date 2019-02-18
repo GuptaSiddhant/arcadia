@@ -1,6 +1,8 @@
-from django.test import TestCase
-from app.models import User, Game, Genre, Transaction, GameScore, GameState
 from datetime import datetime
+
+from django.test import TestCase
+
+from app.models import User, Game, Genre, Transaction, GameScore, GameState
 
 
 # Test cases for the Arcadia system

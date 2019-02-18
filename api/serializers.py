@@ -13,6 +13,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = [field.name for field in model._meta.fields]
         fields.append('url')
 
+
 # Serializer for Game model to define the API representation.
 class GameSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='game-detail')
@@ -21,6 +22,7 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
         model = Game
         fields = [field.name for field in model._meta.fields]
         fields.append('url')
+
 
 # Serializer for Genre model to define the API representation.
 class GenreSerializer(serializers.HyperlinkedModelSerializer):
@@ -31,6 +33,7 @@ class GenreSerializer(serializers.HyperlinkedModelSerializer):
         fields = [field.name for field in model._meta.fields]
         fields.append('url')
 
+
 # Serializer for Transaction model to define the API representation.
 class TransactionSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='transaction-detail')
@@ -40,6 +43,7 @@ class TransactionSerializer(serializers.HyperlinkedModelSerializer):
         fields = [field.name for field in model._meta.fields]
         fields.append('url')
 
+
 # Serializer for GameState model to define the API representation.
 class GameStateSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='gamestate-detail')
@@ -48,6 +52,7 @@ class GameStateSerializer(serializers.HyperlinkedModelSerializer):
         model = GameState
         fields = [field.name for field in model._meta.fields]
         fields.append('url')
+
 
 # Serializer for GameScore model to define the API representation.
 class GameScoreSerializer(serializers.HyperlinkedModelSerializer):

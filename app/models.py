@@ -1,6 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.conf import settings
+from django.db import models
 from django.utils import timezone
 
 
@@ -138,4 +137,3 @@ class GameScore(models.Model):
 
     def __str__(self):
         return str(self.player.username + ": " + str(self.score))
-

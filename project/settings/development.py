@@ -1,6 +1,7 @@
 # Settings for local development
-from .base import *
 import django_heroku
+
+from .base import *
 
 DEBUG = True
 
