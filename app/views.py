@@ -19,6 +19,8 @@ from app.models import User, Game, Genre, Transaction, GameScore, GameState
 from app.tokens import account_activation_token
 
 from hashlib import md5
+
+
 # import logging
 # logger = logging.getLogger(__name__)
 
@@ -135,7 +137,7 @@ def activate(request, uidb64, token):
 # Default View where all games are listed to explore
 def explore_view(request):
     # Get all required information
-    genres = Genre.objects.all()
+    genres = Genre.objects.all().order_by('name')
     genre_tag = request.GET.get('genre', 'all')
     search_tag = request.GET.get('search', None)
     red_tag = request.GET.get('redirect', None)
@@ -159,7 +161,10 @@ def explore_view(request):
     pages = Paginator(games, per_page=10, orphans=4)
     game_list = pages.get_page(page)
 
-    args = {'games': game_list, 'genres': genres, 'count': count_games, 'redirect': red_tag}
+    # All developers
+    devs = User.objects.filter(is_dev=True).order_by('-dev_games_count', '-date_joined')[:5]
+
+    args = {'games': game_list, 'genres': genres, 'count': count_games, "devs": devs, 'redirect': red_tag}
     return render(request, 'game/explore.html', args)
 
 
@@ -355,7 +360,7 @@ def external_profile_view(request, username):
     if not user2.is_active:
         return render(request, '404.html', {'redirect': 'inactive'})
 
-    games = Game.objects.filter(developer=user2)
+    games = Game.objects.filter(developer=user2, is_active=True)
     return render(request, 'profile/profile_ext.html', {'user2': user2, 'dev_games': games, 'redirect': red_tag})
 
 

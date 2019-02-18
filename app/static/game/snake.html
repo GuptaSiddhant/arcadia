@@ -115,8 +115,8 @@
             if (cell.x === apple.x && cell.y === apple.y) {
                 snake.maxCells++;
                 message = {
-                    messageType: "NOTIFY",
-                    notification: "Current Score = " + (snake.maxCells - 4),
+                    messageType: "SCORE_UPDATE",
+                    score: snake.maxCells - 4,
                 };
                 console.log(message);
                 MessageToParent(message);
@@ -191,6 +191,8 @@
             "width": 400, //Integer
             "height": 400, //Integer
             "mobile": false, //Boolean
+            "save": false, //Boolean
+            "score": true, //Boolean
         }
     };
     MessageToParent(message);

@@ -48,32 +48,41 @@
 {% endblock %}
 {% block side_foot %}
     <!-- Leaderboard - High Scored -->
-    {% with scores=game.scores %}
-        <h5>Leaderboard (Top 5)</h5>
-        {% if scores %}
-            <table class="table table-striped table-sm" style="width: 100%; margin-bottom: 0 !important;">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Player</th>
-                    <th scope="col">Score</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for score in scores %}
+    <div id="leader-board" style="display: none">
+        {% with scores=game.scores %}
+            <h5 class="flex_space_between">LEADERBOARD
+                <button class="btn btn-outline-info btn-sm"
+                        data-toggle="modal"
+                        data-target="#scoreModal">View All
+                </button>
+            </h5>
+            {% if scores %}
+                <table class="table table-striped table-sm" style="width: 100%; margin-bottom: 0 !important;">
+                    <thead>
                     <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ score.player }}</td>
-                        <td>{{ score.score }}</td>
+                        <th scope="col">#</th>
+                        <th scope="col">Player</th>
+                        <th scope="col">Score</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p>No scores found for this game.</p>
-            <span class="help-text">Why don't you submit a score and shine on the leaderboard.</span>
-        {% endif %}
-    {% endwith %}
+                    </thead>
+                    <tbody>
+                    {% for score in scores %}
+                        {% if forloop.counter < 6 %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a href="{% url 'user_profile' score.player.username %}">{{ score.player }}</a></td>
+                                <td>{{ score.score }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No scores found for this game.</p>
+                <span class="help-text">Why don't you submit a score and shine on the leaderboard.</span>
+            {% endif %}
+        {% endwith %}
+    </div>
 
     <!-- Edit Game for Dev -->
     {% if user == game.developer %}
@@ -98,15 +107,36 @@
         {% if game in user.inventory.all or game.price == 0  or game.developer == user %}
             <!--Game Frame-->
             <div style="text-align: center; overflow-x: scroll">
-                <iframe id="game_frame" title="{{ game.name }}"
-                        style="border: 1px solid #000000; border-radius: 5px;  width: 100%; height: 500px"
+                <iframe id="game_frame" title="{{ game.name }}" scrolling="no"
+                        style="border: 0px solid #000000; border-radius: 0px;  width: 100%; height: 500px"
+                        frameBorder="0"
                         src="{{ game.url }}"></iframe>
             </div>
+
             <!-- Updates about Game -->
-            <span style="font-weight: 500">Updates: </span><span id="status"> </span>
-            {{ game.last_save_date }}
-            <br>Last Save:
-            <label>{% call_method game 'last_save_date' user %}</label>
+            <div id="status-unsupported" class="help-text">This game doesn't support Arcadia methods like submitting
+                scores or saving state.
+            </div>
+            <div id="status-area"
+                 style="display: none; flex-direction: row; flex-wrap: wrap; justify-content: space-evenly;">
+                <div class="status-item">
+                    Score
+                    <h5 id="status_score"> 0 </h5>
+                </div>
+                <div class="status-item">
+                    Saved Game
+                    <h5 id="status_save"> {% call_method game 'last_save_date' user %} </h5>
+                </div>
+                <div class="status-item">
+                    Size (WxH)
+                    <h5 id="status_size"> 100% x 500px </h5>
+                </div>
+                <div class="status-item">
+                    Mobile
+                    <h5 id="status_mobile"> Not Friendly </h5>
+                </div>
+            </div>
+            <label>Update:&nbsp</label><span id="status"> No new updates.</span>
             <br><br>
         {% endif %}
     {% endif %}
@@ -152,6 +182,53 @@
     {% if user.is_authenticated %}
         <div id="snackbar"></div>
     {% endif %}
+    {% if game %}
+        {# Score Modal #}
+        <!-- Delete Game Popup -->
+        <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="LeaderBoard"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">All Scores for {{ game.name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% with scores=game.scores %}
+                            {% if scores %}
+                                <table class="table table-striped table-sm"
+                                       style="width: 100%; margin-bottom: 0 !important;">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Player</th>
+                                        <th scope="col">Score</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for score in scores %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>
+                                                <a href="{% url 'user_profile' score.player.username %}">{{ score.player }}</a>
+                                            </td>
+                                            <td>{{ score.score }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p>No scores found for this game.</p>
+                                <span class="help-text">Why don't you submit a score and shine on the leaderboard.</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 
@@ -163,8 +240,12 @@
             'use strict';
             let params = (new URL(document.location)).searchParams;
             let redirect = params.get("redirect");
-            let gameWidth = 400;
+            let gameWidth = "100%";
+            let gameHeight = 500;
             let statusText = $('#status');
+
+            let score = 0;
+            let high_score_beaten = 0;
 
             // Initialise frame window size
             $(window).resize(function () {
@@ -187,26 +268,74 @@
                 // Filter Message
                 switch (data.messageType) {
                     case 'SETTING':
-                        let gWidth = data.options.width;
-                        gameWidth = gWidth;
-                        let gHeight = data.options.height;
-                        if ($(window).width() > 800) {
-                            $('#game_frame').width(gWidth).height(gHeight);
-                            message = "Game loaded with width=" + gameWidth + " and height=" + gHeight + ".";
-                        } else {
-                            $('#game_frame').width('100%').height(gHeight);
-                            message = "Game loaded with width=100% and height=" + gHeight + ".";
+                        if (data.options) {
+                            $("#status-area").css("display", "flex");
+                            $("#status-unsupported").css("display", "none");
+                            $("#leader-board").css("display", "block");
+
+                            if (data.options.width || data.options.height) {
+                                if (data.options.width) {
+                                    gameWidth = data.options.width;
+                                }
+                                if (data.options.height) {
+                                    gameHeight = data.options.height;
+                                }
+
+                                if ($(window).width() > 800) {
+                                    $('#game_frame').width(gameWidth + 10).height(gameHeight + 10);
+                                    message = gameWidth + " x " + gameHeight;
+                                } else {
+                                    $('#game_frame').width('100%').height(gameHeight + 10);
+                                    message = "100% x " + gameHeight;
+                                }
+                                $("#status_size").text(message);
+                            } else {
+                                $("#status_size").text("Unsupported");
+                            }
+
+                            if (data.options.score) {
+                                $("#status_score").text("Supported");
+                            } else {
+                                $("#status_score").text("Unsupported");
+                            }
+
+                            if (!data.options.save) {
+                                $("#status_save").text("Unsupported");
+                            }
+
+                            if (data.options.mobile) {
+                                $("#status_mobile").text("Friendly");
+                            } else {
+                                $("#status_mobile").text("Not Friendly");
+                            }
                         }
 
-                        if (data.options.mobile) {
-                            statusText.text(message + " + Mobile Ready");
-                        } else {
-                            statusText.text(message + " The game is not obtimised for Touch-Mobile Interfaces.");
+                        break;
+
+                    case 'SCORE_UPDATE':
+                        score = parseFloat(data.score);
+                        if (isNaN(score)) {
+                            message.info = "Invalid Score";
+                            sendMessageToIFrame(message);
+                            return;
                         }
+                        current_score = score;
+                        $("#status_score").text(current_score);
+                        {% if game.high_score %}
+                        if (current_score > {{ game.high_score.score }} && high_score_beaten === 0) {
+                            var x = document.getElementById("snackbar");
+                            x.textContent = "You have beaten the high-score!";
+                            high_score_beaten = 1;
+                            x.className = "show";
+                            setTimeout(function () {
+                                x.className = x.className.replace("show", "");
+                            }, 2000);
+                        }
+                        {% endif %}
                         break;
 
                     case 'SCORE':
-                        let score = parseFloat(data.score);
+                        score = parseFloat(data.score);
                         if (isNaN(score)) {
                             message.info = "Invalid Score";
                             sendMessageToIFrame(message);
@@ -215,7 +344,8 @@
                         current_score = score;
                         console.log('cs' + current_score);
                         sendData(data, '#');
-                        statusText.text("Your score of " + score + " is successfully submitted.");
+                        $("#status_score").text(current_score);
+                        statusText.text("Score successfully submitted. Refresh to check high-scores.");
                         break;
 
                     case 'SAVE':

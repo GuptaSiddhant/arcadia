@@ -79,6 +79,11 @@
             $("#add_points").click(function () {
                 points += 10;
                 $("#score").text(points);
+                var msg = {
+                    "messageType": "SCORE_UPDATE",
+                    "score": parseFloat($("#score").text())
+                };
+                window.parent.postMessage(msg, "*");
             });
 
             // This is part of the mechanics of the "game"
@@ -102,6 +107,8 @@
                     "width": 700, //Integer
                     "height": 300, //Integer
                     "mobile": true, //Boolean
+                    "save": true, //Boolean
+                    "score": true, //Boolean
                 }
             };
             window.parent.postMessage(message, "*");

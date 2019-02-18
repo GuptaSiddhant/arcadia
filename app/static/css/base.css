@@ -22,6 +22,7 @@ body {
     border-radius: 10px;
     display: grid;
     grid-template-rows: 60px 1fr;
+    overflow-x: hidden;
 }
 
 #page > main {
@@ -31,6 +32,7 @@ body {
     border-radius: 10px;
     display: grid;
     grid-template-rows: 60px 1fr;
+    overflow-x: hidden;
 }
 
 #page > footer {
@@ -40,6 +42,7 @@ body {
     margin-top: 0;
     background-color: inherit;
     display: none;
+    overflow-x: hidden;
 }
 
 
@@ -271,6 +274,11 @@ input:focus {
     outline: #6E42C0 auto 1px;
 }
 
+.status-item {
+    padding: 5px 10px;
+    text-align: center;
+}
+
 #search-game > input {
     height: 40px;
     padding: 10px 30px;
@@ -377,7 +385,41 @@ input:focus {
     height: 25px;
     max-height: 25px;
     object-fit: cover;
-    background: #ffffff;
+    background: #E8E4EE;
+}
+
+.explore_profile_image {
+    border-radius: 50%;
+    width: 100px;
+    max-width: 100px;
+    height: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    background: #E8E4EE;
+    border: 4px solid #E8E4EE;
+}
+
+.arcadia_devs {
+    -webkit-overflow-scrolling: touch; /* [3] */
+    -ms-overflow-style: -ms-autohiding-scrollbar; /* [4] */
+    overflow: auto;
+    white-space: nowrap;
+    max-height: 100px;
+    width: 100%;
+}
+
+.arcadia_devs_games {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #6E42C0;
+    color: white;
+    text-align: center;
+    line-height: 31px;
+    border: 2px solid #E8E4EE;
 }
 
 .pagination {
