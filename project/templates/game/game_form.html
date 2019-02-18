@@ -146,7 +146,7 @@
                 $('#thumbnail_name').text($('#id_name').val());
                 $('#thumbnail_genre').text($('#id_genre :selected').text());
                 var price = $('#id_price').val()
-                if (price == 0) {
+                if (price <= 0) {
                     $('#thumbnail_price').text('Free to Play');
                 } else {
                     $('#thumbnail_price').text('€' + price);
