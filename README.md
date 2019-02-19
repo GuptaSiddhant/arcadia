@@ -89,7 +89,6 @@ The message should contain `options` which can contain some data like in the fol
 - `SAVE`: If service receives this message with valid `gameState`, then the service saves the state which can retrieved later.
 - `LOAD_REQUEST`: If service receives this message, it returns the last save-game (if any) to the game as `LOAD` message, otherwise sends back an `ERROR` message.
 
-
 #### Quality of Work / 100
 - **Santeri (quality of code, use of framework)** give example of using include feature for nav and search
 - **Henri (testing)**
@@ -105,10 +104,6 @@ The message should contain `options` which can contain some data like in the fol
 	- The Game page shows info about game, developer, and highscores. Along with the game (when purchased), there is data like Current Score and Updates. User can see all scores by expanding Leaderboard.
 	- There are many more quirks here and there which will make the experience better on any device.
 	
-
-#### Non-functional requirements
-- **everyone**
-
 ### Extra Features / Points
 
 #### Save/load and resolution feature / 100
