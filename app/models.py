@@ -49,6 +49,9 @@ class User(AbstractUser):
             amount += game.sale_amount()
         return amount
 
+    class Meta:
+        unique_together = ('email',)
+
 
 # Model for website's games. Games are hosted behind developer provided https secured urls
 class Game(models.Model):
