@@ -328,4 +328,5 @@ WEEK 7 Sprint
 Final date 19th of Feb
 
 
+
 [Model relations]: app/static/media/arcadia.png "Model relations"
