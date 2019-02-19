@@ -142,6 +142,10 @@ The message should contain `options` which can contain some data like in the fol
 - The sharing works without logging-in as the game-page is accessible without authentication.
 - We use ShareThis API to create share options for multiple services like Facebook, Twitter, WhatsApp, etc.
 
+#### Django / Heroku security
+- We utilized Heroku's environment variables for numerous sensitive tokens and also for various configuration variables
+- And from Django's security we have enabled on the production server for example HTTP Strict Transport Security, content type nosniff header, 
+browser xss protection, ssl redirection, secure session and csrf cookies, and x frame options are set to deny.
 
 ## Models and Views
 

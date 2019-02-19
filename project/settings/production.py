@@ -31,8 +31,7 @@ EMAIL_HOST_USER = 'arcadiagames.ga@gmail.com'
 EMAIL_HOST_PASSWORD = GMAIL_SMTP_PW
 EMAIL_USE_TLS = True
 
-# Database and Staticfiles, django-heroku handles the heroku database, secret key and staticfiles
-# setups
+# Database and Staticfiles, django-heroku handles the heroku database, secret key and staticfiles setups
 
 # Configure Django App for Heroku.
 django_heroku.settings(locals(), test_runner=False, allowed_hosts=False)
