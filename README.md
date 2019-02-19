@@ -41,6 +41,23 @@ The service has two types of users: players and developers. Developers can add t
 		django-progressive-web-app==0.1.1
 		social-auth-app-django==3.1.0
 
++ Local Installation Commands
+
+        source ~/djangoenv/bin/activate
+        pip install -r requirements.txt
+        python manage.py makemigrations
+        python manage.py migrate
+        python manage.py runserver
+        
+    + An .env file is required locally under `project/settings/` directory, which shall contains all social login keys (ask developers separately to provide it)
+    
+            SOCIAL_AUTH_GITHUB_KEY = 'key_here'
+            SOCIAL_AUTH_GITHUB_SECRET = 'key_here'
+            SOCIAL_AUTH_TWITTER_KEY = 'key_here'
+            SOCIAL_AUTH_TWITTER_SECRET = 'key_here'
+            SOCIAL_AUTH_GOOGLE_KEY = 'key_here'
+            SOCIAL_AUTH_GOOGLE_SECRET = 'key_here'
+
 
 ## Service Features
 
@@ -81,15 +98,15 @@ The messages are processed using AJAX, so there is no need to refresh the page. 
 The message should contain `options` which can contain some data like in the following sample:
 			
 		options: {
-			width: 500,		//integer, width of the game-frame in pixels
+			width: 500,	//integer, width of the game-frame in pixels
 			height: 400,	//integer, height of the game-frame in pixels
 			score: True,	//boolean, if game supports scoring
-			save: True,		//boolean, if game supoorts saving/loading
+			save: True,	//boolean, if game supoorts saving/loading
 			mobile: False,	//boolean, if game is mobile-friendly
 		}
 
 - `SCORE`: If service receives this message with valid `score`, then it records the score in the game's leaderboard (high-scores). Expected when game is finished or user submits score.
-	- 	`SCORE_UPDATE`: A secondary & similar message which lets service know current score without submitting scores. 
+	- `SCORE_UPDATE`: A secondary & similar message which lets service know current score without submitting scores. 
 	This is used to display current score and check if user beat the high-score, but the score is not saved anywhere, until `SCORE` message is received.
 - `SAVE`: If service receives this message with valid `gameState`, then the service saves the state which can retrieved later.
 - `LOAD_REQUEST`: If service receives this message, it returns the last save-game (if any) to the game as `LOAD` message, otherwise sends back an `ERROR` message.
@@ -204,6 +221,9 @@ high scores of the games
 	(player, game, score, scoreDate)  
 
 
+![alt text][Model relations]
+
+
 ### Views
 
 #### Public Views (No Login Required)
@@ -250,8 +270,6 @@ high scores of the games
 - `game_delete_view` // Option to archive game
 
 ---
-![alt text][Model relations]
-
 
 ## Working practices
 - Telegram was our main channel for communication and collaboration
@@ -259,8 +277,8 @@ high scores of the games
 - We divided the project into week long sprints and met once a week to plan and collaborate
 
 
-## Process and Time Schedule plan
-WEEK 51-52
+### Process and Time Schedule plan
+##### WEEK 51-52
 1. Heroku setup (Santeri)
 2. Django basic setup (Henri)
     - one app
@@ -273,12 +291,12 @@ PlayerProfile, Transactions, Game, GameState (settings,
 game_state) (Henri)
 4. Initial website deign (Siddhant)
 
-WEEK 1 Sprint
+##### WEEK 1 Sprint
 - Registration page
 - Login page
 - Email validation / SMTP sending from Django
 
-WEEK 2 Sprint
+##### WEEK 2 Sprint
 - test data population (Santeri)
 - model diagram update (Santeri)
 - revised model implementation & migration (Henri)
@@ -288,7 +306,7 @@ WEEK 2 Sprint
 - GameBrowserView (Siddhant)
 - message_SCORE(and all other game-service messages) (Siddhant)
 
-WEEK 3 Sprint
+##### WEEK 3 Sprint
 - Email validation (Henri)
 - payment service integration (Henri)
 - Get inventory working (Santeri)
@@ -299,13 +317,13 @@ WEEK 3 Sprint
 - GameDetailView (Siddhant)
 - SocialSharing (Siddhant)
 
-WEEK 4 Sprint
+##### WEEK 4 Sprint
 - Post message from Template to View (Siddhant)
 - Delete Game (Siddhant)
 - Update Model-Game (Santeri)
 - Settings separation (Santeri)
 
-WEEK 5 Sprint
+##### WEEK 5 Sprint
 - Highscores (Game & library) - (Siddhant)
 - sales statistics (Siddhant)
 - Testing Python files (Henri)
@@ -315,17 +333,17 @@ WEEK 5 Sprint
 - Security (https enforcing and other django settings):  
 https://observatory.mozilla.org/analyze/arcadiagames.herokuapp.com
 
-WEEK 6 Sprint
+##### WEEK 6 Sprint
 - Testing
 - Commenting
 - Reporting
 
-WEEK 7 Sprint
+##### WEEK 7 Sprint
 - Testing
 - Commenting
 - Reporting 
 
-Final date 19th of Feb
+`Final date 19th of Feb`
 
 
 
