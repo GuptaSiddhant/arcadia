@@ -20,6 +20,7 @@ The service has two types of users: players and developers. Developers can add t
 + The service is made using [Django framework](https://www.djangoproject.com). 
 + The mockup payment service API is provided by Aalto University.
 + 3rd party login enabled for GitHub, Google and Twitter.
++ Databases: SQLite(local), PostgreSQL(Heroku)
 + IDE: JetBrains PyCharm Professional (Education license).
 + Git version control: [Aalto University](https://version.aalto.fi)
 + Languages: Python3, HTML5, CSS, JavaScript
@@ -94,7 +95,15 @@ The message should contain `options` which can contain some data like in the fol
 - `LOAD_REQUEST`: If service receives this message, it returns the last save-game (if any) to the game as `LOAD` message, otherwise sends back an `ERROR` message.
 
 #### Quality of Work / 100
-- **Santeri (quality of code, use of framework)** give example of using include feature for nav and search
+- Our code has been written and later checked and formatted according the PEP8 coding style for python, and Django's template language style, with flake8 and PyCharm Professional IDE's included formatting tools.
+- We already had some prior experience with django, and since we knew the site would not be that complicated or heavily distributed into little pieces, we decided for simplicity to have only the main app,
+and later on also an api as another app, and also we only used the projects base urls file since it fit well for the site's needs. 
+- The code is documented both in the feature descriptions, and maybe a little bit more in depth within the code, and for some parts of code we didn't see the need to add that much comments, 
+since the naming scheme used in it is already so descriptive.
+- We used Django's own models for the users, and we implemented it by recreating their User model from its base model AbstractUser,
+because we wanted to include some other fields to the model, and because it was easier to use the User class with Django's pre-existing forms.
+- For our development convenience we separated the settings of the project into different files according to the environment where the code is being run in.
+- We also used for example Django template language's include feature to reuse navigation and search bars without repeating their code in templates excessively.
 - During the project the service was extensively tested manually on both mobile and desktop platforms
 - Basic automated tests implemented to test all the models  
 - Arcadia focuses a lot on user-experience. The following points are to considered:
@@ -119,7 +128,7 @@ The message should contain `options` which can contain some data like in the fol
 - 3rd party login was implemented via social-auth-app-django library which uses Oauth, and allows users to login with various social accounts. 
 - Github, Google, and Twitter are used for this project. 
 - When the users login to the site for the first time a new player profile is created and tied to their social account with their names, email and profile picture. 
-- One exception was that twitter won't let us use the email of their users without us having our own privacy policy and terms of service. 
+- One exception was that twitter won't let us use the email of their users without us having our own privacy policy and terms of service. Also Github works only on Heroku since only one completion url could be given.
 - For the profile picture part we added a new step to the pipeline to fetch the picture urls from all the services.
 
 #### RESTful API / 100
@@ -143,10 +152,12 @@ The message should contain `options` which can contain some data like in the fol
 - We use ShareThis API to create share options for multiple services like Facebook, Twitter, WhatsApp, etc.
 
 #### Django / Heroku security
-- We utilized Heroku's environment variables for numerous sensitive tokens and also for various configuration variables
+- We utilized Heroku's environment variables for numerous sensitive tokens and also for various configuration variables. Because of this a .env file with keys to the social authentication services is needed to run the project locally.
 - And from Django's security we have enabled on the production server for example HTTP Strict Transport Security, content type nosniff header, 
 browser xss protection, ssl redirection, secure session and csrf cookies, and x frame options are set to deny.
-
+- We also audited the site's security with some 3rd party sites and tried to enhance it's security in the areas we were able to.  
+    https://www.ponycheckup.com/result/?url=arcadiagames.herokuapp.com%2F  
+    https://observatory.mozilla.org/analyze/arcadiagames.herokuapp.com
 ## Models and Views
 
 ### Models
