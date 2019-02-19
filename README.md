@@ -50,10 +50,14 @@ The service has two types of users: players and developers. Developers can add t
 ### Mandatory Features / Points
 
 #### Authentication / 200
-- **Henri**
+- Login, logout and registration is implemented (both player and developer) using Django auth framework
+- Email validation for development environment is implemented using console SMTP backend
+- Email validation for production environment is implemented using Google SMTP and emails are sent to users from arcadiagames.ga@gmail.com
+- The token created for email account activation link is implemented using PasswordResetTokenGenerator
+- Once the registered user clicks the activation link in the email if the token is matched the user is activated and email confirmation is stored in the database
 
 #### Basic player functionalities / 300
-- **Henri (payment)**
+- Player can purchase the games via the [Simple Payments](http://payments.webcourse.niksula.hut.fi/) service integration
 - Player can play games. The games are loaded in an iFrame on the Game page.
 - Players are only allowed to play the games that they have purchased respectively.
 - The service has **Explore** (homepage) which showcases all the games available on the Store. Users can filter the games with search, or by genres, or by whether the game is free or not.
@@ -92,7 +96,8 @@ The message should contain `options` which can contain some data like in the fol
 
 #### Quality of Work / 100
 - **Santeri (quality of code, use of framework)** give example of using include feature for nav and search
-- **Henri (testing)**
+- During the project the service was extensively tested manually on both mobile and desktop platforms
+- Basic automated tests implemented to test all the models  
 - Arcadia focuses a lot on user-experience. The following points are to considered:
 	- The website is styled with friendly colours with a well-defined layout. **Google Lighthouse** test gave the site overall great scores (see image). ![Lighthouse Result](app/static/media/Arcadia-Lighthouse.png "Google Lighthouse Results") 
 	- The website is mobile responsive and supports Progressive Web-App (PWA), which means it can be installed as an app via Chrome browser on Android mobile.
@@ -123,7 +128,10 @@ The message should contain `options` which can contain some data like in the fol
 - For the profile picture part we added a new step to the pipeline to fetch the picture urls from all the services.
 
 #### RESTful API / 100
-- **Henri**
+- On top of game/service internal APIs full RESTful API is implement using Django REST Framework [Arcadia DRF API](https://arcadiagames.herokuapp.com/api/v1/)
+- All the models are accessible through the API
+- The API is not public. To demonstrate the API in web browser it is configured to use session based authentication and accessible by admin users only
+- To provide API access to individual developer users DRF is easy to configure to use e.g. token based authentication
 
 #### Own game / 100
 - We made a basic game '[XO](https://arcadiagames.herokuapp.com/game/7/)' which is Noughts-&-Crosses, offered for free on Store. The game communicates the settings, score, and save_games. It is included in repository under `/app/static/game/`
