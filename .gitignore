@@ -17,3 +17,4 @@ local_settings.py
 .env
 db.sqlite3
 .DS_Store
+design/
