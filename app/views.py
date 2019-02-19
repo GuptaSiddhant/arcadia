@@ -158,7 +158,7 @@ def explore_view(request):
         games = games.filter(name__icontains=search_tag)
 
     # Pagination
-    pages = Paginator(games, per_page=10, orphans=4)
+    pages = Paginator(games, per_page=8, orphans=2)
     game_list = pages.get_page(page)
 
     # All developers
@@ -322,7 +322,7 @@ def library_view(request):
             games = games.order_by('name')
 
         # Pagination
-        pages = Paginator(games, per_page=10, orphans=4)
+        pages = Paginator(games, per_page=8, orphans=2)
         game_list = pages.get_page(page_tag)
 
         args = {'games': game_list, 'genres': genres, 'count': count, 'redirect': red_tag}

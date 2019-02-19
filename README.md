@@ -5,6 +5,7 @@ Deployed on Heroku:  **[http://arcadiagames.ga](https://arcadiagames.herokuapp.c
 ## About
 
 Arcadia is an online game store for JavaScript games. 
+
 > Developed as a project for the Web Software Development course CS-C3170 2018-2019 at Aalto University, Finland.
 
 The service has two types of users: players and developers. Developers can add their games to the service and set a price for it. Players can buy games on the platform and then play the purchased games. And developers can also act as players. Win-Win.
@@ -175,6 +176,8 @@ browser xss protection, ssl redirection, secure session and csrf cookies, and x 
 - We also audited the site's security with some 3rd party sites and tried to enhance it's security in the areas we were able to.  
     https://www.ponycheckup.com/result/?url=arcadiagames.herokuapp.com%2F  
     https://observatory.mozilla.org/analyze/arcadiagames.herokuapp.com
+    
+
 ## Models and Views
 
 ### Models
