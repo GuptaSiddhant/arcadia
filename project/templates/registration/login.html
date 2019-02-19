@@ -33,6 +33,13 @@
         {% endfor %}
         {{ form.non_field_errors }}
     </form>
+
+    <br>
+    By using our website, you hereby consent to our <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a> and
+    agree to its terms.
+    <br><br>
+
+
     <button type="submit" onclick="$('.registration').submit()" class="btn btn-primary btn-lg btn-block">Login</button>
     <hr>
     <div id="social_auth" class="registration">

@@ -21,6 +21,7 @@ urlpatterns += [
     path('account/activate/<uidb64>/<token>/', views.activate, name='activate'),
     path('account/profile/', TemplateView.as_view(template_name='profile/profile.html'), name='profile'),
     path('account/profile/edit/', views.profile_edit_view, name='profileEdit'),
+    path('account/privacy/', TemplateView.as_view(template_name='registration/privacy.html'), name='privacy')
 ]
 
 # 3rd party social authentication urls
