@@ -12,9 +12,9 @@ The service has two types of users: players and developers. Developers can add t
 
 ### Team
 
-	57237L Henri Ahti       
-	721936 Siddhant Gupta
-	528142 Santeri Volkov   
++ Siddhant Gupta
++ Henri Ahti       
++ Santeri Volkov   
 
 ### Specifications
 
@@ -68,14 +68,16 @@ The service has two types of users: players and developers. Developers can add t
 
 ### Mandatory Features / Points
 
-#### Authentication / 200
+#### Authentication
+
 - Login, logout and registration is implemented (both player and developer) using Django auth framework
 - Email validation for development environment is implemented using console SMTP backend
 - Email validation for production environment is implemented using Google SMTP and emails are sent to users from arcadiagames.ga@gmail.com
 - The token created for email account activation link is implemented using PasswordResetTokenGenerator
 - Once the registered user clicks the activation link in the email if the token is matched the user is activated and email confirmation is stored in the database
 
-#### Basic player functionalities / 300
+#### Basic player functionalities
+
 - Player can purchase the games via the [Simple Payments](http://payments.webcourse.niksula.hut.fi/) service integration
 - Player can play games. The games are loaded in an iFrame on the Game page.
 - Players are only allowed to play the games that they have purchased respectively.
@@ -83,14 +85,15 @@ The service has two types of users: players and developers. Developers can add t
 - The service also has **Library** which showcases all the purchased games. It also allows filtering by search, genres and if-free. Library can also sort games alphabetically (A-Z or Z-A).
 - Player can see all their transactions and money spent in their **Profile**.
 
-#### Basic developer functionalities / 200
+#### Basic developer functionalities 
+
 - Developer can submit a game, with a Name, Description, Genre, Image-URL, Price and Game-URL. Once submitted, only that developer can edit the game details or remove the game from store.
 - Developer can see sales statistics (charts and graphs) of all games in the **Dev Center**. All transactions can be seen in the **Profile** Area, with details like Date, Game, Player, Amount and Payment_result.
 - A developer can only add games to his/her respective profile, and then only he/she can modify/remove the game. 
 - Developers can play their own submitted games without purchasing them.
 - Games can also be submitted for 0 price which will make the game *Free to Play*.
 
-#### Game/service interaction / 200
+#### Game/service interaction 
 
 A game optimised for Arcadia, should send a `postMessage` to parent window containing a `messageType` and associated data. The service listens for these messages and reacts accordingly. 
 The messages are processed using AJAX, so there is no need to refresh the page. The supported message-types are: 
@@ -112,7 +115,8 @@ The message should contain `options` which can contain some data like in the fol
 - `SAVE`: If service receives this message with valid `gameState`, then the service saves the state which can retrieved later.
 - `LOAD_REQUEST`: If service receives this message, it returns the last save-game (if any) to the game as `LOAD` message, otherwise sends back an `ERROR` message.
 
-#### Quality of Work / 100
+#### Quality of Work
+
 - Our code has been written and later checked and formatted according the PEP8 coding style for python, and Django's template language style, with flake8 and PyCharm Professional IDE's included formatting tools.
 - We already had some prior experience with django, and since we knew the site would not be that complicated or heavily distributed into little pieces, we decided for simplicity to have only the main app,
 and later on also an api as another app, and also we only used the projects base urls file since it fit well for the site's needs. 
@@ -136,34 +140,34 @@ because we wanted to include some other fields to the model, and because it was 
 	- The Game page shows info about game, developer, and highscores. Along with the game (when purchased), there is data like Current Score and Updates. User can see all scores by expanding Leaderboard.
 	- There are many more quirks here and there which will make the experience better on any device.
 	
-### Extra Features / Points
+### Extra Features
 
-#### Save/load and resolution feature / 100
+#### Save/load and resolution feature
 - The service has complete support for setting frame resolution as requested by game.
 - The service saves a valid gameState and loads the latest save when requested.
 
-#### 3rd party login / 100
+#### 3rd party login
 - 3rd party login was implemented via social-auth-app-django library which uses Oauth, and allows users to login with various social accounts. 
 - Github, Google, and Twitter are used for this project. 
 - When the users login to the site for the first time a new player profile is created and tied to their social account with their names, email and profile picture. 
 - One exception was that twitter won't let us use the email of their users without us having our own privacy policy and terms of service. Also Github works only on Heroku since only one completion url could be given.
 - For the profile picture part we added a new step to the pipeline to fetch the picture urls from all the services.
 
-#### RESTful API / 100
+#### RESTful API
 - On top of game/service internal APIs full RESTful API is implement using Django REST Framework [Arcadia DRF API](https://arcadiagames.herokuapp.com/api/v1/)
 - All the models are accessible through the API
 - The API is not public. To demonstrate the API in web browser it is configured to use session based authentication and accessible by admin users only
 - To provide API access to individual developer users DRF is easy to configure to use e.g. token based authentication
 
-#### Own game / 100
+#### Own game
 - We made a basic game '[XO](https://arcadiagames.herokuapp.com/game/7/)' which is Noughts-&-Crosses, offered for free on Store. The game communicates the settings, score, and save_games. It is included in repository under `/app/static/game/`
 
-#### Mobile Friendly / 50
+#### Mobile Friendly
 - The website is completely mobile-friendly. It contains the `viewport` meta-tag and is optimised to run on any screen size.
 - Bootstrap is NOT used for this. The website has a grid template which changes arrangements on elements depending on window width. 
 - The website is tested on Full HD desktops, TV, 13' Notebook, iPad, and multiple smartphones.
 
-#### Social media sharing / 50
+#### Social media sharing
 - Each page or game can be shared over social media / IM as it contains OpenGraph meta-tags.
 - Default tags describe the service but if a game is shared, then game's information is shared instead of default.
 - The sharing works without logging-in as the game-page is accessible without authentication.
